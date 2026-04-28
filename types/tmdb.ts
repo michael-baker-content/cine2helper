@@ -8,6 +8,7 @@ export interface TMDBMovie {
   vote_average: number;
   vote_count: number;
   genre_ids: number[];
+  runtime: number | null;
   popularity: number;
   original_language: string;
   /** Set by API for group conditions — surnames of matching people */
@@ -16,7 +17,6 @@ export interface TMDBMovie {
 
 export interface TMDBMovieDetail extends TMDBMovie {
   genres: { id: number; name: string }[];
-  runtime: number | null;
   tagline: string;
   status: string;
   credits?: {
