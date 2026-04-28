@@ -12,7 +12,7 @@
 export interface PersonFilm {
   tmdbId: number;
   title: string;
-  year: string;
+  year: number;
   /** The qualifying role(s) this person held on the film */
   role: string;
 }
