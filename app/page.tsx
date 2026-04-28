@@ -105,7 +105,7 @@ function HomePage({
 }: {
   onSelectCondition: (id: string) => void;
   onOverlap: () => void;
-  conditionsRef: React.RefObject<HTMLDivElement>;
+  conditionsRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const grouped = OVERVIEW_CATEGORY_ORDER.reduce<Record<string, WinCondition[]>>((acc, cat) => {
     const items = WIN_CONDITIONS.filter(wc => wc.category === cat);
