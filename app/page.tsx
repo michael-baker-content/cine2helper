@@ -149,7 +149,8 @@ function HomePage({
         }}>
           Cine2Nerdle Battle challenges you to connect films through shared cast and crew.
           Cine2Helper shows you which films qualify for each win condition — and which films
-          satisfy multiple conditions at once, giving you the most powerful plays.
+          satisfy multiple conditions at once. Overlap can work for you or against you:
+          a film that satisfies your condition and your opponent's hands them a win too.
         </p>
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button
@@ -242,7 +243,7 @@ function HomePage({
           fontSize: '13px', color: 'var(--text-dim)',
           marginBottom: '32px', lineHeight: 1.5,
         }}>
-          Click any condition to browse qualifying films. Hover a film card for cast and crew details.
+          Click any condition to browse qualifying films. Use the ⓘ button on any film for cast and crew details.
         </p>
 
         {OVERVIEW_CATEGORY_ORDER.filter(cat => grouped[cat]).map(cat => (
