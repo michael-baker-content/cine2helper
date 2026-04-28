@@ -117,12 +117,8 @@ function HomePage({
     <div style={{ overflowY: 'auto', height: '100%' }}>
 
       {/* Hero */}
-      <div style={{
-        padding: '64px 32px 56px',
-        maxWidth: '680px',
-        margin: '0 auto',
-        textAlign: 'center',
-      }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '64px 32px 0', textAlign: 'center' }}>
+      <div style={{ maxWidth: '680px', margin: '0 auto', paddingBottom: '64px' }}>
         <div style={{
           fontSize: '13px',
           letterSpacing: '0.14em',
@@ -228,10 +224,11 @@ function HomePage({
       </div>
 
       {/* Divider */}
-      <div style={{ borderTop: '1px solid var(--border)', margin: '0 24px' }} />
+      <div style={{ borderTop: '1px solid var(--border)', margin: '0 auto', maxWidth: '1400px', padding: '0 20px' }} />
 
       {/* Win conditions grid */}
-      <div ref={conditionsRef} style={{ padding: '40px 24px 48px' }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '40px 24px 48px' }}>
+      <div ref={conditionsRef}>
         <h2 style={{
           fontFamily: 'var(--font-display)',
           fontSize: '22px',
@@ -258,8 +255,9 @@ function HomePage({
             </h3>
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 220px))',
               gap: '14px',
+              justifyContent: 'center',
             }}>
               {grouped[cat].map(wc => (
                 <ConditionCard
@@ -271,6 +269,8 @@ function HomePage({
             </div>
           </div>
         ))}
+      </div>
+      </div>
       </div>
     </div>
   );
@@ -325,7 +325,7 @@ export default function RootPage() {
           to   { opacity: 1; transform: scale(1) translateY(0); }
         }
         * { box-sizing: border-box; }
-        @media (max-width: 640px) {
+@media (max-width: 640px) {
           .desktop-only { display: none !important; }
         }
         @media (min-width: 641px) {
@@ -347,10 +347,8 @@ export default function RootPage() {
           background: 'var(--surface)',
           flexShrink: 0, zIndex: 10, position: 'relative',
         }}>
-          <div style={{
-            height: '56px', display: 'flex',
-            alignItems: 'center', padding: '0 20px', gap: '12px',
-          }}>
+          <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 20px', width: '100%', display: 'flex', alignItems: 'center', height: '56px', gap: '12px' }}>
+
 
             {/* Back button */}
             {(view === 'condition' || view === 'overlap') && (
@@ -472,9 +470,8 @@ export default function RootPage() {
           </div>
 
           {/* Mobile tab bar */}
-          <div className="mobile-only" style={{
-            display: 'flex', borderTop: '1px solid var(--border)',
-          }}>
+          <div className="mobile-only" style={{ borderTop: '1px solid var(--border)' }}>
+          <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex' }}>
             {([
               { label: 'Win Conditions', action: goHomeScrolled },
               { label: 'Overlap', action: () => setView('overlap') },
@@ -494,6 +491,7 @@ export default function RootPage() {
                 {label}
               </button>
             ))}
+          </div>
           </div>
         </header>
 
@@ -517,8 +515,10 @@ export default function RootPage() {
           )}
 
           {view === 'overlap' && (
-            <div className="slide-in-right" style={{ height: '100%', overflowY: 'auto', padding: '24px' }}>
-              <OverlapAnalyzer />
+            <div className="slide-in-right" style={{ height: '100%', overflowY: 'auto' }}>
+              <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '24px 20px' }}>
+                <OverlapAnalyzer />
+              </div>
             </div>
           )}
         </main>
@@ -530,7 +530,7 @@ export default function RootPage() {
           display: 'flex', alignItems: 'center',
           justifyContent: 'center', padding: '0 16px', flexShrink: 0,
         }}>
-          <span style={{ fontSize: '11px', color: 'var(--text-dim)', textAlign: 'center' }}>
+          <span style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
             Not affiliated with or endorsed by Cine2Nerdle, TMDB, or the TMDB API.
           </span>
         </footer>

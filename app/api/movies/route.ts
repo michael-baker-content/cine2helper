@@ -186,6 +186,10 @@ export async function GET(request: NextRequest) {
     // Catches TV specials, fan events, awards shows that TMDB catalogs as movies
     movies = movies.filter((m) => m.runtime == null || m.runtime >= 60);
 
+    // Remove entries with no genre tags — legitimate films always have at least one.
+    // Live events, promos, and miscatalogued specials typically have none.
+    movies = movies.filter((m) => m.genre_ids == null || m.genre_ids.length > 0);
+
     // Manual blocklist — explicit TMDB IDs to exclude regardless of other filters
     // Add any one-off entries here that slip through (e.g. fan events, promos)
     const BLOCKED_IDS = new Set<number>([

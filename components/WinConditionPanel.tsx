@@ -145,7 +145,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0', height: '100%' }}>
       {/* Panel header */}
       <div style={{
-        padding: '20px 24px 16px',
+        padding: '20px 24px 16px', maxWidth: '1400px', margin: '0 auto',
         borderBottom: '1px solid var(--border)',
         background: 'var(--surface)',
         flexShrink: 0,
@@ -258,7 +258,8 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
       </div>
 
       {/* Movie display */}
-      <div style={{ overflowY: 'auto', flex: 1, padding: '20px 24px' }}>
+      <div style={{ overflowY: 'auto', flex: 1 }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px 24px' }}>
         {filtered.length === 0 ? (
           <div style={{ ...centerStyle, color: 'var(--text-muted)', fontSize: '14px' }}>
             No movies found{search ? ` matching "${search}"` : ''}.
@@ -305,6 +306,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
             </button>
           </div>
         )}
+        </div>{/* /max-width */}
       </div>
     </div>
   );
