@@ -182,6 +182,17 @@ export async function GET(request: NextRequest) {
     const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
     movies = movies.filter((m) => m.release_date && m.release_date <= today);
 
+    // Remove non-features: runtime must be >= 60 minutes if known
+    // Catches TV specials, fan events, awards shows that TMDB catalogs as movies
+    movies = movies.filter((m) => m.runtime == null || m.runtime >= 60);
+
+    // Manual blocklist — explicit TMDB IDs to exclude regardless of other filters
+    // Add any one-off entries here that slip through (e.g. fan events, promos)
+    const BLOCKED_IDS = new Set<number>([
+      1491034, // Netflix Tudum 2025 — fan event miscatalogued as a film
+    ]);
+    movies = movies.filter((m) => !BLOCKED_IDS.has(m.id));
+
     // Server-side sort so pagination is consistent regardless of sort order
     switch (sortParam) {
       case 'year_desc':

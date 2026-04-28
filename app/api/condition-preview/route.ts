@@ -49,7 +49,9 @@ export async function GET(request: NextRequest) {
       .slice(0, 3)
       .map(m => ({ id: m.id, title: m.title, poster_path: m.poster_path }));
 
-    return NextResponse.json({ movies });
+    return NextResponse.json({ movies }, {
+      headers: { 'Cache-Control': 's-maxage=3600, stale-while-revalidate=86400' },
+    });
   } catch (e) {
     return NextResponse.json({ error: 'Failed' }, { status: 500 });
   }

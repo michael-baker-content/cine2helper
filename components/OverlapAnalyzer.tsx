@@ -40,6 +40,10 @@ function FilmstripLoader({ status }: { status: string }) {
           0%, 100% { opacity: 1; }
           50%       { opacity: 0.4; }
         }
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
         @keyframes toastSlideIn {
           from { opacity: 0; transform: translateY(16px) scale(0.96); }
           to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -50,8 +54,8 @@ function FilmstripLoader({ status }: { status: string }) {
         }
       `}</style>
 
-      {/* Status row — always visible on all screen sizes */}
-      <div style={{
+      {/* Status row — desktop only; mobile feedback comes from button spinner */}
+      <div className="desktop-only" style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -75,8 +79,8 @@ function FilmstripLoader({ status }: { status: string }) {
         </span>
       </div>
 
-      {/* Filmstrip — desktop only, hidden on mobile via overflow+minWidth guard */}
-      <div style={{
+      {/* Filmstrip — desktop only */}
+      <div className="desktop-only" style={{
         padding: '12px 20px 32px',
         overflow: 'hidden',
         minWidth: 0,
@@ -370,7 +374,20 @@ export default function OverlapAnalyzer() {
                 whiteSpace: 'nowrap',
               }}
             >
-              {loading ? (loadingStatus || 'SEARCHING…') : 'FIND OVERLAP'}
+              {loading ? (
+                <>
+                  <span className="desktop-only">{loadingStatus || 'SEARCHING…'}</span>
+                  <span className="mobile-only" style={{
+                    display: 'inline-block',
+                    width: '14px', height: '14px',
+                    border: '2px solid var(--bg)',
+                    borderTopColor: 'transparent',
+                    borderRadius: '50%',
+                    animation: 'spin 0.7s linear infinite',
+                    verticalAlign: 'middle',
+                  }} />
+                </>
+              ) : 'FIND OVERLAP'}
             </button>
           </div>
         </div>
