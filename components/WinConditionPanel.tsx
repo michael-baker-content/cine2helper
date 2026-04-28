@@ -31,8 +31,6 @@ function sortMovies(movies: TMDBMovie[], sort: SortMode): TMDBMovie[] {
       case 'year_desc': return (b.release_date ?? '').localeCompare(a.release_date ?? '');
       case 'title_asc': return a.title.localeCompare(b.title);
       case 'title_desc': return b.title.localeCompare(a.title);
-      // legacy fallback
-      case 'title': return a.title.localeCompare(b.title);
       default: return 0;
     }
   });
