@@ -44,26 +44,53 @@ function FilmstripLoader({ status }: { status: string }) {
           from { opacity: 0; transform: translateY(16px) scale(0.96); }
           to   { opacity: 1; transform: translateY(0) scale(1); }
         }
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
       `}</style>
+
+      {/* Status row — always visible on all screen sizes */}
       <div style={{
-        padding: '40px 20px',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
-        gap: '24px',
-        overflow: 'hidden',
+        justifyContent: 'center',
+        gap: '10px',
+        padding: '20px 20px 8px',
       }}>
-        {/* Filmstrip track */}
+        <div style={{
+          width: '10px', height: '10px',
+          borderRadius: '50%',
+          background: 'var(--accent)',
+          animation: 'projectorPulse 1.1s ease-in-out infinite',
+          flexShrink: 0,
+        }} />
+        <span style={{
+          fontSize: '13px',
+          color: 'var(--text-muted)',
+          fontFamily: 'var(--font-display)',
+          letterSpacing: '0.05em',
+        }}>
+          {status || 'SEARCHING…'}
+        </span>
+      </div>
+
+      {/* Filmstrip — desktop only, hidden on mobile via overflow+minWidth guard */}
+      <div style={{
+        padding: '12px 20px 32px',
+        overflow: 'hidden',
+        minWidth: 0,
+      }}>
         <div style={{
           width: '100%',
           overflow: 'hidden',
           position: 'relative',
-          height: '64px',
+          height: '56px',
           borderTop: '3px solid var(--border)',
           borderBottom: '3px solid var(--border)',
           background: 'var(--surface-2)',
+          minWidth: 0,
         }}>
-          {/* Sprocket holes + frames, duplicated for seamless loop */}
           <div style={{
             display: 'flex',
             width: 'max-content',
@@ -74,68 +101,40 @@ function FilmstripLoader({ status }: { status: string }) {
               <div key={pass} style={{ display: 'flex' }}>
                 {[...Array(16)].map((_, i) => (
                   <div key={i} style={{
-                    width: '56px',
+                    width: '48px',
                     height: '100%',
                     flexShrink: 0,
                     borderRight: '1px solid var(--border)',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    padding: '6px 8px',
-                    position: 'relative',
+                    padding: '5px 7px',
                   }}>
-                    {/* Top sprocket */}
                     <div style={{
-                      width: '10px', height: '10px',
-                      borderRadius: '2px',
+                      width: '9px', height: '9px', borderRadius: '2px',
                       border: '1px solid var(--border)',
-                      background: 'var(--bg)',
-                      alignSelf: 'center',
+                      background: 'var(--bg)', alignSelf: 'center',
                     }} />
-                    {/* Frame content — dim accent rect */}
                     <div style={{
-                      flex: 1, margin: '4px 0',
+                      flex: 1, margin: '3px 0',
                       background: 'var(--accent-glow)',
                       borderRadius: '2px',
-                      opacity: 0.5 + (i % 4) * 0.1,
+                      opacity: 0.4 + (i % 4) * 0.12,
                     }} />
-                    {/* Bottom sprocket */}
                     <div style={{
-                      width: '10px', height: '10px',
-                      borderRadius: '2px',
+                      width: '9px', height: '9px', borderRadius: '2px',
                       border: '1px solid var(--border)',
-                      background: 'var(--bg)',
-                      alignSelf: 'center',
+                      background: 'var(--bg)', alignSelf: 'center',
                     }} />
                   </div>
                 ))}
               </div>
             ))}
           </div>
-          {/* Left/right fade edges */}
           <div style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
             background: 'linear-gradient(to right, var(--surface-2) 0%, transparent 12%, transparent 88%, var(--surface-2) 100%)',
           }} />
-        </div>
-
-        {/* Projector light pulse + status text */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{
-            width: '10px', height: '10px',
-            borderRadius: '50%',
-            background: 'var(--accent)',
-            animation: 'projectorPulse 1.1s ease-in-out infinite',
-            flexShrink: 0,
-          }} />
-          <span style={{
-            fontSize: '13px',
-            color: 'var(--text-muted)',
-            fontFamily: 'var(--font-display)',
-            letterSpacing: '0.05em',
-          }}>
-            {status || 'LOADING…'}
-          </span>
         </div>
       </div>
     </>
@@ -371,7 +370,7 @@ export default function OverlapAnalyzer() {
                 whiteSpace: 'nowrap',
               }}
             >
-              {loading ? '…' : 'FIND OVERLAP'}
+              {loading ? (loadingStatus || 'SEARCHING…') : 'FIND OVERLAP'}
             </button>
           </div>
         </div>
