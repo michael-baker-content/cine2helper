@@ -136,7 +136,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
             </a>
           </div>
         )}
-        <button onClick={() => fetchPage(1, false)} style={btnStyle}>Retry</button>
+        <button onClick={() => fetchPage(1, false, sort)} style={btnStyle}>Retry</button>
       </div>
     );
   }
