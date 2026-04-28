@@ -154,6 +154,7 @@ function HomePage({
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button
             onClick={() => conditionsRef.current?.scrollIntoView({ behavior: 'smooth' })}
+            aria-label="Scroll to win conditions"
             style={{
               padding: '12px 28px',
               background: 'var(--accent)',
@@ -174,6 +175,7 @@ function HomePage({
           </button>
           <button
             onClick={onOverlap}
+            aria-label="Open overlap analyzer"
             style={{
               padding: '12px 28px',
               background: 'transparent',
@@ -365,6 +367,7 @@ export default function RootPage() {
                   display: 'flex', alignItems: 'center', gap: '5px',
                   flexShrink: 0, transition: 'all 0.12s',
                 }}
+                aria-label="Back to home"
                 onMouseEnter={e => {
                   e.currentTarget.style.borderColor = 'var(--accent-dim)';
                   e.currentTarget.style.color = 'var(--accent)';
@@ -381,6 +384,7 @@ export default function RootPage() {
             {/* Logo — always goes home to top */}
             <button
               onClick={goHome}
+              aria-label="Cine2Helper home"
               style={{
                 display: 'flex', alignItems: 'center', gap: '8px',
                 flexShrink: 0, background: 'transparent', border: 'none',
@@ -435,7 +439,7 @@ export default function RootPage() {
             )}
 
             {/* Nav — desktop */}
-            <nav className="desktop-only" style={{
+            <nav className="desktop-only" aria-label="Main navigation" style={{
               display: 'flex', gap: '2px', marginLeft: 'auto',
             }}>
               {([
@@ -470,7 +474,7 @@ export default function RootPage() {
           </div>
 
           {/* Mobile tab bar */}
-          <div className="mobile-only" style={{ borderTop: '1px solid var(--border)' }}>
+          <nav className="mobile-only" aria-label="Main navigation" style={{ borderTop: '1px solid var(--border)' }}>
           <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex' }}>
             {([
               { label: 'Win Conditions', action: goHomeScrolled },
@@ -492,11 +496,21 @@ export default function RootPage() {
               </button>
             ))}
           </div>
-          </div>
+          </nav>
         </header>
 
         {/* ── Main ────────────────────────────────────────────────── */}
         <main style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
+          <div aria-live="polite" aria-atomic="true" style={{
+            position: 'absolute', width: '1px', height: '1px',
+            padding: 0, margin: '-1px', overflow: 'hidden',
+            clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0,
+          }}>
+            {view === 'condition' && activeCondition
+              ? `Viewing ${WIN_CONDITIONS.find(w => w.id === activeCondition)?.label ?? ''} films`
+              : view === 'overlap' ? 'Overlap analyzer'
+              : 'Win conditions overview'}
+          </div>
 
           {view === 'home' && (
             <div className="slide-in-left" style={{ height: '100%' }}>

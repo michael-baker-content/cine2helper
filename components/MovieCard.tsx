@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { TMDBMovie, TMDBMovieDetail, TMDBCastMember, TMDBCrewMember } from '@/types/tmdb';
 import { getPosterUrl } from '@/lib/tmdb';
 import Image from 'next/image';
@@ -31,10 +31,15 @@ function groupCrew(crew: TMDBCrewMember[]) {
 }
 
 // ── Info modal ────────────────────────────────────────────────────────────────
-function InfoModal({ movie, onClose }: { movie: TMDBMovie; onClose: () => void }) {
+function InfoModal({ movie, onClose, triggerRef }: {
+  movie: TMDBMovie;
+  onClose: () => void;
+  triggerRef: React.RefObject<HTMLButtonElement | null>;
+}) {
   const [detail, setDetail]   = useState<TMDBMovieDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const year = movie.release_date?.slice(0, 4) ?? '?';
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -45,11 +50,35 @@ function InfoModal({ movie, onClose }: { movie: TMDBMovie; onClose: () => void }
     return () => { cancelled = true; };
   }, [movie.id]);
 
-  // Close on Escape
+  // Focus the modal panel on open, return focus on close
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
+    const previousFocus = document.activeElement as HTMLElement | null;
+    modalRef.current?.focus();
+    return () => {
+      (triggerRef.current ?? previousFocus)?.focus();
+    };
+  }, [triggerRef]);
+
+  // Focus trap — keep Tab/Shift+Tab inside the modal
+  useEffect(() => {
+    const modal = modalRef.current;
+    if (!modal) return;
+    const focusable = modal.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const first = focusable[0];
+    const last  = focusable[focusable.length - 1];
+    const trap = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { onClose(); return; }
+      if (e.key !== 'Tab') return;
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last?.focus(); }
+      } else {
+        if (document.activeElement === last)  { e.preventDefault(); first?.focus(); }
+      }
+    };
+    document.addEventListener('keydown', trap);
+    return () => document.removeEventListener('keydown', trap);
   }, [onClose]);
 
   // Prevent body scroll while open
@@ -91,6 +120,7 @@ function InfoModal({ movie, onClose }: { movie: TMDBMovie; onClose: () => void }
       {/* Backdrop */}
       <div
         onClick={onClose}
+        aria-hidden="true"
         style={{
           position: 'fixed', inset: 0, zIndex: 1000,
           background: 'rgba(0,0,0,0.72)',
@@ -101,7 +131,12 @@ function InfoModal({ movie, onClose }: { movie: TMDBMovie; onClose: () => void }
       >
         {/* Modal panel — stop propagation so clicks inside don't close */}
         <div
+          ref={modalRef}
           onClick={e => e.stopPropagation()}
+          tabIndex={-1}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${movie.title} film details`}
           style={{
             background: 'var(--surface)',
             border: '1px solid var(--accent-dim)',
@@ -113,6 +148,7 @@ function InfoModal({ movie, onClose }: { movie: TMDBMovie; onClose: () => void }
             boxShadow: '0 16px 64px rgba(0,0,0,0.7)',
             animation: 'modalIn 0.2s ease forwards',
             position: 'relative',
+            outline: 'none',
           }}
         >
           {/* Header with poster + title */}
@@ -275,6 +311,7 @@ export default function MovieCard({ movie, compact = false, index = 99 }: MovieC
   const year   = movie.release_date ? new Date(movie.release_date).getFullYear() : '?';
   const rating = movie.vote_average?.toFixed(1) ?? '?';
   const [showModal, setShowModal] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   const openModal  = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -282,7 +319,9 @@ export default function MovieCard({ movie, compact = false, index = 99 }: MovieC
   }, []);
   const closeModal = useCallback(() => setShowModal(false), []);
 
-  const modal = showModal ? <InfoModal movie={movie} onClose={closeModal} /> : null;
+  const modal = showModal
+    ? <InfoModal movie={movie} onClose={closeModal} triggerRef={triggerRef} />
+    : null;
 
   if (compact) {
     return (
@@ -332,8 +371,9 @@ export default function MovieCard({ movie, compact = false, index = 99 }: MovieC
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
             <span style={{ color: 'var(--accent)', fontSize: '12px' }}>★ {rating}</span>
             <button
+              ref={triggerRef}
               onClick={openModal}
-              aria-label="Film info"
+              aria-label={`${movie.title} film info`}
               style={{
                 width: '20px', height: '20px',
                 borderRadius: '50%',
@@ -418,7 +458,42 @@ export default function MovieCard({ movie, compact = false, index = 99 }: MovieC
             ★ {rating}
           </div>
           {/* Info button — bottom right of poster */}
-          <InfoButton onClick={openModal} />
+          <button
+            ref={triggerRef}
+            onClick={openModal}
+            aria-label={`${movie.title} film info`}
+            style={{
+              position: 'absolute',
+              bottom: '8px', right: '8px',
+              width: '22px', height: '22px',
+              borderRadius: '50%',
+              background: 'rgba(0,0,0,0.65)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              color: 'rgba(255,255,255,0.8)',
+              fontSize: '12px',
+              fontWeight: 700,
+              fontStyle: 'italic',
+              fontFamily: 'Georgia, serif',
+              cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              backdropFilter: 'blur(4px)',
+              transition: 'all 0.12s',
+              lineHeight: 1,
+              zIndex: 2,
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'var(--accent)';
+              e.currentTarget.style.borderColor = 'var(--accent)';
+              e.currentTarget.style.color = 'var(--bg)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(0,0,0,0.65)';
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
+              e.currentTarget.style.color = 'rgba(255,255,255,0.8)';
+            }}
+          >
+            i
+          </button>
         </div>
 
         <div style={{ padding: '10px 12px 12px', flex: 1 }}>

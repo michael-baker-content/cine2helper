@@ -37,6 +37,7 @@ function sortMovies(movies: TMDBMovie[], sort: SortMode): TMDBMovie[] {
 }
 
 export default function WinConditionPanel({ conditionId }: WinConditionPanelProps) {
+  // Screen reader announcement ref
   const [movies, setMovies] = useState<TMDBMovie[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
@@ -170,9 +171,14 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
           {/* Controls */}
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
             {/* Search */}
+            <label htmlFor="title-filter" style={{ position: 'absolute', width: '1px', height: '1px', margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}>
+                Filter titles
+              </label>
             <input
+              id="title-filter"
               type="text"
               placeholder="Filter titles…"
+              aria-label="Filter titles"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{
@@ -189,6 +195,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
 
             {/* Sort */}
             <select
+              aria-label="Sort films by"
               value={sort}
               onChange={(e) => handleSortChange(e.target.value as SortMode)}
               style={{
@@ -259,7 +266,16 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
 
       {/* Movie display */}
       <div style={{ overflowY: 'auto', flex: 1 }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px 24px' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px 24px', position: 'relative' }}>
+        <div aria-live="polite" aria-atomic="true" style={{
+          position: 'absolute', width: '1px', height: '1px',
+          margin: '-1px', overflow: 'hidden',
+          clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0,
+        }}>
+          {loading ? `Loading ${condition?.label ?? 'films'}…` : ''}
+          {!loading && movies.length > 0 ? `Showing ${movies.length} of ${total} films` : ''}
+          {!loading && movies.length === 0 && !error ? 'No films found' : ''}
+        </div>
         {filtered.length === 0 ? (
           <div style={{ ...centerStyle, color: 'var(--text-muted)', fontSize: '14px' }}>
             No movies found{search ? ` matching "${search}"` : ''}.

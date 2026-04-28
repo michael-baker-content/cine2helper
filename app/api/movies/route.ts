@@ -194,6 +194,7 @@ export async function GET(request: NextRequest) {
     // Add any one-off entries here that slip through (e.g. fan events, promos)
     const BLOCKED_IDS = new Set<number>([
       1491034, // Netflix Tudum 2025 — fan event miscatalogued as a film
+      1128701, // Creed: Shinjidai — anime short, no runtime on TMDB so slips through
     ]);
     movies = movies.filter((m) => !BLOCKED_IDS.has(m.id));
 

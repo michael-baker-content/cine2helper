@@ -339,6 +339,7 @@ export default function OverlapAnalyzer() {
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             {results !== null && (
               <select
+                aria-label="Sort results by"
                 value={sort}
                 onChange={e => handleSortChange(e.target.value as any)}
                 style={{
@@ -359,6 +360,8 @@ export default function OverlapAnalyzer() {
             <button
               onClick={analyze}
               disabled={selected.length < 2 || loading}
+              aria-label={selected.length < 2 ? 'Select at least 2 conditions to find overlap' : 'Find overlapping films'}
+              aria-busy={loading}
               style={{
                 padding: '8px 18px',
                 background: selected.length >= 2 && !loading ? 'var(--accent)' : 'var(--surface)',
@@ -422,6 +425,8 @@ export default function OverlapAnalyzer() {
                       <button
                         key={wc.id}
                         onClick={() => toggle(wc.id)}
+                        aria-pressed={selected.includes(wc.id)}
+                        aria-label={`${wc.label}${selected.includes(wc.id) ? ', selected' : ''}`}
                         style={{
                           padding: '4px 12px',
                           borderRadius: '20px',
@@ -446,6 +451,16 @@ export default function OverlapAnalyzer() {
 
         {/* Results area */}
         <div style={{ padding: '16px 20px' }}>
+
+          {/* Screen reader announcements */}
+          <div aria-live="polite" aria-atomic="true" style={{
+            position: 'absolute', width: '1px', height: '1px',
+            margin: '-1px', overflow: 'hidden',
+            clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0,
+          }}>
+            {loading ? (loadingStatus || 'Searching for overlapping films…') : ''}
+            {!loading && results !== null ? `Found ${results.length} film${results.length !== 1 ? 's' : ''} matching all selected conditions` : ''}
+          </div>
 
           {/* Loading animation */}
           {loading && <FilmstripLoader status={loadingStatus} />}
