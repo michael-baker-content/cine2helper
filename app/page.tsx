@@ -1,0 +1,517 @@
+'use client';
+
+import { useState, useRef, useEffect } from 'react';
+import WinConditionPanel from '@/components/WinConditionPanel';
+import OverlapAnalyzer from '@/components/OverlapAnalyzer';
+import { WIN_CONDITIONS, CATEGORY_LABELS } from '@/lib/win-conditions';
+import { WinCondition, WinConditionCategory } from '@/types/tmdb';
+import Image from 'next/image';
+import { getPosterUrl } from '@/lib/tmdb';
+
+type View = 'home' | 'condition' | 'overlap';
+
+const OVERVIEW_CATEGORY_ORDER: WinConditionCategory[] = ['themed', 'decade', 'person'];
+
+// ── Condition preview card ────────────────────────────────────────────────────
+interface PreviewMovie { id: number; title: string; poster_path: string | null; }
+
+function ConditionCard({ condition, onClick }: {
+  condition: WinCondition;
+  onClick: () => void;
+}) {
+  const [posters, setPosters] = useState<PreviewMovie[]>([]);
+
+  useEffect(() => {
+    fetch(`/api/condition-preview?condition=${encodeURIComponent(condition.id)}`)
+      .then(r => r.json())
+      .then(d => setPosters(d.movies ?? []))
+      .catch(() => {});
+  }, [condition.id]);
+
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
+        borderRadius: 'var(--radius-lg)',
+        overflow: 'hidden',
+        cursor: 'pointer',
+        textAlign: 'left',
+        transition: 'transform 0.15s, border-color 0.15s, box-shadow 0.15s',
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.transform = 'translateY(-3px)';
+        e.currentTarget.style.borderColor = 'var(--accent-dim)';
+        e.currentTarget.style.boxShadow = 'var(--shadow-glow)';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.transform = '';
+        e.currentTarget.style.borderColor = 'var(--border)';
+        e.currentTarget.style.boxShadow = '';
+      }}
+    >
+      <div style={{
+        display: 'flex', height: '100px',
+        background: 'var(--surface-2)', overflow: 'hidden', position: 'relative',
+      }}>
+        {posters.length === 0 ? (
+          <div style={{
+            flex: 1, display: 'flex', alignItems: 'center',
+            justifyContent: 'center', fontSize: '32px', color: 'var(--text-dim)',
+          }}>🎬</div>
+        ) : posters.map((p, i) => (
+          <div key={p.id} style={{
+            flex: 1, position: 'relative',
+            borderRight: i < posters.length - 1 ? '1px solid var(--border)' : 'none',
+          }}>
+            {p.poster_path && (
+              <Image
+                src={getPosterUrl(p.poster_path, 'w185')}
+                alt={p.title}
+                fill
+                sizes="80px"
+                style={{ objectFit: 'cover', objectPosition: 'center top' }}
+              />
+            )}
+          </div>
+        ))}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%)',
+        }} />
+      </div>
+      <div style={{ padding: '12px 14px 14px' }}>
+        <div style={{
+          fontFamily: 'var(--font-display)', fontSize: '14px',
+          letterSpacing: '0.04em', color: 'var(--accent)', marginBottom: '4px',
+        }}>{condition.label}</div>
+        <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+          {condition.description}
+        </div>
+      </div>
+    </button>
+  );
+}
+
+// ── Home page (hero + conditions grid) ───────────────────────────────────────
+function HomePage({
+  onSelectCondition,
+  onOverlap,
+  conditionsRef,
+}: {
+  onSelectCondition: (id: string) => void;
+  onOverlap: () => void;
+  conditionsRef: React.RefObject<HTMLDivElement>;
+}) {
+  const grouped = OVERVIEW_CATEGORY_ORDER.reduce<Record<string, WinCondition[]>>((acc, cat) => {
+    const items = WIN_CONDITIONS.filter(wc => wc.category === cat);
+    if (items.length) acc[cat] = items;
+    return acc;
+  }, {});
+
+  return (
+    <div style={{ overflowY: 'auto', height: '100%' }}>
+
+      {/* Hero */}
+      <div style={{
+        padding: '64px 32px 56px',
+        maxWidth: '680px',
+        margin: '0 auto',
+        textAlign: 'center',
+      }}>
+        <div style={{
+          fontSize: '13px',
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase',
+          color: 'var(--accent-dim)',
+          marginBottom: '18px',
+          fontWeight: 600,
+        }}>
+          A companion tool for
+        </div>
+        <h1 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: 'clamp(32px, 6vw, 52px)',
+          letterSpacing: '0.06em',
+          color: 'var(--accent)',
+          marginBottom: '24px',
+          lineHeight: 1.1,
+        }}>
+          CINE2NERDLE BATTLE
+        </h1>
+        <p style={{
+          fontSize: '16px',
+          color: 'var(--text-muted)',
+          lineHeight: 1.7,
+          marginBottom: '32px',
+          maxWidth: '520px',
+          margin: '0 auto 32px',
+        }}>
+          Cine2Nerdle Battle challenges you to connect films through shared cast and crew.
+          Cine2Helper shows you which films qualify for each win condition — and which films
+          satisfy multiple conditions at once, giving you the most powerful plays.
+        </p>
+        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => conditionsRef.current?.scrollIntoView({ behavior: 'smooth' })}
+            style={{
+              padding: '12px 28px',
+              background: 'var(--accent)',
+              border: 'none',
+              borderRadius: 'var(--radius)',
+              color: 'var(--bg)',
+              fontFamily: 'var(--font-display)',
+              fontSize: '14px',
+              fontWeight: 700,
+              letterSpacing: '0.06em',
+              cursor: 'pointer',
+              transition: 'opacity 0.15s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+          >
+            WIN CONDITIONS ↓
+          </button>
+          <button
+            onClick={onOverlap}
+            style={{
+              padding: '12px 28px',
+              background: 'transparent',
+              border: '1px solid var(--accent-dim)',
+              borderRadius: 'var(--radius)',
+              color: 'var(--accent)',
+              fontFamily: 'var(--font-display)',
+              fontSize: '14px',
+              fontWeight: 700,
+              letterSpacing: '0.06em',
+              cursor: 'pointer',
+              transition: 'all 0.15s',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'var(--accent-glow)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'transparent';
+            }}
+          >
+            OVERLAP ANALYZER →
+          </button>
+          <a
+            href="https://www.cinenerdle2.app/battle"
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              padding: '12px 28px',
+              background: 'transparent',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius)',
+              color: 'var(--text-muted)',
+              fontFamily: 'var(--font-display)',
+              fontSize: '14px',
+              fontWeight: 700,
+              letterSpacing: '0.06em',
+              cursor: 'pointer',
+              textDecoration: 'none',
+              transition: 'border-color 0.15s',
+              display: 'inline-block',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--accent-dim)')}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}
+          >
+            PLAY THE GAME ↗
+          </a>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div style={{ borderTop: '1px solid var(--border)', margin: '0 24px' }} />
+
+      {/* Win conditions grid */}
+      <div ref={conditionsRef} style={{ padding: '40px 24px 48px' }}>
+        <h2 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '22px',
+          letterSpacing: '0.06em',
+          color: 'var(--accent)',
+          marginBottom: '6px',
+        }}>WIN CONDITIONS</h2>
+        <p style={{
+          fontSize: '13px', color: 'var(--text-dim)',
+          marginBottom: '32px', lineHeight: 1.5,
+        }}>
+          Click any condition to browse qualifying films. Hover a film card for cast and crew details.
+        </p>
+
+        {OVERVIEW_CATEGORY_ORDER.filter(cat => grouped[cat]).map(cat => (
+          <div key={cat} style={{ marginBottom: '36px' }}>
+            <h3 style={{
+              fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em',
+              textTransform: 'uppercase', color: 'var(--text-dim)',
+              marginBottom: '14px', paddingBottom: '8px',
+              borderBottom: '1px solid var(--border)',
+            }}>
+              {CATEGORY_LABELS[cat] ?? cat}
+            </h3>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+              gap: '14px',
+            }}>
+              {grouped[cat].map(wc => (
+                <ConditionCard
+                  key={wc.id}
+                  condition={wc}
+                  onClick={() => onSelectCondition(wc.id)}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Root ──────────────────────────────────────────────────────────────────────
+export default function RootPage() {
+  const [view, setView] = useState<View>('home');
+  const [activeCondition, setActiveCondition] = useState<string | null>(null);
+  const conditionsRef = useRef<HTMLDivElement>(null);
+
+  const selectCondition = (id: string) => {
+    setActiveCondition(id);
+    setView('condition');
+  };
+
+  const goHome = () => {
+    setView('home');
+    setActiveCondition(null);
+  };
+
+  const goHomeScrolled = () => {
+    if (view === 'home') {
+      conditionsRef.current?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      setView('home');
+      setActiveCondition(null);
+      // After state update, scroll on next tick
+      setTimeout(() => conditionsRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
+    }
+  };
+
+  const conditionLabel = WIN_CONDITIONS.find(w => w.id === activeCondition)?.label ?? '';
+
+  return (
+    <>
+      <style>{`
+        @keyframes slideInRight {
+          from { opacity: 0; transform: translateX(40px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInLeft {
+          from { opacity: 0; transform: translateX(-40px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(6px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes tooltipIn {
+          from { opacity: 0; transform: scale(0.96) translateY(4px); }
+          to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        * { box-sizing: border-box; }
+        @media (max-width: 640px) {
+          .desktop-only { display: none !important; }
+        }
+        @media (min-width: 641px) {
+          .mobile-only { display: none !important; }
+        }
+        .slide-in-right { animation: slideInRight 0.28s ease forwards; }
+        .slide-in-left  { animation: slideInLeft  0.28s ease forwards; }
+      `}</style>
+
+      <div style={{
+        display: 'flex', flexDirection: 'column',
+        height: '100vh', overflow: 'hidden',
+        background: 'var(--bg)',
+      }}>
+
+        {/* ── Header ──────────────────────────────────────────────── */}
+        <header style={{
+          borderBottom: '1px solid var(--border)',
+          background: 'var(--surface)',
+          flexShrink: 0, zIndex: 10, position: 'relative',
+        }}>
+          <div style={{
+            height: '56px', display: 'flex',
+            alignItems: 'center', padding: '0 20px', gap: '12px',
+          }}>
+
+            {/* Back button */}
+            {(view === 'condition' || view === 'overlap') && (
+              <button
+                onClick={goHome}
+                style={{
+                  background: 'transparent',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius)',
+                  color: 'var(--text-muted)',
+                  cursor: 'pointer',
+                  padding: '5px 10px',
+                  fontSize: '13px',
+                  display: 'flex', alignItems: 'center', gap: '5px',
+                  flexShrink: 0, transition: 'all 0.12s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = 'var(--accent-dim)';
+                  e.currentTarget.style.color = 'var(--accent)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = 'var(--border)';
+                  e.currentTarget.style.color = 'var(--text-muted)';
+                }}
+              >
+                ← <span className="desktop-only">Home</span>
+              </button>
+            )}
+
+            {/* Logo — always goes home to top */}
+            <button
+              onClick={goHome}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '8px',
+                flexShrink: 0, background: 'transparent', border: 'none',
+                cursor: 'pointer', padding: 0,
+              }}
+            >
+              <span style={{ fontSize: '20px' }}>🎬</span>
+              <span style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '20px', letterSpacing: '0.06em',
+                color: 'var(--accent)',
+              }}>CINE2HELPER</span>
+            </button>
+
+            {/* Breadcrumb */}
+            {view === 'condition' && (
+              <span className="desktop-only" style={{
+                color: 'var(--text-dim)', fontSize: '13px', marginLeft: '4px',
+              }}>
+                / {conditionLabel}
+              </span>
+            )}
+            {view === 'overlap' && (
+              <span className="desktop-only" style={{
+                color: 'var(--text-dim)', fontSize: '13px', marginLeft: '4px',
+              }}>
+                / Overlap Analyzer
+              </span>
+            )}
+
+            {/* Nav — desktop */}
+            <nav className="desktop-only" style={{
+              display: 'flex', gap: '2px', marginLeft: 'auto',
+            }}>
+              {([
+                { label: 'Win Conditions', action: goHomeScrolled },
+                { label: 'Overlap Analyzer', action: () => setView('overlap') },
+              ]).map(({ label, action }) => (
+                <button
+                  key={label}
+                  onClick={action}
+                  style={{
+                    padding: '6px 14px',
+                    background: 'transparent',
+                    border: '1px solid transparent',
+                    borderRadius: 'var(--radius)',
+                    color: 'var(--text-muted)',
+                    cursor: 'pointer', fontSize: '13px',
+                    transition: 'all 0.12s',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = 'var(--border)';
+                    e.currentTarget.style.color = 'var(--text)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = 'transparent';
+                    e.currentTarget.style.color = 'var(--text-muted)';
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          {/* Mobile tab bar */}
+          <div className="mobile-only" style={{
+            display: 'flex', borderTop: '1px solid var(--border)',
+          }}>
+            {([
+              { label: 'Win Conditions', action: goHomeScrolled },
+              { label: 'Overlap', action: () => setView('overlap') },
+            ]).map(({ label, action }) => (
+              <button
+                key={label}
+                onClick={action}
+                style={{
+                  flex: 1, padding: '10px',
+                  background: 'transparent', border: 'none',
+                  borderBottom: '2px solid transparent',
+                  color: 'var(--text-muted)',
+                  cursor: 'pointer', fontSize: '13px',
+                  transition: 'all 0.12s',
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </header>
+
+        {/* ── Main ────────────────────────────────────────────────── */}
+        <main style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
+
+          {view === 'home' && (
+            <div className="slide-in-left" style={{ height: '100%' }}>
+              <HomePage
+                onSelectCondition={selectCondition}
+                onOverlap={() => setView('overlap')}
+                conditionsRef={conditionsRef}
+              />
+            </div>
+          )}
+
+          {view === 'condition' && activeCondition && (
+            <div className="slide-in-right" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <WinConditionPanel key={activeCondition} conditionId={activeCondition} />
+            </div>
+          )}
+
+          {view === 'overlap' && (
+            <div className="slide-in-right" style={{ height: '100%', overflowY: 'auto', padding: '24px' }}>
+              <OverlapAnalyzer />
+            </div>
+          )}
+        </main>
+
+        {/* ── Footer ──────────────────────────────────────────────── */}
+        <footer style={{
+          height: '36px', borderTop: '1px solid var(--border)',
+          background: 'var(--surface)',
+          display: 'flex', alignItems: 'center',
+          justifyContent: 'center', padding: '0 16px', flexShrink: 0,
+        }}>
+          <span style={{ fontSize: '11px', color: 'var(--text-dim)', textAlign: 'center' }}>
+            Not affiliated with or endorsed by Cine2Nerdle, TMDB, or the TMDB API.
+          </span>
+        </footer>
+      </div>
+    </>
+  );
+}
