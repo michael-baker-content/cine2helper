@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { TMDBMovie, TMDBMovieDetail, TMDBCastMember, TMDBCrewMember } from '@/types/tmdb';
 import { getPosterUrl } from '@/lib/tmdb';
 import Image from 'next/image';
@@ -8,235 +8,302 @@ import Image from 'next/image';
 interface MovieCardProps {
   movie: TMDBMovie;
   compact?: boolean;
-  index?: number; // for LCP eager loading
+  index?: number;
 }
 
-// ── Qualifying crew jobs (Cine2Nerdle connection rules) ─────────────────────
-const DIRECTOR_JOBS = new Set(['Director']);
-const WRITER_JOBS = new Set(['Writer', 'Screenplay', 'Story', 'Original Story', 'Screen Story', 'Novel']);
-const COMPOSER_JOBS = new Set(['Original Music Composer', 'Music', 'Composer']);
+const DIRECTOR_JOBS      = new Set(['Director']);
+const WRITER_JOBS        = new Set(['Writer', 'Screenplay', 'Story', 'Original Story', 'Screen Story', 'Novel']);
+const COMPOSER_JOBS      = new Set(['Original Music Composer', 'Music', 'Composer']);
 const CINEMATOGRAPHER_JOBS = new Set(['Director of Photography', 'Cinematography']);
 
 function groupCrew(crew: TMDBCrewMember[]) {
-  const directors: string[] = [];
-  const writers: string[] = [];
-  const composers: string[] = [];
-  const dops: string[] = [];
-
-  const seenDirectors = new Set<number>();
-  const seenWriters = new Set<number>();
-  const seenComposers = new Set<number>();
-  const seenDops = new Set<number>();
-
+  const directors: string[] = [], writers: string[] = [],
+        composers: string[] = [], dops: string[] = [];
+  const seen = { d: new Set<number>(), w: new Set<number>(),
+                 c: new Set<number>(), dp: new Set<number>() };
   for (const c of crew) {
-    if (DIRECTOR_JOBS.has(c.job) && !seenDirectors.has(c.id)) {
-      directors.push(c.name); seenDirectors.add(c.id);
-    } else if (WRITER_JOBS.has(c.job) && !seenWriters.has(c.id)) {
-      writers.push(c.name); seenWriters.add(c.id);
-    } else if (COMPOSER_JOBS.has(c.job) && !seenComposers.has(c.id)) {
-      composers.push(c.name); seenComposers.add(c.id);
-    } else if (CINEMATOGRAPHER_JOBS.has(c.job) && !seenDops.has(c.id)) {
-      dops.push(c.name); seenDops.add(c.id);
-    }
+    if      (DIRECTOR_JOBS.has(c.job)        && !seen.d.has(c.id))  { directors.push(c.name); seen.d.add(c.id); }
+    else if (WRITER_JOBS.has(c.job)          && !seen.w.has(c.id))  { writers.push(c.name);   seen.w.add(c.id); }
+    else if (COMPOSER_JOBS.has(c.job)        && !seen.c.has(c.id))  { composers.push(c.name); seen.c.add(c.id); }
+    else if (CINEMATOGRAPHER_JOBS.has(c.job) && !seen.dp.has(c.id)) { dops.push(c.name);      seen.dp.add(c.id); }
   }
-
   return { directors, writers, composers, dops };
 }
 
-// ── Tooltip component ────────────────────────────────────────────────────────
-function MovieTooltip({ movieId, anchorRect }: {
-  movieId: number;
-  anchorRect: DOMRect | null;
-}) {
-  const [detail, setDetail] = useState<TMDBMovieDetail | null>(null);
+// ── Info modal ────────────────────────────────────────────────────────────────
+function InfoModal({ movie, onClose }: { movie: TMDBMovie; onClose: () => void }) {
+  const [detail, setDetail]   = useState<TMDBMovieDetail | null>(null);
   const [loading, setLoading] = useState(true);
-  const tooltipRef = useRef<HTMLDivElement>(null);
+  const year = movie.release_date?.slice(0, 4) ?? '?';
 
   useEffect(() => {
     let cancelled = false;
-    fetch(`/api/movie-detail?id=${movieId}`)
+    fetch(`/api/movie-detail?id=${movie.id}`)
       .then(r => r.json())
       .then(d => { if (!cancelled) { setDetail(d); setLoading(false); } })
       .catch(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
-  }, [movieId]);
+  }, [movie.id]);
 
-  // Position tooltip: prefer right of card, flip left if near edge
-  const style: React.CSSProperties = {
-    position: 'fixed',
-    zIndex: 9999,
-    width: '260px',
-    background: 'var(--surface)',
-    border: '1px solid var(--accent-dim)',
-    borderRadius: 'var(--radius-lg)',
-    boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
-    padding: '14px',
-    pointerEvents: 'none',
-    animation: 'tooltipIn 0.12s ease',
-  };
+  // Close on Escape
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [onClose]);
 
-  if (anchorRect) {
-    const spaceRight = window.innerWidth - anchorRect.right;
-    const spaceLeft = anchorRect.left;
-    if (spaceRight >= 280) {
-      style.left = anchorRect.right + 8;
-    } else if (spaceLeft >= 280) {
-      style.left = anchorRect.left - 268;
-    } else {
-      // Not enough space either side — center below
-      style.left = Math.max(8, anchorRect.left - 60);
-      style.top = anchorRect.bottom + 8;
-    }
-    if (!style.top) {
-      const mid = anchorRect.top + anchorRect.height / 2;
-      style.top = Math.max(8, Math.min(mid - 120, window.innerHeight - 340));
-    }
-  }
-
-  if (loading) {
-    return (
-      <div ref={tooltipRef} style={style}>
-        <div style={{ color: 'var(--text-dim)', fontSize: '12px', padding: '8px 0' }}>
-          Loading…
-        </div>
-      </div>
-    );
-  }
-
-  if (!detail?.credits) return null;
-
-  const { directors, writers, composers, dops } = groupCrew(detail.credits.crew ?? []);
-  const topCast = (detail.credits.cast ?? [])
-    .sort((a, b) => a.order - b.order)
-    .slice(0, 10);
+  // Prevent body scroll while open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
 
   const Row = ({ label, names }: { label: string; names: string[] }) => {
     if (!names.length) return null;
     return (
-      <div style={{ marginBottom: '8px' }}>
+      <div style={{ marginBottom: '12px' }}>
         <div style={{
           fontSize: '10px', color: 'var(--accent)', fontWeight: 700,
-          letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '3px',
+          letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px',
         }}>{label}</div>
-        <div style={{ fontSize: '12px', color: 'var(--text)', lineHeight: 1.4 }}>
+        <div style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.5 }}>
           {names.join(', ')}
         </div>
       </div>
     );
   };
 
+  const { directors, writers, composers, dops } =
+    detail?.credits ? groupCrew(detail.credits.crew ?? []) : { directors: [], writers: [], composers: [], dops: [] };
+  const topCast = (detail?.credits?.cast ?? [])
+    .sort((a, b) => a.order - b.order)
+    .slice(0, 10);
+
   return (
-    <div ref={tooltipRef} style={style}>
-      <div style={{
-        fontWeight: 700, fontSize: '13px', marginBottom: '10px',
-        lineHeight: 1.3, color: 'var(--text)',
-        borderBottom: '1px solid var(--border)', paddingBottom: '8px',
-      }}>
-        {detail.title}
-        <span style={{ fontWeight: 400, color: 'var(--text-muted)', marginLeft: '6px' }}>
-          {detail.release_date?.slice(0, 4)}
-        </span>
-      </div>
+    <>
+      <style>{`
+        @keyframes modalIn {
+          from { opacity: 0; transform: translateY(20px) scale(0.97); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+      `}</style>
 
-      <Row label="Director" names={directors} />
-      <Row label={writers.length > 1 ? 'Writers' : 'Writer'} names={writers} />
-      <Row label="Cinematography" names={dops} />
-      <Row label="Composer" names={composers} />
-
-      {topCast.length > 0 && (
-        <div>
+      {/* Backdrop */}
+      <div
+        onClick={onClose}
+        style={{
+          position: 'fixed', inset: 0, zIndex: 1000,
+          background: 'rgba(0,0,0,0.72)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '16px',
+        }}
+      >
+        {/* Modal panel — stop propagation so clicks inside don't close */}
+        <div
+          onClick={e => e.stopPropagation()}
+          style={{
+            background: 'var(--surface)',
+            border: '1px solid var(--accent-dim)',
+            borderRadius: 'var(--radius-lg)',
+            width: '100%',
+            maxWidth: '420px',
+            maxHeight: '85vh',
+            overflowY: 'auto',
+            boxShadow: '0 16px 64px rgba(0,0,0,0.7)',
+            animation: 'modalIn 0.2s ease forwards',
+            position: 'relative',
+          }}
+        >
+          {/* Header with poster + title */}
           <div style={{
-            fontSize: '10px', color: 'var(--accent)', fontWeight: 700,
-            letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px',
-          }}>Cast</div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-            {topCast.map(c => (
-              <span key={c.id} style={{
-                fontSize: '11px', color: 'var(--text-muted)',
-                background: 'var(--surface-2)',
-                borderRadius: '10px', padding: '2px 8px',
+            display: 'flex', gap: '14px', padding: '16px 16px 0',
+            alignItems: 'flex-start',
+          }}>
+            {movie.poster_path && (
+              <Image
+                src={getPosterUrl(movie.poster_path, 'w185')}
+                alt={movie.title}
+                width={60}
+                height={90}
+                style={{ borderRadius: '6px', objectFit: 'cover', flexShrink: 0 }}
+              />
+            )}
+            <div style={{ flex: 1, minWidth: 0, paddingTop: '4px' }}>
+              <div style={{
+                fontWeight: 700, fontSize: '16px', lineHeight: 1.3,
+                color: 'var(--text)', marginBottom: '4px',
               }}>
-                {c.name}
-              </span>
-            ))}
+                {movie.title}
+              </div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '6px' }}>
+                {year}
+                {movie.vote_average != null && (
+                  <span style={{ color: 'var(--accent)', marginLeft: '10px' }}>
+                    ★ {movie.vote_average.toFixed(1)}
+                  </span>
+                )}
+              </div>
+              {movie._matchingPersons && movie._matchingPersons.length > 0 && (
+                <div style={{
+                  fontSize: '11px', color: 'var(--accent-dim)',
+                  fontStyle: 'italic', lineHeight: 1.4,
+                }}>
+                  {movie._matchingPersons.join(' · ')}
+                </div>
+              )}
+            </div>
+            {/* Close button */}
+            <button
+              onClick={onClose}
+              style={{
+                flexShrink: 0,
+                background: 'var(--surface-2)',
+                border: '1px solid var(--border)',
+                borderRadius: '50%',
+                width: '28px', height: '28px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', color: 'var(--text-muted)',
+                fontSize: '16px', lineHeight: 1,
+                transition: 'all 0.12s',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = 'var(--accent-dim)';
+                e.currentTarget.style.color = 'var(--accent)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = 'var(--border)';
+                e.currentTarget.style.color = 'var(--text-muted)';
+              }}
+              aria-label="Close"
+            >
+              ×
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div style={{ borderTop: '1px solid var(--border)', margin: '14px 16px 0' }} />
+
+          {/* Credits body */}
+          <div style={{ padding: '14px 16px 20px' }}>
+            {loading ? (
+              <div style={{ color: 'var(--text-dim)', fontSize: '13px', padding: '8px 0' }}>
+                Loading credits…
+              </div>
+            ) : !detail?.credits ? (
+              <div style={{ color: 'var(--text-dim)', fontSize: '13px' }}>
+                No credits available.
+              </div>
+            ) : (
+              <>
+                <Row label="Director"      names={directors} />
+                <Row label={writers.length > 1 ? 'Writers' : 'Writer'} names={writers} />
+                <Row label="Cinematography" names={dops} />
+                <Row label="Composer"      names={composers} />
+                {topCast.length > 0 && (
+                  <div>
+                    <div style={{
+                      fontSize: '10px', color: 'var(--accent)', fontWeight: 700,
+                      letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px',
+                    }}>Cast</div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+                      {topCast.map(c => (
+                        <span key={c.id} style={{
+                          fontSize: '12px', color: 'var(--text-muted)',
+                          background: 'var(--surface-2)',
+                          borderRadius: '12px', padding: '3px 10px',
+                          border: '1px solid var(--border)',
+                        }}>
+                          {c.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
-      )}
-    </div>
+      </div>
+    </>
+  );
+}
+
+// ── Info button ───────────────────────────────────────────────────────────────
+function InfoButton({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label="Film info"
+      style={{
+        position: 'absolute',
+        bottom: '8px', right: '8px',
+        width: '22px', height: '22px',
+        borderRadius: '50%',
+        background: 'rgba(0,0,0,0.65)',
+        border: '1px solid rgba(255,255,255,0.2)',
+        color: 'rgba(255,255,255,0.8)',
+        fontSize: '12px',
+        fontWeight: 700,
+        fontStyle: 'italic',
+        fontFamily: 'Georgia, serif',
+        cursor: 'pointer',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        backdropFilter: 'blur(4px)',
+        transition: 'all 0.12s',
+        lineHeight: 1,
+        zIndex: 2,
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.background = 'var(--accent)';
+        e.currentTarget.style.borderColor = 'var(--accent)';
+        e.currentTarget.style.color = 'var(--bg)';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.background = 'rgba(0,0,0,0.65)';
+        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
+        e.currentTarget.style.color = 'rgba(255,255,255,0.8)';
+      }}
+    >
+      i
+    </button>
   );
 }
 
 // ── Main MovieCard ────────────────────────────────────────────────────────────
 export default function MovieCard({ movie, compact = false, index = 99 }: MovieCardProps) {
-  const year = movie.release_date ? new Date(movie.release_date).getFullYear() : '?';
+  const year   = movie.release_date ? new Date(movie.release_date).getFullYear() : '?';
   const rating = movie.vote_average?.toFixed(1) ?? '?';
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
-  const handleShow = useCallback(() => {
-    if (hideTimer.current) clearTimeout(hideTimer.current);
-    setAnchorRect(cardRef.current?.getBoundingClientRect() ?? null);
-    setShowTooltip(true);
+  const openModal  = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowModal(true);
   }, []);
+  const closeModal = useCallback(() => setShowModal(false), []);
 
-  const handleHide = useCallback(() => {
-    hideTimer.current = setTimeout(() => setShowTooltip(false), 100);
-  }, []);
-
-  // Mobile: toggle on tap
-  const handleTap = useCallback(() => {
-    if (showTooltip) {
-      setShowTooltip(false);
-    } else {
-      setAnchorRect(cardRef.current?.getBoundingClientRect() ?? null);
-      setShowTooltip(true);
-    }
-  }, [showTooltip]);
-
-  // Close tooltip on outside tap (mobile)
-  useEffect(() => {
-    if (!showTooltip) return;
-    const handler = (e: TouchEvent) => {
-      if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
-        setShowTooltip(false);
-      }
-    };
-    document.addEventListener('touchstart', handler);
-    return () => document.removeEventListener('touchstart', handler);
-  }, [showTooltip]);
-
-  const tooltip = showTooltip ? (
-    <MovieTooltip movieId={movie.id} anchorRect={anchorRect} />
-  ) : null;
+  const modal = showModal ? <InfoModal movie={movie} onClose={closeModal} /> : null;
 
   if (compact) {
     return (
       <>
-        <div
-          ref={cardRef}
-          onMouseEnter={(e) => { handleShow(); e.currentTarget.style.borderColor = 'var(--accent-dim)'; }}
-          onMouseLeave={(e) => { handleHide(); e.currentTarget.style.borderColor = 'var(--border)'; }}
-          onTouchStart={handleTap}
-          style={{
-            display: 'flex',
-            gap: '10px',
-            alignItems: 'center',
-            padding: '8px 12px',
-            background: 'var(--surface)',
-            borderRadius: 'var(--radius)',
-            border: '1px solid var(--border)',
-            transition: 'border-color 0.15s',
-            cursor: 'default',
-          }}
+        <div style={{
+          display: 'flex', gap: '10px', alignItems: 'center',
+          padding: '8px 12px',
+          background: 'var(--surface)',
+          borderRadius: 'var(--radius)',
+          border: '1px solid var(--border)',
+          transition: 'border-color 0.15s',
+          position: 'relative',
+        }}
+          onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--accent-dim)')}
+          onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}
         >
           {movie.poster_path ? (
             <Image
               src={getPosterUrl(movie.poster_path, 'w185')}
               alt={movie.title}
-              width={32}
-              height={48}
+              width={32} height={48}
               loading={index < 8 ? 'eager' : 'lazy'}
               style={{ borderRadius: '3px', objectFit: 'cover', flexShrink: 0 }}
             />
@@ -247,7 +314,7 @@ export default function MovieCard({ movie, compact = false, index = 99 }: MovieC
               alignItems: 'center', justifyContent: 'center', fontSize: '18px',
             }}>🎬</div>
           )}
-          <div style={{ minWidth: 0 }}>
+          <div style={{ minWidth: 0, flex: 1 }}>
             <div style={{
               fontWeight: 500, whiteSpace: 'nowrap',
               overflow: 'hidden', textOverflow: 'ellipsis', fontSize: '13px',
@@ -262,22 +329,45 @@ export default function MovieCard({ movie, compact = false, index = 99 }: MovieC
               </div>
             )}
           </div>
-          <div style={{ marginLeft: 'auto', flexShrink: 0, color: 'var(--accent)', fontSize: '12px' }}>
-            ★ {rating}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+            <span style={{ color: 'var(--accent)', fontSize: '12px' }}>★ {rating}</span>
+            <button
+              onClick={openModal}
+              aria-label="Film info"
+              style={{
+                width: '20px', height: '20px',
+                borderRadius: '50%',
+                background: 'var(--surface-2)',
+                border: '1px solid var(--border)',
+                color: 'var(--text-muted)',
+                fontSize: '11px', fontWeight: 700,
+                fontStyle: 'italic', fontFamily: 'Georgia, serif',
+                cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'all 0.12s', lineHeight: 1,
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = 'var(--accent-dim)';
+                e.currentTarget.style.color = 'var(--accent)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = 'var(--border)';
+                e.currentTarget.style.color = 'var(--text-muted)';
+              }}
+            >
+              i
+            </button>
           </div>
         </div>
-        {tooltip}
+        {modal}
       </>
     );
   }
 
+  // Grid card
   return (
     <>
       <div
-        ref={cardRef}
-        onMouseEnter={handleShow}
-        onMouseLeave={handleHide}
-        onTouchStart={handleTap}
         style={{
           background: 'var(--surface)',
           borderRadius: 'var(--radius-lg)',
@@ -287,8 +377,18 @@ export default function MovieCard({ movie, compact = false, index = 99 }: MovieC
           cursor: 'default',
           display: 'flex',
           flexDirection: 'column',
+          position: 'relative',
         }}
-
+        onMouseEnter={e => {
+          e.currentTarget.style.transform = 'translateY(-3px)';
+          e.currentTarget.style.borderColor = 'var(--accent-dim)';
+          e.currentTarget.style.boxShadow = 'var(--shadow-glow)';
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.transform = '';
+          e.currentTarget.style.borderColor = 'var(--border)';
+          e.currentTarget.style.boxShadow = '';
+        }}
       >
         <div style={{ position: 'relative', aspectRatio: '2/3', background: 'var(--surface-2)' }}>
           {movie.poster_path ? (
@@ -307,6 +407,7 @@ export default function MovieCard({ movie, compact = false, index = 99 }: MovieC
               fontSize: '48px', color: 'var(--text-dim)',
             }}>🎬</div>
           )}
+          {/* Rating badge */}
           <div style={{
             position: 'absolute', top: '8px', right: '8px',
             background: 'rgba(0,0,0,0.8)', borderRadius: '4px',
@@ -316,13 +417,15 @@ export default function MovieCard({ movie, compact = false, index = 99 }: MovieC
           }}>
             ★ {rating}
           </div>
+          {/* Info button — bottom right of poster */}
+          <InfoButton onClick={openModal} />
         </div>
+
         <div style={{ padding: '10px 12px 12px', flex: 1 }}>
           <div style={{
             fontWeight: 500, fontSize: '13px', lineHeight: 1.3,
             marginBottom: '4px', display: '-webkit-box',
-            WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
+            WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
           }}>
             {movie.title}
           </div>
@@ -337,7 +440,7 @@ export default function MovieCard({ movie, compact = false, index = 99 }: MovieC
           )}
         </div>
       </div>
-      {tooltip}
+      {modal}
     </>
   );
 }

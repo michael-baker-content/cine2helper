@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
 
 :root {
   --bg: #0a0a0f;
@@ -16,7 +16,7 @@
   --blue: #4a9be8;
   --purple: #9b4ae8;
 
-  --font-display: 'Bebas Neue', 'Impact', sans-serif;
+  --font-display: 'Barlow Condensed', 'Impact', sans-serif;
   --font-body: 'DM Sans', system-ui, sans-serif;
 
   --radius: 6px;

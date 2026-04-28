@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Cine2Nerdle Battle — Cheat Sheet',
-  description: 'A strategic cheat sheet for Cine2Nerdle Battle. Browse movies that satisfy every season win condition, powered by TMDB.',
-  keywords: ['cine2nerdle', 'cinenerdle', 'battle', 'cheat sheet', 'movie trivia', 'win conditions'],
+  title: 'Cine2Helper',
+  description: 'A companion tool for Cine2Nerdle Battle. Browse films by win condition and find overlaps to identify your strongest plays.',
+  keywords: ['cine2nerdle', 'cinenerdle', 'battle', 'win conditions', 'movie trivia', 'cine2helper'],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
