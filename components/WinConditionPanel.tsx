@@ -160,10 +160,10 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
               lineHeight: 1,
               marginBottom: '6px',
             }}>
-              {condition.label}
+              {condition?.label}
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>
-              {condition.description}
+              {condition?.description}
             </p>
           </div>
 
