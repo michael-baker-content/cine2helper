@@ -90,7 +90,7 @@ export async function GET(request: NextRequest) {
 
     } else if (conditionId === 'service-the-fans') {
       movies = await resolveMoviesByIds(SERVICE_THE_FANS_IDS);
-      const seqMap = new Map(SERVICE_THE_FANS.map(f => [f.tmdbId, f.sequence]));
+      const seqMap = new Map(SERVICE_THE_FANS.map(f => [f.tmdbId, (f as any).sequence as number | undefined]));
       movies.forEach(m => { if (seqMap.has(m.id)) (m as any).sequence = seqMap.get(m.id); });
 
     // ── Person / themed conditions — use pre-built filmographies ──────────────
