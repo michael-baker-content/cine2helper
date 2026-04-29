@@ -172,13 +172,14 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0', height: '100%' }}>
-      {/* Panel header */}
+      {/* Panel header — full width so touch anywhere in header area is scrollable */}
       <div style={{
-        padding: '20px 24px 16px', maxWidth: '1400px', margin: '0 auto',
         borderBottom: '1px solid var(--border)',
         background: 'var(--surface)',
         flexShrink: 0,
+        width: '100%',
       }}>
+      <div style={{ padding: '20px 24px 16px', maxWidth: '1400px', margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
           <div>
             <h2 style={{
@@ -328,7 +329,8 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
             via TMDB · refreshes hourly
           </span>
         </div>
-      </div>
+      </div>{/* /inner max-width */}
+      </div>{/* /header full-width */}
 
       {/* Movie display */}
       <div style={{ overflowY: 'auto', flex: 1 }}>

@@ -122,11 +122,14 @@ function InfoModal({ movie, onClose, triggerRef }: {
         onClick={onClose}
         aria-hidden="true"
         style={{
-          position: 'fixed', inset: 0, zIndex: 1000,
+          position: 'fixed',
+          top: 0, left: 0, right: 0, bottom: 0,
+          zIndex: 1000,
           background: 'rgba(0,0,0,0.72)',
           backdropFilter: 'blur(4px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           padding: '16px',
+          overflowY: 'auto',
         }}
       >
         {/* Modal panel — stop propagation so clicks inside don't close */}
