@@ -35,11 +35,19 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Setting font-size on html defines the rem base.
+   Default browser size is 16px, so 100% = 16px.
+   Users who have set a larger browser font size will
+   get proportionally larger text throughout the site. */
+html {
+  font-size: 100%;
+}
+
 body {
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 0.9375rem; /* 15px at default browser size */
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }

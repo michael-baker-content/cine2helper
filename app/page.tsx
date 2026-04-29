@@ -117,7 +117,7 @@ function HomePage({
     <div style={{ overflowY: 'auto', height: '100%' }}>
 
       {/* Hero */}
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '64px 32px 0', textAlign: 'center' }}>
+      <div className="mobile-hero-wrap" style={{ maxWidth: '1400px', margin: '0 auto', padding: '64px 32px 0', textAlign: 'center' }}>
       <div style={{ maxWidth: '680px', margin: '0 auto', paddingBottom: '64px' }}>
         <div style={{
           fontSize: '13px',
@@ -129,7 +129,7 @@ function HomePage({
         }}>
           A companion tool for
         </div>
-        <h1 style={{
+        <h1 className="hero-heading" style={{
           fontFamily: 'var(--font-display)',
           fontSize: 'clamp(32px, 6vw, 52px)',
           letterSpacing: '0.06em',
@@ -146,7 +146,8 @@ function HomePage({
           marginBottom: '32px',
           maxWidth: '520px',
           margin: '0 auto 32px',
-        }}>
+        }}
+        className="hero-body">
           Cine2Nerdle Battle challenges you to connect films through shared cast and crew.
           Cine2Helper shows you which films qualify for each win condition — and which films
           satisfy multiple conditions at once. Overlap can work for you or against you:
@@ -156,6 +157,7 @@ function HomePage({
           <button
             onClick={() => conditionsRef.current?.scrollIntoView({ behavior: 'smooth' })}
             aria-label="Scroll to win conditions"
+            className="hero-cta"
             style={{
               padding: '12px 28px',
               background: 'var(--accent)',
@@ -177,6 +179,7 @@ function HomePage({
           <button
             onClick={onOverlap}
             aria-label="Open overlap analyzer"
+            className="hero-cta"
             style={{
               padding: '12px 28px',
               background: 'transparent',
@@ -230,7 +233,7 @@ function HomePage({
       <div style={{ borderTop: '1px solid var(--border)', margin: '0 auto', maxWidth: '1400px', padding: '0 20px' }} />
 
       {/* Win conditions grid */}
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '40px 24px 48px' }}>
+      <div className="mobile-grid-wrap" style={{ maxWidth: '1400px', margin: '0 auto', padding: '40px 24px 48px' }}>
       <div ref={conditionsRef}>
         <h2 style={{
           fontFamily: 'var(--font-display)',
@@ -248,7 +251,7 @@ function HomePage({
 
         {OVERVIEW_CATEGORY_ORDER.filter(cat => grouped[cat]).map(cat => (
           <div key={cat} style={{ marginBottom: '36px' }}>
-            <h3 style={{
+            <h3 className="category-heading" style={{
               fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em',
               textTransform: 'uppercase', color: 'var(--text-dim)',
               marginBottom: '14px', paddingBottom: '8px',
@@ -328,8 +331,31 @@ export default function RootPage() {
           to   { opacity: 1; transform: scale(1) translateY(0); }
         }
         * { box-sizing: border-box; }
-@media (max-width: 640px) {
+        @media (max-width: 640px) {
           .desktop-only { display: none !important; }
+
+          /* Tighter side padding so cards fill the screen edge-to-edge */
+          .mobile-grid-wrap { padding-left: 10px !important; padding-right: 10px !important; }
+          .mobile-hero-wrap { padding-left: 16px !important; padding-right: 16px !important; }
+
+          /* Condition grid — single column, card fills full width */
+          .condition-grid {
+            grid-template-columns: 1fr !important;
+            gap: 10px !important;
+          }
+
+          /* Card typography */
+          .condition-card-poster { height: 160px !important; }
+          .condition-card-label  { font-size: 20px !important; letter-spacing: 0.05em !important; }
+          .condition-card-desc   { font-size: 15px !important; line-height: 1.5 !important; }
+
+          /* Hero typography */
+          .hero-heading   { font-size: 36px !important; }
+          .hero-body      { font-size: 15px !important; }
+          .hero-cta       { font-size: 15px !important; padding: 13px 20px !important; }
+
+          /* Category section headings */
+          .category-heading { font-size: 13px !important; }
         }
         @media (min-width: 641px) {
           .mobile-only { display: none !important; }
