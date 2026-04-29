@@ -18,6 +18,7 @@ export interface CuratedFilm {
    * Examples: regional titles, stylized names, punctuation differences.
    */
   tmdbTitle?: string;
+  sequence?: number;
 }
 
 // ── '80s Sci-Fi ───────────────────────────────────────────────────────────────
