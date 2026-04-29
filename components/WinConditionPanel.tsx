@@ -171,7 +171,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0', height: '100%', minHeight: 0 }}>
+    <div className="condition-panel-outer" style={{ display: 'flex', flexDirection: 'column', gap: '0', height: '100%', minHeight: 0 }}>
       {/* Panel header — full width so touch anywhere in header area is scrollable */}
       <div style={{
         borderBottom: '1px solid var(--border)',
@@ -339,7 +339,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
       </div>{/* /header full-width */}
 
       {/* Movie display */}
-      <div style={{ overflowY: 'auto', flex: 1, minHeight: 0, WebkitOverflowScrolling: 'touch' }}>
+      <div className="condition-scroll-area" style={{ overflowY: 'auto', flex: 1, minHeight: 0, WebkitOverflowScrolling: 'touch' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px 24px', position: 'relative' }}>
         <div aria-live="polite" aria-atomic="true" style={{
           position: 'absolute', width: '1px', height: '1px',

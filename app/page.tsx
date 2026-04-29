@@ -356,6 +356,32 @@ export default function RootPage() {
 
           /* Category section headings */
           .category-heading { font-size: 13px !important; }
+
+          /* Disable slide animations — transforms trap position:fixed modals */
+          .slide-in-right, .slide-in-left { animation: none !important; }
+
+          /* Switch root layout from fixed-height viewport to natural page scroll */
+          .root-layout {
+            height: auto !important;
+            overflow: visible !important;
+          }
+          .main-area {
+            overflow: visible !important;
+            flex: none !important;
+          }
+          .condition-view {
+            height: auto !important;
+            min-height: 0 !important;
+            flex: none !important;
+          }
+          .condition-panel-outer {
+            height: auto !important;
+            min-height: 0 !important;
+          }
+          .condition-scroll-area {
+            overflow: visible !important;
+            flex: none !important;
+          }
         }
         @media (min-width: 641px) {
           .mobile-only { display: none !important; }
@@ -364,7 +390,7 @@ export default function RootPage() {
         .slide-in-left  { animation: slideInLeft  0.28s ease forwards; }
       `}</style>
 
-      <div style={{
+      <div className="root-layout" style={{
         display: 'flex', flexDirection: 'column',
         height: '100vh', overflow: 'hidden',
         background: 'var(--bg)',
@@ -527,7 +553,7 @@ export default function RootPage() {
         </header>
 
         {/* ── Main ────────────────────────────────────────────────── */}
-        <main style={{ flex: 1, overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+        <main className="main-area" style={{ flex: 1, overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column' }}>
           <div aria-live="polite" aria-atomic="true" style={{
             position: 'absolute', width: '1px', height: '1px',
             padding: 0, margin: '-1px', overflow: 'hidden',
@@ -550,7 +576,7 @@ export default function RootPage() {
           )}
 
           {view === 'condition' && activeCondition && (
-            <div className="slide-in-right" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+            <div className="slide-in-right condition-view" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
               <WinConditionPanel key={activeCondition} conditionId={activeCondition} />
             </div>
           )}
