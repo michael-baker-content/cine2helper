@@ -171,7 +171,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0', height: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0', height: '100%', minHeight: 0 }}>
       {/* Panel header — full width so touch anywhere in header area is scrollable */}
       <div style={{
         borderBottom: '1px solid var(--border)',
@@ -207,9 +207,12 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
                 onChange={e => handlePersonFilterChange(e.target.value || null)}
                 style={{
                   background: 'var(--surface-2)',
+                  backgroundImage: 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%228%22%20viewBox%3D%220%200%2012%208%22%3E%3Cpath%20d%3D%22M1%201l5%205%205-5%22%20stroke%3D%22%23a0a0b0%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E")',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 10px center',
                   border: `1px solid ${personFilter ? 'var(--accent)' : 'var(--border)'}`,
                   borderRadius: 'var(--radius)',
-                  padding: '6px 10px',
+                  padding: '6px 28px 6px 10px',
                   color: personFilter ? 'var(--accent)' : 'var(--text)',
                   fontSize: '13px',
                   cursor: 'pointer',
@@ -258,9 +261,12 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
               onChange={(e) => handleSortChange(e.target.value as SortMode)}
               style={{
                 background: 'var(--surface-2)',
+                backgroundImage: 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%228%22%20viewBox%3D%220%200%2012%208%22%3E%3Cpath%20d%3D%22M1%201l5%205%205-5%22%20stroke%3D%22%23a0a0b0%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E")',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 10px center',
                 border: '1px solid var(--border)',
                 borderRadius: 'var(--radius)',
-                padding: '6px 10px',
+                padding: '6px 28px 6px 10px',
                 color: 'var(--text)',
                 fontSize: '13px',
                 cursor: 'pointer',
@@ -288,7 +294,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
                   onClick={() => setView(v)}
                   title={v === 'grid' ? 'Grid view' : 'List view'}
                   style={{
-                    padding: '6px 10px',
+                    padding: '6px 28px 6px 10px',
                     background: view === v ? 'var(--accent-glow)' : 'var(--surface-2)',
                     border: 'none',
                     color: view === v ? 'var(--accent)' : 'var(--text-muted)',
@@ -333,7 +339,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
       </div>{/* /header full-width */}
 
       {/* Movie display */}
-      <div style={{ overflowY: 'auto', flex: 1 }}>
+      <div style={{ overflowY: 'auto', flex: 1, minHeight: 0, WebkitOverflowScrolling: 'touch' }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px 24px', position: 'relative' }}>
         <div aria-live="polite" aria-atomic="true" style={{
           position: 'absolute', width: '1px', height: '1px',

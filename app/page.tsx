@@ -527,7 +527,7 @@ export default function RootPage() {
         </header>
 
         {/* ── Main ────────────────────────────────────────────────── */}
-        <main style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
+        <main style={{ flex: 1, overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'column' }}>
           <div aria-live="polite" aria-atomic="true" style={{
             position: 'absolute', width: '1px', height: '1px',
             padding: 0, margin: '-1px', overflow: 'hidden',
@@ -540,7 +540,7 @@ export default function RootPage() {
           </div>
 
           {view === 'home' && (
-            <div className="slide-in-left" style={{ height: '100%' }}>
+            <div className="slide-in-left" style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
               <HomePage
                 onSelectCondition={selectCondition}
                 onOverlap={() => setView('overlap')}
@@ -550,13 +550,13 @@ export default function RootPage() {
           )}
 
           {view === 'condition' && activeCondition && (
-            <div className="slide-in-right" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div className="slide-in-right" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
               <WinConditionPanel key={activeCondition} conditionId={activeCondition} />
             </div>
           )}
 
           {view === 'overlap' && (
-            <div className="slide-in-right" style={{ height: '100%', overflowY: 'auto' }}>
+            <div className="slide-in-right" style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
               <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '24px 20px' }}>
                 <OverlapAnalyzer />
               </div>

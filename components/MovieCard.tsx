@@ -112,8 +112,8 @@ function InfoModal({ movie, onClose, triggerRef }: {
     <>
       <style>{`
         @keyframes modalIn {
-          from { opacity: 0; transform: translateY(20px) scale(0.97); }
-          to   { opacity: 1; transform: translateY(0) scale(1); }
+          from { opacity: 0; transform: scale(0.96); }
+          to   { opacity: 1; transform: scale(1); }
         }
       `}</style>
 
@@ -127,9 +127,10 @@ function InfoModal({ movie, onClose, triggerRef }: {
           zIndex: 1000,
           background: 'rgba(0,0,0,0.72)',
           backdropFilter: 'blur(4px)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           padding: '16px',
-          overflowY: 'auto',
         }}
       >
         {/* Modal panel — stop propagation so clicks inside don't close */}
