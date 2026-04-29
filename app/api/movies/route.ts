@@ -1,36 +1,59 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getMovieSummary, discoverMoviesAllPages } from '@/lib/tmdb';
+import { discoverMoviesAllPages } from '@/lib/tmdb';
 import { WIN_CONDITIONS_MAP } from '@/lib/win-conditions';
 import { CURATED_LISTS } from '@/lib/decade-genre-lists';
 import { OSCAR_WINNER_TMDB_IDS } from '@/lib/oscar-winners';
 import { SERVICE_THE_FANS, SERVICE_THE_FANS_IDS } from '@/lib/service-the-fans';
-import { FILMOGRAPHY_MAP, getFilmographyIds } from '@/lib/person-filmographies';
+import { FILMOGRAPHY_MAP } from '@/lib/person-filmographies';
+import { MOVIE_CACHE } from '@/lib/movie-cache';
 import { TMDBMovie } from '@/types/tmdb';
 
 export const runtime = 'nodejs';
 
+// Cache API responses at Vercel's CDN edge for 1 hour.
+// The first request after a deploy pays the cost; all subsequent requests
+// are served instantly from cache until the next revalidation.
+export const revalidate = 3600;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 /**
- * Fetch full movie details for a list of TMDB IDs in parallel batches.
- * Returns results in the same order, skipping any IDs that fail.
+ * Resolve a list of TMDB IDs to TMDBMovie objects using the pre-built cache.
+ * Falls back to a live TMDB fetch only for IDs missing from the cache
+ * (e.g. very recently added films not yet in a cache rebuild).
  */
-async function fetchMoviesByIds(ids: number[], batchSize = 40): Promise<TMDBMovie[]> {
-  const results: TMDBMovie[] = [];
-
-  // Deduplicate IDs before fetching
+async function resolveMoviesByIds(ids: number[]): Promise<TMDBMovie[]> {
   const uniqueIds = [...new Set(ids)];
+  const results: TMDBMovie[] = [];
+  const missing: number[] = [];
 
-  for (let i = 0; i < uniqueIds.length; i += batchSize) {
-    const batch = uniqueIds.slice(i, i + batchSize);
-    const settled = await Promise.allSettled(batch.map((id) => getMovieSummary(id)));
-    for (const result of settled) {
-      if (result.status === 'fulfilled') {
-        results.push(result.value);
+  for (const id of uniqueIds) {
+    const cached = MOVIE_CACHE[id];
+    if (cached) {
+      results.push(cached);
+    } else {
+      missing.push(id);
+    }
+  }
+
+  // Live fallback for any IDs not in the cache (should be rare)
+  if (missing.length > 0) {
+    console.warn(`[movies API] ${missing.length} IDs not in movie cache — fetching live from TMDB: ${missing.join(', ')}`);
+    const BATCH_SIZE = 40;
+    for (let i = 0; i < missing.length; i += BATCH_SIZE) {
+      const batch = missing.slice(i, i + BATCH_SIZE);
+      const settled = await Promise.allSettled(
+        batch.map((id) =>
+          fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, {
+            headers: { Authorization: `Bearer ${process.env.TMDB_READ_ACCESS_TOKEN}` },
+            next: { revalidate: 3600 },
+          }).then((r) => r.json() as Promise<TMDBMovie>)
+        )
+      );
+      for (const result of settled) {
+        if (result.status === 'fulfilled') results.push(result.value);
       }
     }
-    // No delay needed — Next.js fetch cache handles deduplication
   }
 
   return results;
@@ -45,7 +68,7 @@ export async function GET(request: NextRequest) {
   const conditionId = searchParams.get('condition');
   const page = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10));
   const sortParam = searchParams.get('sort') ?? 'year_desc';
-  const personParam   = searchParams.get('person') ?? null; // display name for group person filter
+  const personParam   = searchParams.get('person') ?? null;
   const sequenceParam = searchParams.get('sequence') ? parseInt(searchParams.get('sequence')!) : null;
 
   if (!conditionId) {
@@ -60,38 +83,35 @@ export async function GET(request: NextRequest) {
   try {
     let movies: TMDBMovie[] = [];
 
-    // ── Person conditions — use pre-built filmographies ───────────────────
-    // ── Specific condition ID checks first (before category checks) ─────────
+    // ── Special conditions ────────────────────────────────────────────────────
+
     if (conditionId === 'thank-the-academy') {
-      movies = await fetchMoviesByIds(OSCAR_WINNER_TMDB_IDS);
+      movies = await resolveMoviesByIds(OSCAR_WINNER_TMDB_IDS);
 
     } else if (conditionId === 'service-the-fans') {
-      movies = await fetchMoviesByIds(SERVICE_THE_FANS_IDS);
-      // Attach sequence numbers from static list
+      movies = await resolveMoviesByIds(SERVICE_THE_FANS_IDS);
       const seqMap = new Map(SERVICE_THE_FANS.map(f => [f.tmdbId, f.sequence]));
       movies.forEach(m => { if (seqMap.has(m.id)) (m as any).sequence = seqMap.get(m.id); });
+
+    // ── Person / themed conditions — use pre-built filmographies ──────────────
 
     } else if (condition.category === 'person' || condition.category === 'themed') {
 
       if (condition.groupPersonIds && condition.groupPersonIds.length > 0) {
-        // Group condition: merge filmographies of all people (or just one if personParam set)
         const seenIds = new Set<number>();
         const allIds: number[] = [];
         const filmPersonMap = new Map<number, string[]>();
 
-        // Determine which people to include — all, or just the filtered person
         const indicesToInclude = condition.groupPersonIds
           .map((_, i) => i)
           .filter(i => !personParam || condition.groupDisplayNames?.[i] === personParam);
 
         for (const i of indicesToInclude) {
           const personId = condition.groupPersonIds[i];
-          const fullName = condition.groupPersonNames?.[i] ?? '';
           const surname = condition.groupDisplayNames?.[i]
-            ?? fullName.split(' ').pop()
-            ?? fullName;
+            ?? condition.groupPersonNames?.[i]?.split(' ').pop()
+            ?? '';
 
-          // Find matching filmography by personId
           const filmography = [...FILMOGRAPHY_MAP.values()].find(
             (f) => f.personId === personId
           );
@@ -109,8 +129,7 @@ export async function GET(request: NextRequest) {
           }
         }
 
-        movies = await fetchMoviesByIds(allIds);
-        // Attach matching person display names for display in the UI
+        movies = await resolveMoviesByIds(allIds);
         (movies as (TMDBMovie & { _matchingPersons?: string[] })[]).forEach((m) => {
           m._matchingPersons = filmPersonMap.get(m.id) ?? [];
         });
@@ -120,7 +139,7 @@ export async function GET(request: NextRequest) {
         const filmography = FILMOGRAPHY_MAP.get(conditionId);
         if (filmography) {
           const ids = filmography.films.map((f) => f.tmdbId);
-          movies = await fetchMoviesByIds(ids);
+          movies = await resolveMoviesByIds(ids);
         } else {
           console.warn(`[movies API] No filmography found for ${conditionId}`);
           return NextResponse.json(
@@ -130,16 +149,16 @@ export async function GET(request: NextRequest) {
         }
       }
 
-    // ── Decade + genre conditions — use curated static lists ──────────────
+    // ── Decade + genre conditions — use curated static lists ──────────────────
+
     } else if (condition.category === 'decade') {
       const curatedFilms = CURATED_LISTS[conditionId];
 
       if (curatedFilms && curatedFilms.length > 0) {
-        // Static curated list — fetch full movie details by ID
         const ids = curatedFilms.map((f) => f.tmdbId);
-        movies = await fetchMoviesByIds(ids);
+        movies = await resolveMoviesByIds(ids);
       } else {
-        // Fallback: live TMDB discover (for any decade condition without a curated list)
+        // Fallback: live TMDB discover (no curated list for this condition)
         console.warn(`[movies API] No curated list for ${conditionId}, falling back to discover`);
         const gte = `${condition.decadeStart}-01-01`;
         const lte = `${condition.decadeEnd}-12-31`;
@@ -155,7 +174,8 @@ export async function GET(request: NextRequest) {
         );
       }
 
-    // ── Genre conditions (not currently used this season) ─────────────────
+    // ── Genre conditions ──────────────────────────────────────────────────────
+
     } else if (condition.category === 'genre') {
       movies = await discoverMoviesAllPages(
         {
@@ -166,7 +186,8 @@ export async function GET(request: NextRequest) {
         3
       );
 
-    // ── Country / language conditions ──────────────────────────────────────
+    // ── Country / language conditions ─────────────────────────────────────────
+
     } else if (condition.category === 'country') {
       if (condition.originCountry === 'non-en') {
         movies = await discoverMoviesAllPages(
@@ -186,35 +207,29 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Remove unreleased films (release_date in the future or missing)
-    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-    movies = movies.filter((m) => m.release_date && m.release_date <= today);
+    // ── Filters ───────────────────────────────────────────────────────────────
 
-    // Remove non-features: runtime must be >= 60 minutes if known
-    // Catches TV specials, fan events, awards shows that TMDB catalogs as movies
+    const today = new Date().toISOString().slice(0, 10);
+    movies = movies.filter((m) => m.release_date && m.release_date <= today);
     movies = movies.filter((m) => m.runtime == null || m.runtime >= 60);
 
-    // Filter by franchise sequence position if requested
     if (sequenceParam !== null) {
       movies = movies.filter(m => (m as any).sequence === sequenceParam);
     }
 
-    // Remove entries with no genre tags — legitimate films always have at least one.
-    // Live events, promos, and miscatalogued specials typically have none.
     movies = movies.filter((m) => m.genre_ids == null || m.genre_ids.length > 0);
 
-    // Manual blocklist — explicit TMDB IDs to exclude regardless of other filters
-    // Add any one-off entries here that slip through (e.g. fan events, promos)
     const BLOCKED_IDS = new Set<number>([
       1491034, // Netflix Tudum 2025 — fan event miscatalogued as a film
       1128701, // Creed: Shinjidai — anime short, no runtime on TMDB so slips through
     ]);
     movies = movies.filter((m) => !BLOCKED_IDS.has(m.id));
 
-    // Server-side sort so pagination is consistent regardless of sort order
+    // ── Sort ──────────────────────────────────────────────────────────────────
+
     switch (sortParam) {
-      case 'series': // client handles grouping; fetch in year_asc order for series
-      case 'decade': // client handles final grouping; fetch in year_desc order
+      case 'series':
+      case 'decade':
       case 'year_desc':
         movies.sort((a, b) =>
           (b.release_date ?? '').localeCompare(a.release_date ?? ''));
@@ -239,6 +254,8 @@ export async function GET(request: NextRequest) {
         movies.sort((a, b) =>
           (b.release_date ?? '').localeCompare(a.release_date ?? ''));
     }
+
+    // ── Paginate ──────────────────────────────────────────────────────────────
 
     const total = movies.length;
     const start = (page - 1) * PAGE_SIZE;
