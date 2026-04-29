@@ -3,7 +3,7 @@ import { getMovieSummary, discoverMoviesAllPages } from '@/lib/tmdb';
 import { WIN_CONDITIONS_MAP } from '@/lib/win-conditions';
 import { CURATED_LISTS } from '@/lib/decade-genre-lists';
 import { OSCAR_WINNER_TMDB_IDS } from '@/lib/oscar-winners';
-import { SERVICE_THE_FANS_IDS } from '@/lib/service-the-fans';
+import { SERVICE_THE_FANS, SERVICE_THE_FANS_IDS } from '@/lib/service-the-fans';
 import { FILMOGRAPHY_MAP, getFilmographyIds } from '@/lib/person-filmographies';
 import { TMDBMovie } from '@/types/tmdb';
 
@@ -45,7 +45,8 @@ export async function GET(request: NextRequest) {
   const conditionId = searchParams.get('condition');
   const page = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10));
   const sortParam = searchParams.get('sort') ?? 'year_desc';
-  const personParam = searchParams.get('person') ?? null; // display name for group person filter
+  const personParam   = searchParams.get('person') ?? null; // display name for group person filter
+  const sequenceParam = searchParams.get('sequence') ? parseInt(searchParams.get('sequence')!) : null;
 
   if (!conditionId) {
     return NextResponse.json({ error: 'Missing condition parameter' }, { status: 400 });
@@ -66,6 +67,9 @@ export async function GET(request: NextRequest) {
 
     } else if (conditionId === 'service-the-fans') {
       movies = await fetchMoviesByIds(SERVICE_THE_FANS_IDS);
+      // Attach sequence numbers from static list
+      const seqMap = new Map(SERVICE_THE_FANS.map(f => [f.tmdbId, f.sequence]));
+      movies.forEach(m => { if (seqMap.has(m.id)) (m as any).sequence = seqMap.get(m.id); });
 
     } else if (condition.category === 'person' || condition.category === 'themed') {
 
@@ -190,6 +194,11 @@ export async function GET(request: NextRequest) {
     // Catches TV specials, fan events, awards shows that TMDB catalogs as movies
     movies = movies.filter((m) => m.runtime == null || m.runtime >= 60);
 
+    // Filter by franchise sequence position if requested
+    if (sequenceParam !== null) {
+      movies = movies.filter(m => (m as any).sequence === sequenceParam);
+    }
+
     // Remove entries with no genre tags — legitimate films always have at least one.
     // Live events, promos, and miscatalogued specials typically have none.
     movies = movies.filter((m) => m.genre_ids == null || m.genre_ids.length > 0);
@@ -204,6 +213,8 @@ export async function GET(request: NextRequest) {
 
     // Server-side sort so pagination is consistent regardless of sort order
     switch (sortParam) {
+      case 'series': // client handles grouping; fetch in year_asc order for series
+      case 'decade': // client handles final grouping; fetch in year_desc order
       case 'year_desc':
         movies.sort((a, b) =>
           (b.release_date ?? '').localeCompare(a.release_date ?? ''));

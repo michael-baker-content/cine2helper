@@ -9,6 +9,7 @@ export interface TMDBMovie {
   vote_count: number;
   genre_ids: number[];
   runtime: number | null;
+  sequence?: number; // franchise position (1-5), set for service-the-fans
   popularity: number;
   original_language: string;
   /** Set by API for group conditions — surnames of matching people */

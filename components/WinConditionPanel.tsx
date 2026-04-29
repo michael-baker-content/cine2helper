@@ -10,7 +10,7 @@ interface WinConditionPanelProps {
 }
 
 type ViewMode = 'grid' | 'list';
-type SortMode = 'popularity' | 'rating' | 'year_asc' | 'year_desc' | 'title_asc' | 'title_desc';
+type SortMode = 'popularity' | 'rating' | 'year_asc' | 'year_desc' | 'title_asc' | 'title_desc' | 'decade';
 
 interface ApiResponse {
   conditionId: string;
@@ -31,6 +31,12 @@ function sortMovies(movies: TMDBMovie[], sort: SortMode): TMDBMovie[] {
       case 'year_desc': return (b.release_date ?? '').localeCompare(a.release_date ?? '');
       case 'title_asc': return a.title.localeCompare(b.title);
       case 'title_desc': return b.title.localeCompare(a.title);
+      case 'decade': {
+        const decadeA = Math.floor(parseInt(a.release_date?.slice(0, 4) ?? '0') / 10) * 10;
+        const decadeB = Math.floor(parseInt(b.release_date?.slice(0, 4) ?? '0') / 10) * 10;
+        if (decadeB !== decadeA) return decadeB - decadeA; // newest decade first
+        return (b.release_date ?? '').localeCompare(a.release_date ?? ''); // year within decade
+      }
       default: return 0;
     }
   });
@@ -51,6 +57,8 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
   const [search, setSearch] = useState('');
   const [personFilter, setPersonFilter] = useState<string | null>(null);
   const personFilterRef = React.useRef<string | null>(null);
+  const [sequenceFilter, setSequenceFilter] = useState<number | null>(null);
+  const sequenceFilterRef = React.useRef<number | null>(null);
 
   const fetchPage = useCallback(async (pageNum: number, append: boolean, sortMode: string) => {
     if (append) setLoadingMore(true);
@@ -58,7 +66,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
     setError(null);
     try {
       const res = await fetch(
-        `/api/movies?condition=${encodeURIComponent(conditionId)}&page=${pageNum}&sort=${sortMode}${personFilterRef.current ? `&person=${encodeURIComponent(personFilterRef.current)}` : ''}`
+        `/api/movies?condition=${encodeURIComponent(conditionId)}&page=${pageNum}&sort=${sortMode}${personFilterRef.current ? `&person=${encodeURIComponent(personFilterRef.current)}` : ''}${sequenceFilterRef.current !== null ? `&sequence=${sequenceFilterRef.current}` : ''}`
       );
       if (!res.ok) {
         const err = await res.json();
@@ -82,6 +90,8 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
     setSearch('');
     setPersonFilter(null);
     personFilterRef.current = null;
+    setSequenceFilter(null);
+    sequenceFilterRef.current = null;
     setMovies([]);
     setPage(1);
     setHasMore(false);
@@ -93,6 +103,15 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
   };
 
   // Keep ref in sync so fetchPage always sees current personFilter
+  const handleSequenceFilterChange = (seq: number | null) => {
+    sequenceFilterRef.current = seq;
+    setSequenceFilter(seq);
+    setMovies([]);
+    setPage(1);
+    setHasMore(false);
+    fetchPage(1, false, sort);
+  };
+
   const handlePersonFilterChange = (name: string | null) => {
     personFilterRef.current = name;
     setPersonFilter(name);
@@ -116,7 +135,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
     if (search.trim()) {
       result = result.filter(m => m.title.toLowerCase().includes(search.toLowerCase()));
     }
-    // person filtering is now server-side via &person= param
+    // sequence and person filtering are server-side via &sequence= and &person= params
     return search.trim() ? sortMovies(result, sort) : result;
   })();
 
@@ -229,6 +248,36 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
               </select>
             )}
 
+            {/* Sequence filter — service-the-fans only */}
+            {conditionId === 'service-the-fans' && (
+              <select
+                aria-label="Filter by series position"
+                value={sequenceFilter ?? ''}
+                onChange={e => handleSequenceFilterChange(e.target.value ? parseInt(e.target.value) : null)}
+                style={{
+                  background: 'var(--surface-2)',
+                  backgroundImage: 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%228%22%20viewBox%3D%220%200%2012%208%22%3E%3Cpath%20d%3D%22M1%201l5%205%205-5%22%20stroke%3D%22%23a0a0b0%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E")',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 10px center',
+                  border: `1px solid ${sequenceFilter !== null ? 'var(--accent)' : 'var(--border)'}`,
+                  borderRadius: 'var(--radius)',
+                  padding: '6px 28px 6px 10px',
+                  color: sequenceFilter !== null ? 'var(--accent)' : 'var(--text)',
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  alignSelf: 'flex-start',
+                }}
+              >
+                <option value="">All Films</option>
+                <option value="1">First Film</option>
+                <option value="2">Second Film</option>
+                <option value="3">Third Film</option>
+                <option value="4">Fourth Film</option>
+                <option value="5">Fifth Film</option>
+              </select>
+            )}
+
             {/* Row 2: search + sort + view toggle */}
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
             {/* Search */}
@@ -275,6 +324,9 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
             >
               <option value="year_desc">Newest First</option>
               <option value="year_asc">Oldest First</option>
+              {conditionId === 'thank-the-academy' && (
+                <option value="decade">By Decade</option>
+              )}
               <option value="popularity">Most Popular</option>
               <option value="rating">Highest Rated</option>
               <option value="title_asc">A–Z</option>
@@ -355,20 +407,97 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
             No movies found{search ? ` matching "${search}"` : ''}.
           </div>
         ) : view === 'grid' ? (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
-            gap: '14px',
-          }}>
-            {filtered.map((movie, idx) => (
-              <MovieCard key={movie.id} movie={movie} index={idx} />
-            ))}
+          <div>
+            {sort === 'decade' ? (
+              // Group by decade with section headers
+              (() => {
+                const groups: { decade: number; movies: typeof filtered }[] = [];
+                for (const movie of filtered) {
+                  const yr = parseInt(movie.release_date?.slice(0, 4) ?? '0');
+                  const dec = Math.floor(yr / 10) * 10;
+                  const last = groups[groups.length - 1];
+                  if (last && last.decade === dec) last.movies.push(movie);
+                  else groups.push({ decade: dec, movies: [movie] });
+                }
+                let globalIdx = 0;
+                return groups.map(({ decade, movies: gMovies }) => (
+                  <div key={decade} style={{ marginBottom: '24px' }}>
+                    <h3 style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '16px',
+                      letterSpacing: '0.08em',
+                      color: 'var(--accent)',
+                      marginBottom: '12px',
+                      paddingBottom: '6px',
+                      borderBottom: '1px solid var(--border)',
+                    }}>
+                      {decade}s
+                    </h3>
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
+                      gap: '14px',
+                    }}>
+                      {gMovies.map((movie) => {
+                        const idx = globalIdx++;
+                        return <MovieCard key={movie.id} movie={movie} index={idx} />;
+                      })}
+                    </div>
+                  </div>
+                ));
+              })()
+            ) : (
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
+                gap: '14px',
+              }}>
+                {filtered.map((movie, idx) => (
+                  <MovieCard key={movie.id} movie={movie} index={idx} />
+                ))}
+              </div>
+            )}
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            {filtered.map((movie, idx) => (
-              <MovieCard key={movie.id} movie={movie} compact index={idx} />
-            ))}
+            {sort === 'decade' ? (
+              (() => {
+                const groups: { decade: number; movies: typeof filtered }[] = [];
+                for (const movie of filtered) {
+                  const yr = parseInt(movie.release_date?.slice(0, 4) ?? '0');
+                  const dec = Math.floor(yr / 10) * 10;
+                  const last = groups[groups.length - 1];
+                  if (last && last.decade === dec) last.movies.push(movie);
+                  else groups.push({ decade: dec, movies: [movie] });
+                }
+                let globalIdx = 0;
+                return groups.map(({ decade, movies: gMovies }) => (
+                  <div key={decade} style={{ marginBottom: '16px' }}>
+                    <h3 style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '14px',
+                      letterSpacing: '0.08em',
+                      color: 'var(--accent)',
+                      marginBottom: '8px',
+                      paddingBottom: '4px',
+                      borderBottom: '1px solid var(--border)',
+                    }}>
+                      {decade}s
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      {gMovies.map((movie) => {
+                        const idx = globalIdx++;
+                        return <MovieCard key={movie.id} movie={movie} compact index={idx} />;
+                      })}
+                    </div>
+                  </div>
+                ));
+              })()
+            ) : (
+              filtered.map((movie, idx) => (
+                <MovieCard key={movie.id} movie={movie} compact index={idx} />
+              ))
+            )}
           </div>
         )}
 
