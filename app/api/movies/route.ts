@@ -45,6 +45,7 @@ export async function GET(request: NextRequest) {
   const conditionId = searchParams.get('condition');
   const page = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10));
   const sortParam = searchParams.get('sort') ?? 'year_desc';
+  const personParam = searchParams.get('person') ?? null; // display name for group person filter
 
   if (!conditionId) {
     return NextResponse.json({ error: 'Missing condition parameter' }, { status: 400 });
@@ -69,16 +70,19 @@ export async function GET(request: NextRequest) {
     } else if (condition.category === 'person' || condition.category === 'themed') {
 
       if (condition.groupPersonIds && condition.groupPersonIds.length > 0) {
-        // Group condition: merge filmographies of all people, tag each film
-        // with which group members appear in it
+        // Group condition: merge filmographies of all people (or just one if personParam set)
         const seenIds = new Set<number>();
         const allIds: number[] = [];
         const filmPersonMap = new Map<number, string[]>();
 
-        for (let i = 0; i < condition.groupPersonIds.length; i++) {
+        // Determine which people to include — all, or just the filtered person
+        const indicesToInclude = condition.groupPersonIds
+          .map((_, i) => i)
+          .filter(i => !personParam || condition.groupDisplayNames?.[i] === personParam);
+
+        for (const i of indicesToInclude) {
           const personId = condition.groupPersonIds[i];
           const fullName = condition.groupPersonNames?.[i] ?? '';
-          // Use groupDisplayNames if set, otherwise fall back to last word of full name
           const surname = condition.groupDisplayNames?.[i]
             ?? fullName.split(' ').pop()
             ?? fullName;
@@ -102,7 +106,7 @@ export async function GET(request: NextRequest) {
         }
 
         movies = await fetchMoviesByIds(allIds);
-        // Attach matching person surnames for display in the UI
+        // Attach matching person display names for display in the UI
         (movies as (TMDBMovie & { _matchingPersons?: string[] })[]).forEach((m) => {
           m._matchingPersons = filmPersonMap.get(m.id) ?? [];
         });

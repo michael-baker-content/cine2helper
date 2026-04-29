@@ -383,8 +383,8 @@ export default function OverlapAnalyzer() {
                   <span className="mobile-only" style={{
                     display: 'inline-block',
                     width: '14px', height: '14px',
-                    border: '2px solid var(--bg)',
-                    borderTopColor: 'transparent',
+                    border: '2px solid rgba(255,255,255,0.25)',
+                    borderTopColor: 'var(--accent)',
                     borderRadius: '50%',
                     animation: 'spin 0.7s linear infinite',
                     verticalAlign: 'middle',

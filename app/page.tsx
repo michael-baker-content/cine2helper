@@ -54,7 +54,7 @@ function ConditionCard({ condition, onClick }: {
         e.currentTarget.style.boxShadow = '';
       }}
     >
-      <div style={{
+      <div className="condition-card-poster" style={{
         display: 'flex', height: '100px',
         background: 'var(--surface-2)', overflow: 'hidden', position: 'relative',
       }}>
@@ -85,11 +85,11 @@ function ConditionCard({ condition, onClick }: {
         }} />
       </div>
       <div style={{ padding: '12px 14px 14px' }}>
-        <div style={{
+        <div className="condition-card-label" style={{
           fontFamily: 'var(--font-display)', fontSize: '14px',
           letterSpacing: '0.04em', color: 'var(--accent)', marginBottom: '4px',
         }}>{condition.label}</div>
-        <div style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+        <div className="condition-card-desc" style={{ fontSize: '12px', color: 'var(--text-muted)', lineHeight: 1.4 }}>
           {condition.description}
         </div>
       </div>
@@ -240,7 +240,7 @@ function HomePage({
           marginBottom: '6px',
         }}>WIN CONDITIONS</h2>
         <p style={{
-          fontSize: '13px', color: 'var(--text-dim)',
+          fontSize: '14px', color: 'var(--text-muted)',
           marginBottom: '32px', lineHeight: 1.5,
         }}>
           Click any condition to browse qualifying films. Use the ⓘ button on any film for cast and crew details.
@@ -256,9 +256,9 @@ function HomePage({
             }}>
               {CATEGORY_LABELS[cat] ?? cat}
             </h3>
-            <div style={{
+            <div className="condition-grid" style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 220px))',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
               gap: '14px',
               justifyContent: 'center',
             }}>

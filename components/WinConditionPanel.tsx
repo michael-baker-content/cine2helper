@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { TMDBMovie } from '@/types/tmdb';
 import { WinCondition } from '@/types/tmdb';
 import MovieCard from './MovieCard';
@@ -49,6 +49,8 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
   const [view, setView] = useState<ViewMode>('grid');
   const [sort, setSort] = useState<SortMode>('year_desc');
   const [search, setSearch] = useState('');
+  const [personFilter, setPersonFilter] = useState<string | null>(null);
+  const personFilterRef = React.useRef<string | null>(null);
 
   const fetchPage = useCallback(async (pageNum: number, append: boolean, sortMode: string) => {
     if (append) setLoadingMore(true);
@@ -56,7 +58,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
     setError(null);
     try {
       const res = await fetch(
-        `/api/movies?condition=${encodeURIComponent(conditionId)}&page=${pageNum}&sort=${sortMode}`
+        `/api/movies?condition=${encodeURIComponent(conditionId)}&page=${pageNum}&sort=${sortMode}${personFilterRef.current ? `&person=${encodeURIComponent(personFilterRef.current)}` : ''}`
       );
       if (!res.ok) {
         const err = await res.json();
@@ -78,6 +80,8 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
 
   useEffect(() => {
     setSearch('');
+    setPersonFilter(null);
+    personFilterRef.current = null;
     setMovies([]);
     setPage(1);
     setHasMore(false);
@@ -86,6 +90,16 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
 
   const handleLoadMore = () => {
     fetchPage(page + 1, true, sort);
+  };
+
+  // Keep ref in sync so fetchPage always sees current personFilter
+  const handlePersonFilterChange = (name: string | null) => {
+    personFilterRef.current = name;
+    setPersonFilter(name);
+    setMovies([]);
+    setPage(1);
+    setHasMore(false);
+    fetchPage(1, false, sort);
   };
 
   const handleSortChange = (newSort: SortMode) => {
@@ -97,18 +111,32 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
   };
   // Server handles sort order; client-side sort only applies to search results
   // (since search filters the already-loaded page, not the full dataset)
-  const filtered = search.trim()
-    ? sortMovies(
-        movies.filter((m) => m.title.toLowerCase().includes(search.toLowerCase())),
-        sort
-      )
-    : movies;
+  const filtered = (() => {
+    let result = movies;
+    if (search.trim()) {
+      result = result.filter(m => m.title.toLowerCase().includes(search.toLowerCase()));
+    }
+    // person filtering is now server-side via &person= param
+    return search.trim() ? sortMovies(result, sort) : result;
+  })();
 
   if (loading) {
     return (
       <div style={centerStyle}>
-        <div style={spinnerStyle} />
-        <p style={{ color: 'var(--text-muted)', marginTop: '20px', fontSize: '14px' }}>
+        <style>{`
+          @keyframes wcpSpin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+          }
+        `}</style>
+        <div style={{
+          width: '40px', height: '40px',
+          border: '3px solid var(--border)',
+          borderTopColor: 'var(--accent)',
+          borderRadius: '50%',
+          animation: 'wcpSpin 0.8s linear infinite',
+        }} />
+        <p style={{ color: 'var(--text-muted)', marginTop: '28px', fontSize: '14px' }}>
           Loading movies from TMDB…
         </p>
       </div>
@@ -168,8 +196,37 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
             </p>
           </div>
 
-          {/* Controls */}
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+          {/* Controls — wraps to two rows on mobile if person filters present */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {/* Row 1: person filter dropdown (group conditions only) */}
+            {condition?.groupDisplayNames && condition.groupDisplayNames.length > 0 && (
+              <select
+                aria-label="Filter by person"
+                value={personFilter ?? ''}
+                onChange={e => handlePersonFilterChange(e.target.value || null)}
+                style={{
+                  background: 'var(--surface-2)',
+                  border: `1px solid ${personFilter ? 'var(--accent)' : 'var(--border)'}`,
+                  borderRadius: 'var(--radius)',
+                  padding: '6px 10px',
+                  color: personFilter ? 'var(--accent)' : 'var(--text)',
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  alignSelf: 'flex-start',
+                }}
+              >
+                <option value="">All</option>
+                {condition.groupDisplayNames.map((name, i) => (
+                  <option key={name} value={name}>
+                    {condition.groupPersonNames?.[i] ?? name}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            {/* Row 2: search + sort + view toggle */}
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
             {/* Search */}
             <label htmlFor="title-filter" style={{ position: 'absolute', width: '1px', height: '1px', margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}>
                 Filter titles
@@ -243,18 +300,27 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
                 </button>
               ))}
             </div>
-          </div>
-        </div>
+            </div>{/* /row 2 */}
+          </div>{/* /controls column */}
+        </div>{/* /header inner */}
 
         {/* Stats bar */}
         <div style={{
           marginTop: '12px', display: 'flex', gap: '16px',
-          fontSize: '12px', color: 'var(--text-dim)',
+          fontSize: '12px', color: 'var(--text-muted)',
         }}>
           <span style={{ color: 'var(--text-muted)' }}>{filtered.length} films</span>
+          {personFilter && (
+            <span>· {
+              (() => {
+                const idx = condition?.groupDisplayNames?.indexOf(personFilter) ?? -1;
+                return idx >= 0 ? (condition?.groupPersonNames?.[idx] ?? personFilter) : personFilter;
+              })()
+            } only</span>
+          )}
           {search && <span>· filtered from {movies.length}</span>}
           {!search && total > 0 && (
-            <span style={{ color: 'var(--text-dim)' }}>
+            <span style={{ color: 'var(--text-muted)' }}>
               · showing {movies.length} of {total}
             </span>
           )}
