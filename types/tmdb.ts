@@ -14,6 +14,8 @@ export interface TMDBMovie {
   original_language: string;
   /** Set by API for group conditions — surnames of matching people */
   _matchingPersons?: string[];
+  /** Set by API — other win condition IDs this film also qualifies for */
+  _overlapConditions?: string[];
 }
 
 export interface TMDBMovieDetail extends TMDBMovie {

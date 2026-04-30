@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { TMDBMovie, TMDBMovieDetail, TMDBCastMember, TMDBCrewMember } from '@/types/tmdb';
+import { WIN_CONDITIONS_MAP } from '@/lib/win-conditions';
 import { getPosterUrl } from '@/lib/tmdb';
 import Image from 'next/image';
 
@@ -9,6 +10,7 @@ interface MovieCardProps {
   movie: TMDBMovie;
   compact?: boolean;
   index?: number;
+  onOverlapClick?: (conditionId: string) => void;
 }
 
 const DIRECTOR_JOBS      = new Set(['Director']);
@@ -28,6 +30,62 @@ function groupCrew(crew: TMDBCrewMember[]) {
     else if (CINEMATOGRAPHER_JOBS.has(c.job) && !seen.dp.has(c.id)) { dops.push(c.name);      seen.dp.add(c.id); }
   }
   return { directors, writers, composers, dops };
+}
+
+// ── Overlap chips ─────────────────────────────────────────────────────────────
+
+function OverlapChips({
+  conditionIds,
+  onChipClick,
+}: {
+  conditionIds: string[];
+  onChipClick?: (conditionId: string) => void;
+}) {
+  if (!conditionIds.length) return null;
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '5px' }}>
+      {conditionIds.map((id) => {
+        const label = WIN_CONDITIONS_MAP.get(id)?.label ?? id;
+        return (
+          <button
+            key={id}
+            onClick={(e) => {
+              e.stopPropagation();
+              onChipClick?.(id);
+            }}
+            title={`Filter by: ${label}`}
+            style={{
+              fontSize: '10px',
+              fontWeight: 600,
+              letterSpacing: '0.03em',
+              padding: '2px 7px',
+              borderRadius: '10px',
+              border: '1px solid var(--accent-dim)',
+              background: 'var(--accent-glow)',
+              color: 'var(--accent)',
+              cursor: onChipClick ? 'pointer' : 'default',
+              lineHeight: 1.4,
+              transition: 'all 0.12s',
+              whiteSpace: 'nowrap',
+            }}
+            onMouseEnter={e => {
+              if (!onChipClick) return;
+              e.currentTarget.style.background = 'var(--accent)';
+              e.currentTarget.style.color = 'var(--bg)';
+              e.currentTarget.style.borderColor = 'var(--accent)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'var(--accent-glow)';
+              e.currentTarget.style.color = 'var(--accent)';
+              e.currentTarget.style.borderColor = 'var(--accent-dim)';
+            }}
+          >
+            {label}
+          </button>
+        );
+      })}
+    </div>
+  );
 }
 
 // ── Info modal ────────────────────────────────────────────────────────────────
@@ -269,49 +327,13 @@ function InfoModal({ movie, onClose, triggerRef }: {
   );
 }
 
-// ── Info button ───────────────────────────────────────────────────────────────
-function InfoButton({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
-  return (
-    <button
-      onClick={onClick}
-      aria-label="Film info"
-      style={{
-        position: 'absolute',
-        bottom: '8px', right: '8px',
-        width: '22px', height: '22px',
-        borderRadius: '50%',
-        background: 'rgba(0,0,0,0.65)',
-        border: '1px solid rgba(255,255,255,0.2)',
-        color: 'rgba(255,255,255,0.8)',
-        fontSize: '12px',
-        fontWeight: 700,
-        fontStyle: 'italic',
-        fontFamily: 'Georgia, serif',
-        cursor: 'pointer',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        backdropFilter: 'blur(4px)',
-        transition: 'all 0.12s',
-        lineHeight: 1,
-        zIndex: 2,
-      }}
-      onMouseEnter={e => {
-        e.currentTarget.style.background = 'var(--accent)';
-        e.currentTarget.style.borderColor = 'var(--accent)';
-        e.currentTarget.style.color = 'var(--bg)';
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.background = 'rgba(0,0,0,0.65)';
-        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
-        e.currentTarget.style.color = 'rgba(255,255,255,0.8)';
-      }}
-    >
-      i
-    </button>
-  );
-}
-
 // ── Main MovieCard ────────────────────────────────────────────────────────────
-export default function MovieCard({ movie, compact = false, index = 99 }: MovieCardProps) {
+export default function MovieCard({
+  movie,
+  compact = false,
+  index = 99,
+  onOverlapClick,
+}: MovieCardProps) {
   const year   = movie.release_date ? new Date(movie.release_date).getFullYear() : '?';
   const rating = movie.vote_average?.toFixed(1) ?? '?';
   const [showModal, setShowModal] = useState(false);
@@ -326,6 +348,8 @@ export default function MovieCard({ movie, compact = false, index = 99 }: MovieC
   const modal = showModal
     ? <InfoModal movie={movie} onClose={closeModal} triggerRef={triggerRef} />
     : null;
+
+  const overlapConditions = movie._overlapConditions ?? [];
 
   if (compact) {
     return (
@@ -370,6 +394,9 @@ export default function MovieCard({ movie, compact = false, index = 99 }: MovieC
               }}>
                 {movie._matchingPersons.join(' · ')}
               </div>
+            )}
+            {overlapConditions.length > 0 && (
+              <OverlapChips conditionIds={overlapConditions} onChipClick={onOverlapClick} />
             )}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
@@ -516,6 +543,9 @@ export default function MovieCard({ movie, compact = false, index = 99 }: MovieC
             }}>
               {movie._matchingPersons.join(' · ')}
             </div>
+          )}
+          {overlapConditions.length > 0 && (
+            <OverlapChips conditionIds={overlapConditions} onChipClick={onOverlapClick} />
           )}
         </div>
       </div>

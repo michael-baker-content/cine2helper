@@ -4,8 +4,9 @@ import { WIN_CONDITIONS_MAP } from '@/lib/win-conditions';
 import { CURATED_LISTS } from '@/lib/decade-genre-lists';
 import { OSCAR_WINNER_TMDB_IDS } from '@/lib/oscar-winners';
 import { SERVICE_THE_FANS, SERVICE_THE_FANS_IDS } from '@/lib/service-the-fans';
-import { FILMOGRAPHY_MAP } from '@/lib/person-filmographies';
+import { FILMOGRAPHY_MAP, PERSON_FILMOGRAPHIES } from '@/lib/person-filmographies';
 import { MOVIE_CACHE } from '@/lib/movie-cache';
+import { OVERLAP_INDEX } from '@/lib/overlap-index';
 import { TMDBMovie } from '@/types/tmdb';
 
 export const runtime = 'nodejs';
@@ -59,6 +60,41 @@ async function resolveMoviesByIds(ids: number[]): Promise<TMDBMovie[]> {
   return results;
 }
 
+// ── Condition film set helper ─────────────────────────────────────────────────
+// Returns the set of TMDB IDs for a given condition ID.
+// Used for server-side overlap filtering — mirrors the logic in
+// build-overlap-index.mjs so the two stay in sync.
+
+function getFilmIdsForCondition(cId: string): Set<number> {
+  if (cId === 'thank-the-academy') return new Set(OSCAR_WINNER_TMDB_IDS);
+  if (cId === 'service-the-fans')  return new Set(SERVICE_THE_FANS_IDS);
+
+  const cond = WIN_CONDITIONS_MAP.get(cId);
+  if (!cond) return new Set();
+
+  if (cond.category === 'person' || cond.category === 'themed') {
+    if (cond.groupPersonIds && cond.groupPersonIds.length > 0) {
+      const ids = new Set<number>();
+      for (const personId of cond.groupPersonIds) {
+        const filmography = [...FILMOGRAPHY_MAP.values()].find(f => f.personId === personId);
+        if (filmography) filmography.films.forEach(f => ids.add(f.tmdbId));
+      }
+      return ids;
+    }
+    const filmography = FILMOGRAPHY_MAP.get(cId);
+    if (filmography) return new Set(filmography.films.map(f => f.tmdbId));
+    return new Set();
+  }
+
+  if (cond.category === 'decade') {
+    const curated = CURATED_LISTS[cId];
+    if (curated?.length) return new Set(curated.map(f => f.tmdbId));
+    return new Set();
+  }
+
+  return new Set(); // live-query conditions (genre/country) not supported
+}
+
 // ── Route handler ─────────────────────────────────────────────────────────────
 
 const PAGE_SIZE = 50;
@@ -70,6 +106,9 @@ export async function GET(request: NextRequest) {
   const sortParam = searchParams.get('sort') ?? 'year_desc';
   const personParam   = searchParams.get('person') ?? null;
   const sequenceParam = searchParams.get('sequence') ? parseInt(searchParams.get('sequence')!) : null;
+  const overlapParam = searchParams.get('overlap')
+    ? searchParams.get('overlap')!.split(',').map(s => s.trim()).filter(Boolean)
+    : [];
 
   if (!conditionId) {
     return NextResponse.json({ error: 'Missing condition parameter' }, { status: 400 });
@@ -225,6 +264,33 @@ export async function GET(request: NextRequest) {
     ]);
     movies = movies.filter((m) => !BLOCKED_IDS.has(m.id));
 
+    // ── Overlap filter (server-side) ──────────────────────────────────────────
+    // Narrow the full movie set to films that also qualify for every requested
+    // overlap condition. Applied before pagination so results are correct
+    // regardless of page number.
+    if (overlapParam.length > 0) {
+      const overlapSets = overlapParam.map(id => getFilmIdsForCondition(id));
+      movies = movies.filter(m => overlapSets.every(s => s.has(m.id)));
+    }
+
+    // ── Derive available overlaps from full (pre-pagination) dataset ──────────
+    // Collect every condition that appears on at least one film in the current
+    // (post-filter) results, excluding the current condition.
+    // Returned to the client so the chip bar always reflects the full dataset.
+    const availableOverlapsMap = new Map<string, string>();
+    for (const m of movies) {
+      const overlaps = OVERLAP_INDEX[m.id];
+      if (!overlaps) continue;
+      for (const id of overlaps) {
+        if (id !== conditionId && !availableOverlapsMap.has(id)) {
+          availableOverlapsMap.set(id, WIN_CONDITIONS_MAP.get(id)?.label ?? id);
+        }
+      }
+    }
+    const availableOverlaps = [...availableOverlapsMap.entries()]
+      .sort((a, b) => a[1].localeCompare(b[1]))
+      .map(([id, label]) => ({ id, label }));
+
     // ── Sort ──────────────────────────────────────────────────────────────────
 
     switch (sortParam) {
@@ -262,14 +328,26 @@ export async function GET(request: NextRequest) {
     const end = start + PAGE_SIZE;
     const pageMovies = movies.slice(start, end);
 
+    // ── Annotate with overlap conditions ─────────────────────────────────────
+    // Attach the other conditions each film qualifies for (excluding the
+    // current one). Drives the overlap filter chips in the UI.
+    const annotatedMovies = pageMovies.map((m) => {
+      const allConditions = OVERLAP_INDEX[m.id];
+      if (!allConditions) return m;
+      const others = allConditions.filter((c) => c !== conditionId);
+      if (others.length === 0) return m;
+      return { ...m, _overlapConditions: others };
+    });
+
     return NextResponse.json({
       conditionId,
       condition,
-      movies: pageMovies,
+      movies: annotatedMovies,
       page,
       pageSize: PAGE_SIZE,
       total,
       hasMore: end < total,
+      availableOverlaps,
     });
 
   } catch (error) {

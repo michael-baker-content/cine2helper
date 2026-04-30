@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:cache": "tsx scripts/build-movie-cache.mjs"
+    "build:cache": "tsx scripts/build-movie-cache.mjs",
+    "build:overlap": "tsx scripts/build-overlap-index.mjs"
   },
   "dependencies": {
     "next": "^16.2.4",

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { TMDBMovie } from '@/types/tmdb';
 import { WinCondition } from '@/types/tmdb';
 import MovieCard from './MovieCard';
@@ -20,6 +20,7 @@ interface ApiResponse {
   pageSize: number;
   total: number;
   hasMore: boolean;
+  availableOverlaps: { id: string; label: string }[];
 }
 
 function sortMovies(movies: TMDBMovie[], sort: SortMode): TMDBMovie[] {
@@ -34,8 +35,8 @@ function sortMovies(movies: TMDBMovie[], sort: SortMode): TMDBMovie[] {
       case 'decade': {
         const decadeA = Math.floor(parseInt(a.release_date?.slice(0, 4) ?? '0') / 10) * 10;
         const decadeB = Math.floor(parseInt(b.release_date?.slice(0, 4) ?? '0') / 10) * 10;
-        if (decadeB !== decadeA) return decadeB - decadeA; // newest decade first
-        return (b.release_date ?? '').localeCompare(a.release_date ?? ''); // year within decade
+        if (decadeB !== decadeA) return decadeB - decadeA;
+        return (b.release_date ?? '').localeCompare(a.release_date ?? '');
       }
       default: return 0;
     }
@@ -43,7 +44,6 @@ function sortMovies(movies: TMDBMovie[], sort: SortMode): TMDBMovie[] {
 }
 
 export default function WinConditionPanel({ conditionId }: WinConditionPanelProps) {
-  // Screen reader announcement ref
   const [movies, setMovies] = useState<TMDBMovie[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
@@ -60,13 +60,19 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
   const [sequenceFilter, setSequenceFilter] = useState<number | null>(null);
   const sequenceFilterRef = React.useRef<number | null>(null);
 
+  // Overlap filter — set of condition IDs the user has toggled on
+  const [overlapFilter, setOverlapFilter] = useState<Set<string>>(new Set());
+  const overlapFilterRef = React.useRef<Set<string>>(new Set());
+  // Available overlap conditions — returned by the API from the full dataset
+  const [availableOverlaps, setAvailableOverlaps] = useState<{ id: string; label: string }[]>([]);
+
   const fetchPage = useCallback(async (pageNum: number, append: boolean, sortMode: string) => {
     if (append) setLoadingMore(true);
     else setLoading(true);
     setError(null);
     try {
       const res = await fetch(
-        `/api/movies?condition=${encodeURIComponent(conditionId)}&page=${pageNum}&sort=${sortMode}${personFilterRef.current ? `&person=${encodeURIComponent(personFilterRef.current)}` : ''}${sequenceFilterRef.current !== null ? `&sequence=${sequenceFilterRef.current}` : ''}`
+        `/api/movies?condition=${encodeURIComponent(conditionId)}&page=${pageNum}&sort=${sortMode}${personFilterRef.current ? `&person=${encodeURIComponent(personFilterRef.current)}` : ''}${sequenceFilterRef.current !== null ? `&sequence=${sequenceFilterRef.current}` : ''}${overlapFilterRef.current.size > 0 ? `&overlap=${[...overlapFilterRef.current].join(',')}` : ''}`
       );
       if (!res.ok) {
         const err = await res.json();
@@ -78,6 +84,9 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
       setHasMore(json.hasMore);
       setPage(json.page);
       setMovies((prev) => append ? [...prev, ...json.movies] : json.movies);
+      // Only update available overlaps on fresh loads (not append), so chips
+      // don't change as the user pages through results
+      if (!append) setAvailableOverlaps(json.availableOverlaps ?? []);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to load movies');
     } finally {
@@ -92,20 +101,22 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
     personFilterRef.current = null;
     setSequenceFilter(null);
     sequenceFilterRef.current = null;
+    setOverlapFilter(new Set());
+    overlapFilterRef.current = new Set();
     setMovies([]);
     setPage(1);
     setHasMore(false);
     fetchPage(1, false, sort);
-  }, [fetchPage]);  // sort intentionally excluded — handled by handleSortChange
+  }, [fetchPage]); // sort intentionally excluded — handled by handleSortChange
 
   const handleLoadMore = () => {
     fetchPage(page + 1, true, sort);
   };
 
-  // Keep ref in sync so fetchPage always sees current personFilter
   const handleSequenceFilterChange = (seq: number | null) => {
     sequenceFilterRef.current = seq;
     setSequenceFilter(seq);
+    setOverlapFilter(new Set());
     setMovies([]);
     setPage(1);
     setHasMore(false);
@@ -115,6 +126,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
   const handlePersonFilterChange = (name: string | null) => {
     personFilterRef.current = name;
     setPersonFilter(name);
+    setOverlapFilter(new Set());
     setMovies([]);
     setPage(1);
     setHasMore(false);
@@ -128,16 +140,33 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
     setHasMore(false);
     fetchPage(1, false, newSort);
   };
-  // Server handles sort order; client-side sort only applies to search results
-  // (since search filters the already-loaded page, not the full dataset)
-  const filtered = (() => {
+
+  // Toggle a single overlap condition on/off — triggers a server fetch
+  const handleOverlapChipClick = useCallback((overlapConditionId: string) => {
+    const next = new Set(overlapFilterRef.current);
+    if (next.has(overlapConditionId)) {
+      next.delete(overlapConditionId);
+    } else {
+      next.add(overlapConditionId);
+    }
+    overlapFilterRef.current = next;
+    setOverlapFilter(new Set(next));
+    setMovies([]);
+    setPage(1);
+    setHasMore(false);
+    fetchPage(1, false, sort);
+  }, [fetchPage, sort]);
+
+
+
+  // Apply client-side title search filter (overlap filtering is server-side)
+  const filtered = useMemo(() => {
     let result = movies;
     if (search.trim()) {
       result = result.filter(m => m.title.toLowerCase().includes(search.toLowerCase()));
     }
-    // sequence and person filtering are server-side via &sequence= and &person= params
     return search.trim() ? sortMovies(result, sort) : result;
-  })();
+  }, [movies, search, sort]);
 
   if (loading) {
     return (
@@ -191,7 +220,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
 
   return (
     <div className="condition-panel-outer" style={{ display: 'flex', flexDirection: 'column', gap: '0', height: '100%', minHeight: 0 }}>
-      {/* Panel header — full width so touch anywhere in header area is scrollable */}
+      {/* Panel header */}
       <div style={{
         borderBottom: '1px solid var(--border)',
         background: 'var(--surface)',
@@ -216,9 +245,9 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
             </p>
           </div>
 
-          {/* Controls — wraps to two rows on mobile if person filters present */}
+          {/* Controls */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {/* Row 1: person filter dropdown (group conditions only) */}
+            {/* Person filter dropdown (group conditions only) */}
             {condition?.groupDisplayNames && condition.groupDisplayNames.length > 0 && (
               <select
                 aria-label="Filter by person"
@@ -278,97 +307,187 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
               </select>
             )}
 
-            {/* Row 2: search + sort + view toggle */}
+            {/* Row: search + sort + view toggle */}
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-            {/* Search */}
-            <label htmlFor="title-filter" style={{ position: 'absolute', width: '1px', height: '1px', margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}>
+              <label htmlFor="title-filter" style={{ position: 'absolute', width: '1px', height: '1px', margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}>
                 Filter titles
               </label>
-            <input
-              id="title-filter"
-              type="text"
-              placeholder="Filter titles…"
-              aria-label="Filter titles"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              style={{
-                background: 'var(--surface-2)',
+              <input
+                id="title-filter"
+                type="text"
+                placeholder="Filter titles…"
+                aria-label="Filter titles"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                style={{
+                  background: 'var(--surface-2)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius)',
+                  padding: '6px 12px',
+                  color: 'var(--text)',
+                  fontSize: '13px',
+                  outline: 'none',
+                  width: '160px',
+                }}
+              />
+
+              <select
+                aria-label="Sort films by"
+                value={sort}
+                onChange={(e) => handleSortChange(e.target.value as SortMode)}
+                style={{
+                  background: 'var(--surface-2)',
+                  backgroundImage: 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%228%22%20viewBox%3D%220%200%2012%208%22%3E%3Cpath%20d%3D%22M1%201l5%205%205-5%22%20stroke%3D%22%23a0a0b0%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E")',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 10px center',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius)',
+                  padding: '6px 28px 6px 10px',
+                  color: 'var(--text)',
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  outline: 'none',
+                }}
+              >
+                <option value="year_desc">Newest First</option>
+                <option value="year_asc">Oldest First</option>
+                {conditionId === 'thank-the-academy' && (
+                  <option value="decade">By Decade</option>
+                )}
+                <option value="popularity">Most Popular</option>
+                <option value="rating">Highest Rated</option>
+                <option value="title_asc">A–Z</option>
+                <option value="title_desc">Z–A</option>
+              </select>
+
+              <div style={{
+                display: 'flex',
                 border: '1px solid var(--border)',
                 borderRadius: 'var(--radius)',
-                padding: '6px 12px',
-                color: 'var(--text)',
-                fontSize: '13px',
-                outline: 'none',
-                width: '160px',
-              }}
-            />
+                overflow: 'hidden',
+              }}>
+                {(['grid', 'list'] as ViewMode[]).map((v) => (
+                  <button
+                    key={v}
+                    onClick={() => setView(v)}
+                    title={v === 'grid' ? 'Grid view' : 'List view'}
+                    style={{
+                      padding: '6px 28px 6px 10px',
+                      background: view === v ? 'var(--accent-glow)' : 'var(--surface-2)',
+                      border: 'none',
+                      color: view === v ? 'var(--accent)' : 'var(--text-muted)',
+                      cursor: 'pointer',
+                      fontSize: '15px',
+                      transition: 'all 0.12s',
+                    }}
+                  >
+                    {v === 'grid' ? '⊞' : '☰'}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>{/* /header inner */}
 
-            {/* Sort */}
-            <select
-              aria-label="Sort films by"
-              value={sort}
-              onChange={(e) => handleSortChange(e.target.value as SortMode)}
-              style={{
-                background: 'var(--surface-2)',
-                backgroundImage: 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%228%22%20viewBox%3D%220%200%2012%208%22%3E%3Cpath%20d%3D%22M1%201l5%205%205-5%22%20stroke%3D%22%23a0a0b0%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E")',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'right 10px center',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius)',
-                padding: '6px 28px 6px 10px',
-                color: 'var(--text)',
-                fontSize: '13px',
-                cursor: 'pointer',
-                outline: 'none',
-              }}
-            >
-              <option value="year_desc">Newest First</option>
-              <option value="year_asc">Oldest First</option>
-              {conditionId === 'thank-the-academy' && (
-                <option value="decade">By Decade</option>
-              )}
-              <option value="popularity">Most Popular</option>
-              <option value="rating">Highest Rated</option>
-              <option value="title_asc">A–Z</option>
-              <option value="title_desc">Z–A</option>
-            </select>
-
-            {/* View toggle */}
-            <div style={{
-              display: 'flex',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius)',
-              overflow: 'hidden',
+        {/* Overlap filter chips — only shown when there are relevant conditions */}
+        {availableOverlaps.length > 0 && (
+          <div style={{
+            marginTop: '12px',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '6px',
+            alignItems: 'center',
+          }}>
+            <span style={{
+              fontSize: '11px',
+              color: 'var(--text-dim)',
+              fontWeight: 600,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              marginRight: '2px',
+              flexShrink: 0,
             }}>
-              {(['grid', 'list'] as ViewMode[]).map((v) => (
+              Also qualifies for:
+            </span>
+            {availableOverlaps.map(({ id, label }) => {
+              const active = overlapFilter.has(id);
+              return (
                 <button
-                  key={v}
-                  onClick={() => setView(v)}
-                  title={v === 'grid' ? 'Grid view' : 'List view'}
+                  key={id}
+                  onClick={() => handleOverlapChipClick(id)}
+                  aria-pressed={active}
                   style={{
-                    padding: '6px 28px 6px 10px',
-                    background: view === v ? 'var(--accent-glow)' : 'var(--surface-2)',
-                    border: 'none',
-                    color: view === v ? 'var(--accent)' : 'var(--text-muted)',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    letterSpacing: '0.03em',
+                    padding: '3px 10px',
+                    borderRadius: '12px',
+                    border: `1px solid ${active ? 'var(--accent)' : 'var(--border)'}`,
+                    background: active ? 'var(--accent)' : 'var(--surface-2)',
+                    color: active ? 'var(--bg)' : 'var(--text-muted)',
                     cursor: 'pointer',
-                    fontSize: '15px',
                     transition: 'all 0.12s',
+                    whiteSpace: 'nowrap',
+                  }}
+                  onMouseEnter={e => {
+                    if (active) return;
+                    e.currentTarget.style.borderColor = 'var(--accent-dim)';
+                    e.currentTarget.style.color = 'var(--accent)';
+                  }}
+                  onMouseLeave={e => {
+                    if (active) return;
+                    e.currentTarget.style.borderColor = 'var(--border)';
+                    e.currentTarget.style.color = 'var(--text-muted)';
                   }}
                 >
-                  {v === 'grid' ? '⊞' : '☰'}
+                  {label}
+                  {active && (
+                    <span style={{ marginLeft: '5px', opacity: 0.7, fontSize: '10px' }}>×</span>
+                  )}
                 </button>
-              ))}
-            </div>
-            </div>{/* /row 2 */}
-          </div>{/* /controls column */}
-        </div>{/* /header inner */}
+              );
+            })}
+            {overlapFilter.size > 0 && (
+              <button
+                onClick={() => {
+                  overlapFilterRef.current = new Set();
+                  setOverlapFilter(new Set());
+                  setMovies([]);
+                  setPage(1);
+                  setHasMore(false);
+                  fetchPage(1, false, sort);
+                }}
+                style={{
+                  fontSize: '11px',
+                  padding: '3px 8px',
+                  borderRadius: '12px',
+                  border: '1px solid var(--border)',
+                  background: 'transparent',
+                  color: 'var(--text-dim)',
+                  cursor: 'pointer',
+                  transition: 'all 0.12s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.color = 'var(--text-muted)';
+                  e.currentTarget.style.borderColor = 'var(--accent-dim)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.color = 'var(--text-dim)';
+                  e.currentTarget.style.borderColor = 'var(--border)';
+                }}
+              >
+                Clear filters
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Stats bar */}
         <div style={{
           marginTop: '12px', display: 'flex', gap: '16px',
           fontSize: '12px', color: 'var(--text-muted)',
         }}>
-          <span style={{ color: 'var(--text-muted)' }}>{filtered.length} films</span>
+          <span>{filtered.length} films</span>
           {personFilter && (
             <span>· {
               (() => {
@@ -377,11 +496,12 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
               })()
             } only</span>
           )}
+          {overlapFilter.size > 0 && (
+            <span>· filtered by {overlapFilter.size} condition{overlapFilter.size > 1 ? 's' : ''}</span>
+          )}
           {search && <span>· filtered from {movies.length}</span>}
-          {!search && total > 0 && (
-            <span style={{ color: 'var(--text-muted)' }}>
-              · showing {movies.length} of {total}
-            </span>
+          {!search && !overlapFilter.size && total > 0 && (
+            <span>· showing {movies.length} of {total}</span>
           )}
           <span style={{ marginLeft: 'auto', color: 'var(--text-dim)', fontSize: '11px' }}>
             via TMDB · refreshes hourly
@@ -404,12 +524,11 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
         </div>
         {filtered.length === 0 ? (
           <div style={{ ...centerStyle, color: 'var(--text-muted)', fontSize: '14px' }}>
-            No movies found{search ? ` matching "${search}"` : ''}.
+            No movies found{search ? ` matching "${search}"` : overlapFilter.size > 0 ? ' matching the selected filters' : ''}.
           </div>
         ) : view === 'grid' ? (
           <div>
             {sort === 'decade' ? (
-              // Group by decade with section headers
               (() => {
                 const groups: { decade: number; movies: typeof filtered }[] = [];
                 for (const movie of filtered) {
@@ -440,7 +559,14 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
                     }}>
                       {gMovies.map((movie) => {
                         const idx = globalIdx++;
-                        return <MovieCard key={movie.id} movie={movie} index={idx} />;
+                        return (
+                          <MovieCard
+                            key={movie.id}
+                            movie={movie}
+                            index={idx}
+                            onOverlapClick={handleOverlapChipClick}
+                          />
+                        );
                       })}
                     </div>
                   </div>
@@ -453,7 +579,12 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
                 gap: '14px',
               }}>
                 {filtered.map((movie, idx) => (
-                  <MovieCard key={movie.id} movie={movie} index={idx} />
+                  <MovieCard
+                    key={movie.id}
+                    movie={movie}
+                    index={idx}
+                    onOverlapClick={handleOverlapChipClick}
+                  />
                 ))}
               </div>
             )}
@@ -487,7 +618,15 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                       {gMovies.map((movie) => {
                         const idx = globalIdx++;
-                        return <MovieCard key={movie.id} movie={movie} compact index={idx} />;
+                        return (
+                          <MovieCard
+                            key={movie.id}
+                            movie={movie}
+                            compact
+                            index={idx}
+                            onOverlapClick={handleOverlapChipClick}
+                          />
+                        );
                       })}
                     </div>
                   </div>
@@ -495,14 +634,20 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
               })()
             ) : (
               filtered.map((movie, idx) => (
-                <MovieCard key={movie.id} movie={movie} compact index={idx} />
+                <MovieCard
+                  key={movie.id}
+                  movie={movie}
+                  compact
+                  index={idx}
+                  onOverlapClick={handleOverlapChipClick}
+                />
               ))
             )}
           </div>
         )}
 
-        {/* Load More button — only shown when not filtering by search */}
-        {!search && hasMore && (
+        {/* Load More — only when not filtering */}
+        {!search && !overlapFilter.size && hasMore && (
           <div style={{ textAlign: 'center', padding: '24px 0 8px' }}>
             <button
               onClick={handleLoadMore}
@@ -537,15 +682,6 @@ const centerStyle: React.CSSProperties = {
   justifyContent: 'center',
   height: '100%',
   minHeight: '300px',
-};
-
-const spinnerStyle: React.CSSProperties = {
-  width: '36px',
-  height: '36px',
-  border: '3px solid var(--border)',
-  borderTopColor: 'var(--accent)',
-  borderRadius: '50%',
-  animation: 'spin 0.7s linear infinite',
 };
 
 const btnStyle: React.CSSProperties = {
