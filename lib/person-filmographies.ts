@@ -988,7 +988,7 @@ export const PERSON_FILMOGRAPHIES: PersonFilmography[] = [
     { tmdbId: 911916,   title: 'Spider-Man: Beyond the Spider-Verse',   year: 2027,   role: 'Actor' },
     { tmdbId: 1533178,   title: 'Asteroid',   year: 2025,   role: 'Actor' },
     { tmdbId: 1538497,   title: 'Hexed',   year: 2026,   role: 'Actor' },
-    { tmdbId: 1676277,   title: 'Bulletproof Man',   year: 2026,   role: 'Actor' },
+
     ],
   },
   {

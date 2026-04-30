@@ -12,441 +12,641 @@
 import { CuratedFilm } from './decade-genre-lists';
 
 export const SERVICE_THE_FANS: CuratedFilm[] = [
-  { tmdbId: 24428,   title: 'The Avengers',   year: 2012, sequence: 1 },
-  { tmdbId: 155,   title: 'The Dark Knight',   year: 2008, sequence: 2 },
-  { tmdbId: 19995,   title: 'Avatar',   year: 2009, sequence: 1 },
-  { tmdbId: 293660,   title: 'Deadpool',   year: 2016, sequence: 1 },
-  { tmdbId: 299536,   title: 'Avengers: Infinity War',   year: 2018, sequence: 3 },
-  { tmdbId: 118340,   title: 'Guardians of the Galaxy',   year: 2014, sequence: 1 },
-  { tmdbId: 1726,   title: 'Iron Man',   year: 2008, sequence: 1 },
-  { tmdbId: 603,   title: 'The Matrix',   year: 1999, sequence: 1 },
-  { tmdbId: 475557,   title: 'Joker',   year: 2019, sequence: 1 },
-  { tmdbId: 299534,   title: 'Avengers: Endgame',   year: 2019, sequence: 4 },
-  { tmdbId: 120,   title: 'The Lord of the Rings: The Fellowship of the Ring',   year: 2001, sequence: 1 },
-  { tmdbId: 122,   title: 'The Lord of the Rings: The Return of the King',   year: 2003, sequence: 3 },
-  { tmdbId: 99861,   title: 'Avengers: Age of Ultron',   year: 2015, sequence: 2 },
-  { tmdbId: 49026,   title: 'The Dark Knight Rises',   year: 2012, sequence: 3 },
-  { tmdbId: 76341,   title: 'Mad Max: Fury Road',   year: 2015, sequence: 4 },
-  { tmdbId: 271110,   title: 'Captain America: Civil War',   year: 2016, sequence: 3 },
-  { tmdbId: 121,   title: 'The Lord of the Rings: The Two Towers',   year: 2002, sequence: 2 },
-  { tmdbId: 672,   title: 'Harry Potter and the Chamber of Secrets',   year: 2002, sequence: 2 },
-  { tmdbId: 284054,   title: 'Black Panther',   year: 2018, sequence: 1 },
-  { tmdbId: 150540,   title: 'Inside Out',   year: 2015, sequence: 1 },
-  { tmdbId: 284052,   title: 'Doctor Strange',   year: 2016, sequence: 1 },
-  { tmdbId: 68721,   title: 'Iron Man 3',   year: 2013, sequence: 3 },
-  { tmdbId: 70160,   title: 'The Hunger Games',   year: 2012, sequence: 1 },
-  { tmdbId: 315635,   title: 'Spider-Man: Homecoming',   year: 2017, sequence: 1 },
-  { tmdbId: 673,   title: 'Harry Potter and the Prisoner of Azkaban',   year: 2004, sequence: 3 },
-  { tmdbId: 283995,   title: 'Guardians of the Galaxy Vol. 2',   year: 2017, sequence: 2 },
-  { tmdbId: 238,   title: 'The Godfather',   year: 1972, sequence: 1 },
-  { tmdbId: 1771,   title: 'Captain America: The First Avenger',   year: 2011, sequence: 1 },
-  { tmdbId: 272,   title: 'Batman Begins',   year: 2005, sequence: 1 },
-  { tmdbId: 10138,   title: 'Iron Man 2',   year: 2010, sequence: 2 },
-  { tmdbId: 10195,   title: 'Thor',   year: 2011, sequence: 1 },
-  { tmdbId: 11,   title: 'Star Wars',   year: 1977, sequence: 1 },
-  { tmdbId: 22,   title: 'Pirates of the Caribbean: The Curse of the Black Pearl',   year: 2003, sequence: 1 },
-  { tmdbId: 674,   title: 'Harry Potter and the Goblet of Fire',   year: 2005, sequence: 4 },
-  { tmdbId: 297761,   title: 'Suicide Squad',   year: 2016, sequence: 1 },
-  { tmdbId: 284053,   title: 'Thor: Ragnarok',   year: 2017, sequence: 3 },
-  { tmdbId: 634649,   title: 'Spider-Man: No Way Home',   year: 2021, sequence: 3 },
-  { tmdbId: 105,   title: 'Back to the Future',   year: 1985, sequence: 1 },
-  { tmdbId: 135397,   title: 'Jurassic World',   year: 2015, sequence: 4 },
-  { tmdbId: 354912,   title: 'Coco',   year: 2017, sequence: 1 },
-  { tmdbId: 297762,   title: 'Wonder Woman',   year: 2017, sequence: 1 },
-  { tmdbId: 102899,   title: 'Ant-Man',   year: 2015, sequence: 1 },
-  { tmdbId: 98,   title: 'Gladiator',   year: 2000, sequence: 1 },
-  { tmdbId: 245891,   title: 'John Wick',   year: 2014, sequence: 1 },
-  { tmdbId: 675,   title: 'Harry Potter and the Order of the Phoenix',   year: 2007, sequence: 5 },
-  { tmdbId: 557,   title: 'Spider-Man',   year: 2002, sequence: 1 },
-  { tmdbId: 12,   title: 'Finding Nemo',   year: 2003, sequence: 1 },
-  { tmdbId: 263115,   title: 'Logan',   year: 2017, sequence: 3 },
-  { tmdbId: 346364,   title: 'It',   year: 2017, sequence: 1 },
-  { tmdbId: 100402,   title: 'Captain America: The Winter Soldier',   year: 2014, sequence: 2 },
-  { tmdbId: 862,   title: 'Toy Story',   year: 1995, sequence: 1 },
-  { tmdbId: 585,   title: 'Monsters, Inc.',   year: 2001, sequence: 1 },
-  { tmdbId: 259316,   title: 'Fantastic Beasts and Where to Find Them',   year: 2016, sequence: 1 },
-  { tmdbId: 8587,   title: 'The Lion King',   year: 1994, sequence: 1 },
-  { tmdbId: 49051,   title: 'The Hobbit: An Unexpected Journey',   year: 2012, sequence: 1 },
-  { tmdbId: 383498,   title: 'Deadpool 2',   year: 2018, sequence: 2 },
-  { tmdbId: 209112,   title: 'Batman v Superman: Dawn of Justice',   year: 2016, sequence: 2 },
-  { tmdbId: 24,   title: 'Kill Bill: Vol. 1',   year: 2003, sequence: 1 },
-  { tmdbId: 694,   title: 'The Shining',   year: 1980, sequence: 1 },
-  { tmdbId: 9806,   title: 'The Incredibles',   year: 2004, sequence: 1 },
-  { tmdbId: 808,   title: 'Shrek',   year: 2001, sequence: 1 },
-  { tmdbId: 1930,   title: 'The Amazing Spider-Man',   year: 2012, sequence: 1 },
-  { tmdbId: 101299,   title: 'The Hunger Games: Catching Fire',   year: 2013, sequence: 2 },
-  { tmdbId: 1891,   title: 'The Empire Strikes Back',   year: 1980, sequence: 2 },
-  { tmdbId: 76338,   title: 'Thor: The Dark World',   year: 2013, sequence: 2 },
-  { tmdbId: 198663,   title: 'The Maze Runner',   year: 2014, sequence: 1 },
-  { tmdbId: 18785,   title: 'The Hangover',   year: 2009, sequence: 1 },
-  { tmdbId: 269149,   title: 'Zootopia',   year: 2016, sequence: 1 },
-  { tmdbId: 274,   title: 'The Silence of the Lambs',   year: 1991, sequence: 1 },
-  { tmdbId: 329,   title: 'Jurassic Park',   year: 1993, sequence: 1 },
-  { tmdbId: 207703,   title: 'Kingsman: The Secret Service',   year: 2015, sequence: 1 },
-  { tmdbId: 109445,   title: 'Frozen',   year: 2013, sequence: 1 },
-  { tmdbId: 335983,   title: 'Venom',   year: 2018, sequence: 1 },
-  { tmdbId: 324857,   title: 'Spider-Man: Into the Spider-Verse',   year: 2018, sequence: 1 },
-  { tmdbId: 429617,   title: 'Spider-Man: Far From Home',   year: 2019, sequence: 2 },
-  { tmdbId: 1892,   title: 'Return of the Jedi',   year: 1983, sequence: 3 },
-  { tmdbId: 75656,   title: 'Now You See Me',   year: 2013, sequence: 1 },
-  { tmdbId: 299537,   title: 'Captain Marvel',   year: 2019, sequence: 1 },
-  { tmdbId: 131631,   title: 'The Hunger Games: Mockingjay - Part 1',   year: 2014, sequence: 3 },
-  { tmdbId: 558,   title: 'Spider-Man 2',   year: 2004, sequence: 2 },
-  { tmdbId: 348,   title: 'Alien',   year: 1979, sequence: 1 },
-  { tmdbId: 127585,   title: 'X-Men: Days of Future Past',   year: 2014, sequence: 5 },
-  { tmdbId: 49521,   title: 'Man of Steel',   year: 2013, sequence: 1 },
-  { tmdbId: 20352,   title: 'Despicable Me',   year: 2010, sequence: 1 },
-  { tmdbId: 1893,   title: 'Star Wars: Episode I - The Phantom Menace',   year: 1999, sequence: 4 },
-  { tmdbId: 10193,   title: 'Toy Story 3',   year: 2010, sequence: 3 },
-  { tmdbId: 122917,   title: 'The Hobbit: The Battle of the Five Armies',   year: 2014, sequence: 3 },
-  { tmdbId: 447332,   title: 'A Quiet Place',   year: 2018, sequence: 1 },
-  { tmdbId: 559,   title: 'Spider-Man 3',   year: 2007, sequence: 3 },
-  { tmdbId: 920,   title: 'Cars',   year: 2006, sequence: 1 },
-  { tmdbId: 335984,   title: 'Blade Runner 2049',   year: 2017, sequence: 2 },
-  { tmdbId: 393,   title: 'Kill Bill: Vol. 2',   year: 2004, sequence: 2 },
-  { tmdbId: 78,   title: 'Blade Runner',   year: 1982, sequence: 1 },
-  { tmdbId: 1865,   title: 'Pirates of the Caribbean: On Stranger Tides',   year: 2011, sequence: 4 },
-  { tmdbId: 297802,   title: 'Aquaman',   year: 2018, sequence: 1 },
-  { tmdbId: 863,   title: 'Toy Story 2',   year: 1999, sequence: 2 },
-  { tmdbId: 438631,   title: 'Dune',   year: 2021, sequence: 1 },
-  { tmdbId: 607,   title: 'Men in Black',   year: 1997, sequence: 1 },
-  { tmdbId: 12155,   title: 'Alice in Wonderland',   year: 2010, sequence: 1 },
-  { tmdbId: 10528,   title: 'Sherlock Holmes',   year: 2009, sequence: 1 },
-  { tmdbId: 1271,   title: '300',   year: 2007, sequence: 1 },
-  { tmdbId: 218,   title: 'The Terminator',   year: 1984, sequence: 1 },
-  { tmdbId: 353486,   title: 'Jumanji: Welcome to the Jungle',   year: 2017, sequence: 2 },
-  { tmdbId: 8966,   title: 'Twilight',   year: 2008, sequence: 1 },
-  { tmdbId: 10191,   title: 'How to Train Your Dragon',   year: 2010, sequence: 1 },
-  { tmdbId: 1894,   title: 'Star Wars: Episode II - Attack of the Clones',   year: 2002, sequence: 5 },
-  { tmdbId: 425,   title: 'Ice Age',   year: 2002, sequence: 1 },
-  { tmdbId: 324552,   title: 'John Wick: Chapter 2',   year: 2017, sequence: 2 },
-  { tmdbId: 280,   title: 'Terminator 2: Judgment Day',   year: 1991, sequence: 2 },
-  { tmdbId: 102382,   title: 'The Amazing Spider-Man 2',   year: 2014, sequence: 2 },
-  { tmdbId: 363088,   title: 'Ant-Man and the Wasp',   year: 2018, sequence: 2 },
-  { tmdbId: 57158,   title: 'The Hobbit: The Desolation of Smaug',   year: 2013, sequence: 2 },
-  { tmdbId: 76600,   title: 'Avatar: The Way of Water',   year: 2022, sequence: 2 },
-  { tmdbId: 546554,   title: 'Knives Out',   year: 2019, sequence: 1 },
-  { tmdbId: 165,   title: 'Back to the Future Part II',   year: 1989, sequence: 2 },
-  { tmdbId: 240,   title: 'The Godfather Part II',   year: 1974, sequence: 2 },
-  { tmdbId: 277834,   title: 'Moana',   year: 2016, sequence: 1 },
-  { tmdbId: 102651,   title: 'Maleficent',   year: 2014, sequence: 1 },
-  { tmdbId: 260513,   title: 'Incredibles 2',   year: 2018, sequence: 2 },
-  { tmdbId: 85,   title: 'Raiders of the Lost Ark',   year: 1981, sequence: 1 },
-  { tmdbId: 49538,   title: 'X-Men: First Class',   year: 2011, sequence: 4 },
-  { tmdbId: 157350,   title: 'Divergent',   year: 2014, sequence: 1 },
-  { tmdbId: 809,   title: 'Shrek 2',   year: 2004, sequence: 2 },
-  { tmdbId: 131634,   title: 'The Hunger Games: Mockingjay - Part 2',   year: 2015, sequence: 4 },
-  { tmdbId: 68726,   title: 'Pacific Rim',   year: 2013, sequence: 1 },
-  { tmdbId: 70981,   title: 'Prometheus',   year: 2012, sequence: 1 },
-  { tmdbId: 19908,   title: 'Zombieland',   year: 2009, sequence: 1 },
-  { tmdbId: 72105,   title: 'Ted',   year: 2012, sequence: 1 },
-  { tmdbId: 82690,   title: 'Wreck-It Ralph',   year: 2012, sequence: 1 },
-  { tmdbId: 166426,   title: 'Pirates of the Caribbean: Dead Men Tell No Tales',   year: 2017, sequence: 5 },
-  { tmdbId: 351286,   title: 'Jurassic World: Fallen Kingdom',   year: 2018, sequence: 5 },
-  { tmdbId: 61791,   title: 'Rise of the Planet of the Apes',   year: 2011, sequence: 1 },
-  { tmdbId: 138843,   title: 'The Conjuring',   year: 2013, sequence: 1 },
-  { tmdbId: 127380,   title: 'Finding Dory',   year: 2016, sequence: 2 },
-  { tmdbId: 9502,   title: 'Kung Fu Panda',   year: 2008, sequence: 1 },
-  { tmdbId: 771,   title: 'Home Alone',   year: 1990, sequence: 1 },
-  { tmdbId: 216015,   title: 'Fifty Shades of Grey',   year: 2015, sequence: 1 },
-  { tmdbId: 23483,   title: 'Kick-Ass',   year: 2010, sequence: 1 },
-  { tmdbId: 562,   title: 'Die Hard',   year: 1988, sequence: 1 },
-  { tmdbId: 1359,   title: 'American Psycho',   year: 2000, sequence: 1 },
-  { tmdbId: 119450,   title: 'Dawn of the Planet of the Apes',   year: 2014, sequence: 2 },
-  { tmdbId: 1858,   title: 'Transformers',   year: 2007, sequence: 1 },
-  { tmdbId: 36657,   title: 'X-Men',   year: 2000, sequence: 1 },
-  { tmdbId: 8681,   title: 'Taken',   year: 2008, sequence: 1 },
-  { tmdbId: 812,   title: 'Aladdin',   year: 1992, sequence: 1 },
-  { tmdbId: 93456,   title: 'Despicable Me 2',   year: 2013, sequence: 2 },
-  { tmdbId: 604,   title: 'The Matrix Reloaded',   year: 2003, sequence: 2 },
-  { tmdbId: 414906,   title: 'The Batman',   year: 2022, sequence: 1 },
-  { tmdbId: 953,   title: 'Madagascar',   year: 2005, sequence: 1 },
-  { tmdbId: 458156,   title: 'John Wick: Chapter 3 - Parabellum',   year: 2019, sequence: 3 },
-  { tmdbId: 291805,   title: 'Now You See Me 2',   year: 2016, sequence: 2 },
-  { tmdbId: 578,   title: 'Jaws',   year: 1975, sequence: 1 },
-  { tmdbId: 196,   title: 'Back to the Future Part III',   year: 1990, sequence: 3 },
-  { tmdbId: 411,   title: 'The Chronicles of Narnia: The Lion, the Witch and the Wardrobe',   year: 2005, sequence: 1 },
-  { tmdbId: 310,   title: 'Bruce Almighty',   year: 2003, sequence: 1 },
-  { tmdbId: 338952,   title: 'Fantastic Beasts: The Crimes of Grindelwald',   year: 2018, sequence: 2 },
-  { tmdbId: 62211,   title: 'Monsters University',   year: 2013, sequence: 2 },
-  { tmdbId: 8844,   title: 'Jumanji',   year: 1995, sequence: 1 },
-  { tmdbId: 45243,   title: 'The Hangover Part II',   year: 2011, sequence: 2 },
-  { tmdbId: 2080,   title: 'X-Men Origins: Wolverine',   year: 2009, sequence: 1 },
-  { tmdbId: 854,   title: 'The Mask',   year: 1994, sequence: 1 },
-  { tmdbId: 580489,   title: 'Venom: Let There Be Carnage',   year: 2021, sequence: 2 },
-  { tmdbId: 343668,   title: 'Kingsman: The Golden Circle',   year: 2017, sequence: 2 },
-  { tmdbId: 293167,   title: 'Kong: Skull Island',   year: 2017, sequence: 1 },
-  { tmdbId: 211672,   title: 'Minions',   year: 2015, sequence: 1 },
-  { tmdbId: 89,   title: 'Indiana Jones and the Last Crusade',   year: 1989, sequence: 3 },
-  { tmdbId: 294254,   title: 'Maze Runner: The Scorch Trials',   year: 2015, sequence: 2 },
-  { tmdbId: 64688,   title: '21 Jump Street',   year: 2012, sequence: 1 },
-  { tmdbId: 41154,   title: 'Men in Black 3',   year: 2012, sequence: 3 },
-  { tmdbId: 1593,   title: 'Night at the Museum',   year: 2006, sequence: 1 },
-  { tmdbId: 58574,   title: 'Sherlock Holmes: A Game of Shadows',   year: 2011, sequence: 2 },
-  { tmdbId: 36658,   title: 'X2',   year: 2003, sequence: 2 },
-  { tmdbId: 361743,   title: 'Top Gun: Maverick',   year: 2022, sequence: 2 },
-  { tmdbId: 679,   title: 'Aliens',   year: 1986, sequence: 2 },
-  { tmdbId: 9799,   title: 'The Fast and the Furious',   year: 2001, sequence: 1 },
-  { tmdbId: 605,   title: 'The Matrix Revolutions',   year: 2003, sequence: 3 },
-  { tmdbId: 420818,   title: 'The Lion King',   year: 2019, sequence: 1 },
-  { tmdbId: 56292,   title: 'Mission: Impossible - Ghost Protocol',   year: 2011, sequence: 4 },
-  { tmdbId: 10020,   title: 'Beauty and the Beast',   year: 1991, sequence: 1 },
-  { tmdbId: 608,   title: 'Men in Black II',   year: 2002, sequence: 2 },
-  { tmdbId: 399566,   title: 'Godzilla vs. Kong',   year: 2021, sequence: 3 },
-  { tmdbId: 772,   title: 'Home Alone 2: Lost in New York',   year: 1992, sequence: 2 },
-  { tmdbId: 502356,   title: 'The Super Mario Bros. Movie',   year: 2023, sequence: 1 },
-  { tmdbId: 405774,   title: 'Bird Box',   year: 2018, sequence: 1 },
-  { tmdbId: 392044,   title: 'Murder on the Orient Express',   year: 2017, sequence: 1 },
-  { tmdbId: 301528,   title: 'Toy Story 4',   year: 2019, sequence: 4 },
-  { tmdbId: 13475,   title: 'Star Trek',   year: 2009, sequence: 1 },
-  { tmdbId: 262500,   title: 'Insurgent',   year: 2015, sequence: 2 },
-  { tmdbId: 82702,   title: 'How to Train Your Dragon 2',   year: 2014, sequence: 2 },
-  { tmdbId: 10674,   title: 'Mulan',   year: 1998, sequence: 1 },
-  { tmdbId: 602,   title: 'Independence Day',   year: 1996, sequence: 1 },
-  { tmdbId: 454626,   title: 'Sonic the Hedgehog',   year: 2020, sequence: 1 },
-  { tmdbId: 627,   title: 'Trainspotting',   year: 1996, sequence: 1 },
-  { tmdbId: 36668,   title: 'X-Men: The Last Stand',   year: 2006, sequence: 3 },
-  { tmdbId: 950,   title: 'Ice Age: The Meltdown',   year: 2006, sequence: 2 },
-  { tmdbId: 330457,   title: 'Frozen II',   year: 2019, sequence: 2 },
-  { tmdbId: 76170,   title: 'The Wolverine',   year: 2013, sequence: 2 },
-  { tmdbId: 453395,   title: 'Doctor Strange in the Multiverse of Madness',   year: 2022, sequence: 2 },
-  { tmdbId: 287947,   title: 'Shazam!',   year: 2019, sequence: 1 },
-  { tmdbId: 87,   title: 'Indiana Jones and the Temple of Doom',   year: 1984, sequence: 2 },
-  { tmdbId: 2501,   title: 'The Bourne Identity',   year: 2002, sequence: 1 },
-  { tmdbId: 591,   title: 'The Da Vinci Code',   year: 2006, sequence: 1 },
-  { tmdbId: 176,   title: 'Saw',   year: 2004, sequence: 1 },
-  { tmdbId: 954,   title: 'Mission: Impossible',   year: 1996, sequence: 1 },
-  { tmdbId: 564,   title: 'The Mummy',   year: 1999, sequence: 1 },
-  { tmdbId: 156022,   title: 'The Equalizer',   year: 2014, sequence: 1 },
-  { tmdbId: 810,   title: 'Shrek the Third',   year: 2007, sequence: 3 },
-  { tmdbId: 124905,   title: 'Godzilla',   year: 2014, sequence: 1 },
-  { tmdbId: 18239,   title: 'The Twilight Saga: New Moon',   year: 2009, sequence: 2 },
-  { tmdbId: 620,   title: 'Ghostbusters',   year: 1984, sequence: 1 },
-  { tmdbId: 281338,   title: 'War for the Planet of the Apes',   year: 2017, sequence: 3 },
-  { tmdbId: 177677,   title: 'Mission: Impossible - Rogue Nation',   year: 2015, sequence: 5 },
-  { tmdbId: 54138,   title: 'Star Trek Into Darkness',   year: 2013, sequence: 2 },
-  { tmdbId: 429,   title: 'The Good, the Bad and the Ugly',   year: 1966, sequence: 3 },
-  { tmdbId: 474350,   title: 'It Chapter Two',   year: 2019, sequence: 2 },
-  { tmdbId: 436969,   title: 'The Suicide Squad',   year: 2021, sequence: 2 },
-  { tmdbId: 744,   title: 'Top Gun',   year: 1986, sequence: 1 },
-  { tmdbId: 126889,   title: 'Alien: Covenant',   year: 2017, sequence: 2 },
-  { tmdbId: 50620,   title: 'The Twilight Saga: Breaking Dawn - Part 2',   year: 2012, sequence: 5 },
-  { tmdbId: 512200,   title: 'Jumanji: The Next Level',   year: 2019, sequence: 3 },
-  { tmdbId: 50619,   title: 'The Twilight Saga: Breaking Dawn - Part 1',   year: 2011, sequence: 4 },
-  { tmdbId: 24021,   title: 'The Twilight Saga: Eclipse',   year: 2010, sequence: 3 },
-  { tmdbId: 109439,   title: 'The Hangover Part III',   year: 2013, sequence: 3 },
-  { tmdbId: 330,   title: 'The Lost World: Jurassic Park',   year: 1997, sequence: 2 },
-  { tmdbId: 259693,   title: 'The Conjuring 2',   year: 2016, sequence: 2 },
-  { tmdbId: 8373,   title: 'Transformers: Revenge of the Fallen',   year: 2009, sequence: 2 },
-  { tmdbId: 464052,   title: 'Wonder Woman 1984',   year: 2020, sequence: 2 },
-  { tmdbId: 217,   title: 'Indiana Jones and the Kingdom of the Crystal Skull',   year: 2008, sequence: 4 },
-  { tmdbId: 87101,   title: 'Terminator Genisys',   year: 2015, sequence: 5 },
-  { tmdbId: 38356,   title: 'Transformers: Dark of the Moon',   year: 2011, sequence: 3 },
-  { tmdbId: 8355,   title: 'Ice Age: Dawn of the Dinosaurs',   year: 2009, sequence: 3 },
-  { tmdbId: 51497,   title: 'Fast Five',   year: 2011, sequence: 5 },
-  { tmdbId: 91314,   title: 'Transformers: Age of Extinction',   year: 2014, sequence: 4 },
-  { tmdbId: 533535,   title: 'Deadpool & Wolverine',   year: 2024, sequence: 3 },
-  { tmdbId: 616037,   title: 'Thor: Love and Thunder',   year: 2022, sequence: 4 },
-  { tmdbId: 569094,   title: 'Spider-Man: Across the Spider-Verse',   year: 2023, sequence: 2 },
-  { tmdbId: 187017,   title: '22 Jump Street',   year: 2014, sequence: 2 },
-  { tmdbId: 49013,   title: 'Cars 2',   year: 2011, sequence: 2 },
-  { tmdbId: 1979,   title: 'Fantastic Four: Rise of the Silver Surfer',   year: 2007, sequence: 2 },
-  { tmdbId: 336843,   title: 'Maze Runner: The Death Cure',   year: 2018, sequence: 3 },
-  { tmdbId: 337167,   title: 'Fifty Shades Freed',   year: 2018, sequence: 3 },
-  { tmdbId: 2503,   title: 'The Bourne Ultimatum',   year: 2007, sequence: 3 },
-  { tmdbId: 447365,   title: 'Guardians of the Galaxy Vol. 3',   year: 2023, sequence: 3 },
-  { tmdbId: 2502,   title: 'The Bourne Supremacy',   year: 2004, sequence: 2 },
-  { tmdbId: 584,   title: '2 Fast 2 Furious',   year: 2003, sequence: 2 },
-  { tmdbId: 57800,   title: 'Ice Age: Continental Drift',   year: 2012, sequence: 4 },
-  { tmdbId: 404368,   title: 'Ralph Breaks the Internet',   year: 2018, sequence: 2 },
-  { tmdbId: 214756,   title: 'Ted 2',   year: 2015, sequence: 2 },
-  { tmdbId: 341174,   title: 'Fifty Shades Darker',   year: 2017, sequence: 2 },
-  { tmdbId: 10192,   title: 'Shrek Forever After',   year: 2010, sequence: 4 },
-  { tmdbId: 603692,   title: 'John Wick: Chapter 4',   year: 2023, sequence: 4 },
-  { tmdbId: 49444,   title: 'Kung Fu Panda 2',   year: 2011, sequence: 2 },
-  { tmdbId: 693134,   title: 'Dune: Part Two',   year: 2024, sequence: 2 },
-  { tmdbId: 331,   title: 'Jurassic Park III',   year: 2001, sequence: 3 },
-  { tmdbId: 13804,   title: 'Fast & Furious',   year: 2009, sequence: 4 },
-  { tmdbId: 1734,   title: 'The Mummy Returns',   year: 2001, sequence: 2 },
-  { tmdbId: 324852,   title: 'Despicable Me 3',   year: 2017, sequence: 3 },
-  { tmdbId: 956,   title: 'Mission: Impossible III',   year: 2006, sequence: 3 },
-  { tmdbId: 9615,   title: 'The Fast and the Furious: Tokyo Drift',   year: 2006, sequence: 3 },
-  { tmdbId: 955,   title: 'Mission: Impossible II',   year: 2000, sequence: 2 },
-  { tmdbId: 505642,   title: 'Black Panther: Wakanda Forever',   year: 2022, sequence: 2 },
-  { tmdbId: 10527,   title: 'Madagascar: Escape 2 Africa',   year: 2008, sequence: 2 },
-  { tmdbId: 520763,   title: 'A Quiet Place Part II',   year: 2021, sequence: 2 },
-  { tmdbId: 13448,   title: 'Angels & Demons',   year: 2009, sequence: 2 },
-  { tmdbId: 18360,   title: 'Night at the Museum: Battle of the Smithsonian',   year: 2009, sequence: 2 },
-  { tmdbId: 296,   title: 'Terminator 3: Rise of the Machines',   year: 2003, sequence: 3 },
-  { tmdbId: 82675,   title: 'Taken 2',   year: 2012, sequence: 2 },
-  { tmdbId: 166428,   title: 'How to Train Your Dragon: The Hidden World',   year: 2019, sequence: 3 },
-  { tmdbId: 188927,   title: 'Star Trek Beyond',   year: 2016, sequence: 3 },
-  { tmdbId: 534,   title: 'Terminator Salvation',   year: 2009, sequence: 4 },
-  { tmdbId: 262504,   title: 'Allegiant',   year: 2016, sequence: 3 },
-  { tmdbId: 53182,   title: '300: Rise of an Empire',   year: 2014, sequence: 2 },
-  { tmdbId: 242,   title: 'The Godfather Part III',   year: 1990, sequence: 3 },
-  { tmdbId: 241259,   title: 'Alice Through the Looking Glass',   year: 2016, sequence: 2 },
-  { tmdbId: 661374,   title: 'Glass Onion: A Knives Out Mystery',   year: 2022, sequence: 2 },
-  { tmdbId: 2454,   title: 'The Chronicles of Narnia: Prince Caspian',   year: 2008, sequence: 2 },
-  { tmdbId: 47964,   title: 'A Good Day to Die Hard',   year: 2013, sequence: 5 },
-  { tmdbId: 373571,   title: 'Godzilla: King of the Monsters',   year: 2019, sequence: 2 },
-  { tmdbId: 335988,   title: 'Transformers: The Last Knight',   year: 2017, sequence: 5 },
-  { tmdbId: 1572,   title: 'Die Hard: With a Vengeance',   year: 1995, sequence: 3 },
-  { tmdbId: 1022789,   title: 'Inside Out 2',   year: 2024, sequence: 2 },
-  { tmdbId: 207932,   title: 'Inferno',   year: 2016, sequence: 3 },
-  { tmdbId: 59859,   title: 'Kick-Ass 2',   year: 2013, sequence: 2 },
-  { tmdbId: 140300,   title: 'Kung Fu Panda 3',   year: 2016, sequence: 3 },
-  { tmdbId: 423108,   title: 'The Conjuring: The Devil Made Me Do It',   year: 2021, sequence: 3 },
-  { tmdbId: 420809,   title: 'Maleficent: Mistress of Evil',   year: 2019, sequence: 2 },
-  { tmdbId: 47933,   title: 'Independence Day: Resurgence',   year: 2016, sequence: 2 },
-  { tmdbId: 624860,   title: 'The Matrix Resurrections',   year: 2021, sequence: 4 },
-  { tmdbId: 1573,   title: 'Die Hard 2',   year: 1990, sequence: 2 },
-  { tmdbId: 260514,   title: 'Cars 3',   year: 2017, sequence: 3 },
-  { tmdbId: 8077,   title: 'Alien┬│',   year: 1992, sequence: 3 },
-  { tmdbId: 1571,   title: 'Live Free or Die Hard',   year: 2007, sequence: 4 },
-  { tmdbId: 338967,   title: 'Zombieland: Double Tap',   year: 2019, sequence: 2 },
-  { tmdbId: 181533,   title: 'Night at the Museum: Secret of the Tomb',   year: 2014, sequence: 3 },
-  { tmdbId: 324668,   title: 'Jason Bourne',   year: 2016, sequence: 5 },
-  { tmdbId: 260346,   title: 'Taken 3',   year: 2014, sequence: 3 },
-  { tmdbId: 49040,   title: 'The Bourne Legacy',   year: 2012, sequence: 4 },
-  { tmdbId: 345887,   title: 'The Equalizer 2',   year: 2018, sequence: 2 },
-  { tmdbId: 10140,   title: 'The Chronicles of Narnia: The Voyage of the Dawn Treader',   year: 2010, sequence: 3 },
-  { tmdbId: 675353,   title: 'Sonic the Hedgehog 2',   year: 2022, sequence: 2 },
-  { tmdbId: 215,   title: 'Saw II',   year: 2005, sequence: 2 },
-  { tmdbId: 640146,   title: 'Ant-Man and the Wasp: Quantumania',   year: 2023, sequence: 3 },
-  { tmdbId: 8078,   title: 'Alien Resurrection',   year: 1997, sequence: 4 },
-  { tmdbId: 268896,   title: 'Pacific Rim: Uprising',   year: 2018, sequence: 2 },
-  { tmdbId: 9740,   title: 'Hannibal',   year: 2001, sequence: 2 },
-  { tmdbId: 425909,   title: 'Ghostbusters: Afterlife',   year: 2021, sequence: 3 },
-  { tmdbId: 338953,   title: 'Fantastic Beasts: The Secrets of Dumbledore',   year: 2022, sequence: 3 },
-  { tmdbId: 9659,   title: 'Mad Max',   year: 1979, sequence: 1 },
-  { tmdbId: 214,   title: 'Saw III',   year: 2006, sequence: 3 },
-  { tmdbId: 278154,   title: 'Ice Age: Collision Course',   year: 2016, sequence: 5 },
-  { tmdbId: 501170,   title: 'Doctor Sleep',   year: 2019, sequence: 2 },
-  { tmdbId: 2978,   title: 'Ghostbusters II',   year: 1989, sequence: 2 },
-  { tmdbId: 786892,   title: 'Furiosa: A Mad Max Saga',   year: 2024, sequence: 5 },
-  { tmdbId: 1735,   title: 'The Mummy: Tomb of the Dragon Emperor',   year: 2008, sequence: 3 },
-  { tmdbId: 9533,   title: 'Red Dragon',   year: 2002, sequence: 3 },
-  { tmdbId: 391,   title: 'A Fistful of Dollars',   year: 1964, sequence: 1 },
-  { tmdbId: 823464,   title: 'Godzilla x Kong: The New Empire',   year: 2024, sequence: 2 },
-  { tmdbId: 2698,   title: 'Evan Almighty',   year: 2007, sequence: 2 },
-  { tmdbId: 938,   title: 'For a Few Dollars More',   year: 1965, sequence: 2 },
-  { tmdbId: 558449,   title: 'Gladiator II',   year: 2024, sequence: 2 },
-  { tmdbId: 653346,   title: 'Kingdom of the Planet of the Apes',   year: 2024, sequence: 4 },
-  { tmdbId: 505026,   title: 'Death on the Nile',   year: 2022, sequence: 2 },
-  { tmdbId: 8810,   title: 'Mad Max 2',   year: 1981, sequence: 2 },
-  { tmdbId: 912649,   title: 'Venom: The Last Dance',   year: 2024, sequence: 3 },
-  { tmdbId: 335977,   title: 'Indiana Jones and the Dial of Destiny',   year: 2023, sequence: 5 },
-  { tmdbId: 663,   title: 'Saw IV',   year: 2007, sequence: 4 },
-  { tmdbId: 646,   title: 'Dr. No',   year: 1962, sequence: 1 },
-  { tmdbId: 438148,   title: 'Minions: The Rise of Gru',   year: 2022, sequence: 2 },
-  { tmdbId: 658,   title: 'Goldfinger',   year: 1964, sequence: 3 },
-  { tmdbId: 11917,   title: 'Saw V',   year: 2008, sequence: 5 },
-  { tmdbId: 926393,   title: 'The Equalizer 3',   year: 2023, sequence: 3 },
-  { tmdbId: 594767,   title: 'Shazam! Fury of the Gods',   year: 2023, sequence: 2 },
-  { tmdbId: 1011985,   title: 'Kung Fu Panda 4',   year: 2024, sequence: 4 },
-  { tmdbId: 572802,   title: 'Aquaman and the Lost Kingdom',   year: 2023, sequence: 2 },
-  { tmdbId: 15969,   title: 'The Return of Jafar',   year: 1994, sequence: 2 },
-  { tmdbId: 180863,   title: 'T2 Trainspotting',   year: 2017, sequence: 2 },
-  { tmdbId: 657,   title: 'From Russia with Love',   year: 1963, sequence: 2 },
-  { tmdbId: 609681,   title: 'The Marvels',   year: 2023, sequence: 2 },
-  { tmdbId: 9714,   title: 'Home Alone 3',   year: 1997, sequence: 3 },
-  { tmdbId: 9355,   title: 'Mad Max Beyond Thunderdome',   year: 1985, sequence: 3 },
-  { tmdbId: 939243,   title: 'Sonic the Hedgehog 3',   year: 2024, sequence: 3 },
-  { tmdbId: 519182,   title: 'Despicable Me 4',   year: 2024, sequence: 4 },
-  { tmdbId: 11430,   title: 'The Lion King 1┬╜',   year: 2004, sequence: 3 },
-  { tmdbId: 822119,   title: 'Captain America: Brave New World',   year: 2025, sequence: 4 },
-  { tmdbId: 1241982,   title: 'Moana 2',   year: 2024, sequence: 2 },
-  { tmdbId: 889737,   title: 'Joker: Folie ├á Deux',   year: 2024, sequence: 2 },
-  { tmdbId: 945729,   title: 'A Haunting in Venice',   year: 2023, sequence: 3 },
-  { tmdbId: 83533,   title: 'Avatar: Fire and Ash',   year: 2025, sequence: 3 },
-  { tmdbId: 762509,   title: 'Mufasa: The Lion King',   year: 2024, sequence: 2 },
-  { tmdbId: 1084242,   title: 'Zootopia 2',   year: 2025, sequence: 2 },
-  { tmdbId: 660,   title: 'Thunderball',   year: 1965, sequence: 4 },
-  { tmdbId: 12242,   title: 'Mulan II',   year: 2004, sequence: 2 },
-  { tmdbId: 667,   title: 'You Only Live Twice',   year: 1967, sequence: 5 },
-  { tmdbId: 812583,   title: 'Wake Up Dead Man: A Knives Out Mystery',   year: 2025, sequence: 3 },
-  { tmdbId: 967847,   title: 'Ghostbusters: Frozen Empire',   year: 2024, sequence: 4 },
-  { tmdbId: 579,   title: 'Jaws 2',   year: 1978, sequence: 2 },
-  { tmdbId: 11238,   title: 'Aladdin and the King of Thieves',   year: 1996, sequence: 3 },
-  { tmdbId: 10214,   title: 'Son of the Mask',   year: 2005, sequence: 2 },
-  { tmdbId: 1038392,   title: 'The Conjuring: Last Rites',   year: 2025, sequence: 4 },
-  { tmdbId: 17692,   title: 'Jaws 3-D',   year: 1983, sequence: 3 },
-  { tmdbId: 12536,   title: 'Home Alone 4',   year: 2002, sequence: 4 },
-  { tmdbId: 580,   title: 'Jaws: The Revenge',   year: 1987, sequence: 4 },
-  { tmdbId: 13313,   title: 'Beauty and the Beast: The Enchanted Christmas',   year: 1997, sequence: 2 },
-  { tmdbId: 4437,   title: '2010',   year: 1984, sequence: 2 },
-  { tmdbId: 805320,   title: 'Bird Box Barcelona',   year: 2023, sequence: 2 },
-  { tmdbId: 10576,   title: 'Psycho II',   year: 1983, sequence: 2 },
-  { tmdbId: 1226863,   title: 'The Super Mario Galaxy Movie',   year: 2026, sequence: 2 },
-  { tmdbId: 187,   title: 'Sin City',   year: 2005, sequence: 1 },
-  { tmdbId: 268,   title: 'Batman',   year: 1989, sequence: 1 },
-  { tmdbId: 137106,   title: 'The Lego Movie',   year: 2014, sequence: 1 },
-  { tmdbId: 561,   title: 'Constantine',   year: 2005, sequence: 1 },
-  { tmdbId: 1487,   title: 'Hellboy',   year: 2004, sequence: 1 },
-  { tmdbId: 364,   title: 'Batman Returns',   year: 1992, sequence: 2 },
-  { tmdbId: 36647,   title: 'Blade',   year: 1998, sequence: 1 },
-  { tmdbId: 545609,   title: 'Extraction',   year: 2020, sequence: 1 },
-  { tmdbId: 11253,   title: 'Hellboy II: The Golden Army',   year: 2008, sequence: 2 },
-  { tmdbId: 414,   title: 'Batman Forever',   year: 1995, sequence: 3 },
-  { tmdbId: 415,   title: 'Batman & Robin',   year: 1997, sequence: 4 },
-  { tmdbId: 36586,   title: 'Blade II',   year: 2002, sequence: 2 },
-  { tmdbId: 547016,   title: 'The Old Guard',   year: 2020, sequence: 1 },
-  { tmdbId: 9495,   title: 'The Crow',   year: 1994, sequence: 1 },
-  { tmdbId: 146216,   title: 'RED 2',   year: 2013, sequence: 2 },
-  { tmdbId: 36648,   title: 'Blade: Trinity',   year: 2004, sequence: 3 },
-  { tmdbId: 1924,   title: 'Superman',   year: 1978, sequence: 1 },
-  { tmdbId: 8536,   title: 'Superman II',   year: 1980, sequence: 2 },
-  { tmdbId: 9531,   title: 'Superman III',   year: 1983, sequence: 3 },
-  { tmdbId: 39514,   title: 'RED',   year: 2010, sequence: 1 },
-  { tmdbId: 1498,   title: 'Teenage Mutant Ninja Turtles',   year: 1990, sequence: 1 },
-  { tmdbId: 1497,   title: 'Teenage Mutant Ninja Turtles II: The Secret of the Ooze',   year: 1991, sequence: 2 },
-  { tmdbId: 1499,   title: 'Teenage Mutant Ninja Turtles III',   year: 1993, sequence: 3 },
-  { tmdbId: 98566,   title: 'Teenage Mutant Ninja Turtles',   year: 2014, sequence: 1 },
-  { tmdbId: 308531,   title: 'Teenage Mutant Ninja Turtles: Out of the Shadows',   year: 2016, sequence: 2 },
-  { tmdbId: 614930,   title: 'Teenage Mutant Ninja Turtles: Mutant Mayhem',   year: 2023, sequence: 1 },
-  { tmdbId: 4513,   title: '30 Days of Night',   year: 2007, sequence: 1 },
-  { tmdbId: 16281,   title: 'Creepshow',   year: 1982, sequence: 1 },
-  { tmdbId: 10249,   title: 'The Rocketeer',   year: 1991, sequence: 1 },
-  { tmdbId: 1061474,   title: 'Superman',   year: 2025, sequence: 1 },
-  { tmdbId: 846422,   title: 'The Old Guard 2',   year: 2025, sequence: 2 },
-  { tmdbId: 871,   title: 'Planet of the Apes',   year: 1968, sequence: 1 },
-  { tmdbId: 1685,   title: 'Beneath the Planet of the Apes',   year: 1970, sequence: 2 },
-  { tmdbId: 1687,   title: 'Escape from the Planet of the Apes',   year: 1971, sequence: 3 },
-  { tmdbId: 1688,   title: 'Conquest of the Planet of the Apes',   year: 1972, sequence: 4 },
-  { tmdbId: 1705,   title: 'Battle for the Planet of the Apes',   year: 1973, sequence: 5 },
-  { tmdbId: 152,   title: 'Star Trek: The Motion Picture',   year: 1979, sequence: 1 },
-  { tmdbId: 154,   title: 'Star Trek II: The Wrath of Khan',   year: 1982, sequence: 2 },
-  { tmdbId: 157,   title: 'Star Trek III: The Search for Spock',   year: 1984, sequence: 3 },
-  { tmdbId: 168,   title: 'Star Trek IV: The Voyage Home',   year: 1986, sequence: 4 },
-  { tmdbId: 172,   title: 'Star Trek V: The Final Frontier',   year: 1989, sequence: 5 },
-  { tmdbId: 193,   title: 'Star Trek: Generations',   year: 1994, sequence: 1 },
-  { tmdbId: 199,   title: 'Star Trek: First Contact',   year: 1996, sequence: 2 },
-  { tmdbId: 200,   title: 'Star Trek: Insurrection',   year: 1998, sequence: 3 },
-  { tmdbId: 201,   title: 'Star Trek: Nemesis',   year: 2002, sequence: 4 },
-  { tmdbId: 9738,   title: 'Fantastic Four',   year: 2005, sequence: 1 },
-  { tmdbId: 1724,   title: 'The Incredible Hulk',   year: 2008, sequence: 1 },
-  { tmdbId: 140607,   title: 'Star Wars: The Force Awakens',   year: 2015, sequence: 1 },
-  { tmdbId: 181808,   title: 'Star Wars: The Last Jedi',   year: 2017, sequence: 2 },
-  { tmdbId: 298250,   title: 'Jigsaw',   year: 2017, sequence: 1 },
-  { tmdbId: 181812,   title: 'Star Wars: The Rise of Skywalker',   year: 2019, sequence: 3 },
-  { tmdbId: 479455,   title: 'Men in Black: International',   year: 2019, sequence: 4 },
-  { tmdbId: 495764,   title: 'Birds of Prey (and the Fantabulous Emancipation of One Harley Quinn)',   year: 2020, sequence: 1 },
-  { tmdbId: 602734,   title: 'Spiral: From the Book of Saw',   year: 2021, sequence: 2 },
-  { tmdbId: 497698,   title: 'Black Widow',   year: 2021, sequence: 1 },
-  { tmdbId: 566525,   title: 'Shang-Chi and the Legend of the Ten Rings',   year: 2021, sequence: 1 },
-  { tmdbId: 524434,   title: 'Eternals',   year: 2021, sequence: 1 },
-  { tmdbId: 507086,   title: 'Jurassic World Dominion',   year: 2022, sequence: 3 },
-  { tmdbId: 436270,   title: 'Black Adam',   year: 2022, sequence: 1 },
-  { tmdbId: 526896,   title: 'Morbius',   year: 2022, sequence: 1 },
-  { tmdbId: 951491,   title: 'Saw X',   year: 2023, sequence: 3 },
-  { tmdbId: 695721,   title: 'The Hunger Games: The Ballad of Songbirds & Snakes',   year: 2023, sequence: 1 },
-  { tmdbId: 298618,   title: 'The Flash',   year: 2023, sequence: 1 },
-  { tmdbId: 565770,   title: 'Blue Beetle',   year: 2023, sequence: 1 },
-  { tmdbId: 968051,   title: 'The Nun II',   year: 2023, sequence: 2 },
-  { tmdbId: 762441,   title: 'A Quiet Place: Day One',   year: 2024, sequence: 3 },
-  { tmdbId: 634492,   title: 'Madame Web',   year: 2024, sequence: 1 },
-  { tmdbId: 539972,   title: 'Kraven the Hunter',   year: 2024, sequence: 1 },
+  { tmdbId: 24428, title: 'The Avengers', year: 2012, sequence: 1 },
+  { tmdbId: 155, title: 'The Dark Knight', year: 2008, sequence: 2 },
+  { tmdbId: 19995, title: 'Avatar', year: 2009, sequence: 1 },
+  { tmdbId: 293660, title: 'Deadpool', year: 2016, sequence: 1 },
+  { tmdbId: 299536, title: 'Avengers: Infinity War', year: 2018, sequence: 3 },
+  { tmdbId: 118340, title: 'Guardians of the Galaxy', year: 2014, sequence: 1 },
+  { tmdbId: 1726, title: 'Iron Man', year: 2008, sequence: 1 },
+  { tmdbId: 603, title: 'The Matrix', year: 1999, sequence: 1 },
+  { tmdbId: 475557, title: 'Joker', year: 2019, sequence: 1 },
+  { tmdbId: 299534, title: 'Avengers: Endgame', year: 2019, sequence: 4 },
+  { tmdbId: 120, title: 'The Lord of the Rings: The Fellowship of the Ring', year: 2001, sequence: 1 },
+  { tmdbId: 122, title: 'The Lord of the Rings: The Return of the King', year: 2003, sequence: 3 },
+  { tmdbId: 99861, title: 'Avengers: Age of Ultron', year: 2015, sequence: 2 },
+  { tmdbId: 49026, title: 'The Dark Knight Rises', year: 2012, sequence: 3 },
+  { tmdbId: 76341, title: 'Mad Max: Fury Road', year: 2015, sequence: 4 },
+  { tmdbId: 271110, title: 'Captain America: Civil War', year: 2016, sequence: 3 },
+  { tmdbId: 121, title: 'The Lord of the Rings: The Two Towers', year: 2002, sequence: 2 },
+  { tmdbId: 672, title: 'Harry Potter and the Chamber of Secrets', year: 2002, sequence: 2 },
+  { tmdbId: 284054, title: 'Black Panther', year: 2018, sequence: 1 },
+  { tmdbId: 150540, title: 'Inside Out', year: 2015, sequence: 1 },
+  { tmdbId: 284052, title: 'Doctor Strange', year: 2016, sequence: 1 },
+  { tmdbId: 68721, title: 'Iron Man 3', year: 2013, sequence: 3 },
+  { tmdbId: 70160, title: 'The Hunger Games', year: 2012, sequence: 1 },
+  { tmdbId: 315635, title: 'Spider-Man: Homecoming', year: 2017, sequence: 1 },
+  { tmdbId: 673, title: 'Harry Potter and the Prisoner of Azkaban', year: 2004, sequence: 3 },
+  { tmdbId: 283995, title: 'Guardians of the Galaxy Vol. 2', year: 2017, sequence: 2 },
+  { tmdbId: 238, title: 'The Godfather', year: 1972, sequence: 1 },
+  { tmdbId: 1771, title: 'Captain America: The First Avenger', year: 2011, sequence: 1 },
+  { tmdbId: 272, title: 'Batman Begins', year: 2005, sequence: 1 },
+  { tmdbId: 10138, title: 'Iron Man 2', year: 2010, sequence: 2 },
+  { tmdbId: 10195, title: 'Thor', year: 2011, sequence: 1 },
+  { tmdbId: 11, title: 'Star Wars', year: 1977, sequence: 1 },
+  { tmdbId: 22, title: 'Pirates of the Caribbean: The Curse of the Black Pearl', year: 2003, sequence: 1 },
+  { tmdbId: 674, title: 'Harry Potter and the Goblet of Fire', year: 2005, sequence: 4 },
+  { tmdbId: 297761, title: 'Suicide Squad', year: 2016, sequence: 1 },
+  { tmdbId: 284053, title: 'Thor: Ragnarok', year: 2017, sequence: 3 },
+  { tmdbId: 634649, title: 'Spider-Man: No Way Home', year: 2021, sequence: 3 },
+  { tmdbId: 105, title: 'Back to the Future', year: 1985, sequence: 1 },
+  { tmdbId: 135397, title: 'Jurassic World', year: 2015, sequence: 4 },
+  { tmdbId: 354912, title: 'Coco', year: 2017, sequence: 1 },
+  { tmdbId: 297762, title: 'Wonder Woman', year: 2017, sequence: 1 },
+  { tmdbId: 102899, title: 'Ant-Man', year: 2015, sequence: 1 },
+  { tmdbId: 98, title: 'Gladiator', year: 2000, sequence: 1 },
+  { tmdbId: 245891, title: 'John Wick', year: 2014, sequence: 1 },
+  { tmdbId: 675, title: 'Harry Potter and the Order of the Phoenix', year: 2007, sequence: 5 },
+  { tmdbId: 557, title: 'Spider-Man', year: 2002, sequence: 1 },
+  { tmdbId: 12, title: 'Finding Nemo', year: 2003, sequence: 1 },
+  { tmdbId: 263115, title: 'Logan', year: 2017, sequence: 3 },
+  { tmdbId: 346364, title: 'It', year: 2017, sequence: 1 },
+  { tmdbId: 100402, title: 'Captain America: The Winter Soldier', year: 2014, sequence: 2 },
+  { tmdbId: 862, title: 'Toy Story', year: 1995, sequence: 1 },
+  { tmdbId: 585, title: 'Monsters, Inc.', year: 2001, sequence: 1 },
+  { tmdbId: 259316, title: 'Fantastic Beasts and Where to Find Them', year: 2016, sequence: 1 },
+  { tmdbId: 8587, title: 'The Lion King', year: 1994, sequence: 1 },
+  { tmdbId: 49051, title: 'The Hobbit: An Unexpected Journey', year: 2012, sequence: 1 },
+  { tmdbId: 383498, title: 'Deadpool 2', year: 2018, sequence: 2 },
+  { tmdbId: 209112, title: 'Batman v Superman: Dawn of Justice', year: 2016, sequence: 2 },
+  { tmdbId: 24, title: 'Kill Bill: Vol. 1', year: 2003, sequence: 1 },
+  { tmdbId: 694, title: 'The Shining', year: 1980, sequence: 1 },
+  { tmdbId: 9806, title: 'The Incredibles', year: 2004, sequence: 1 },
+  { tmdbId: 808, title: 'Shrek', year: 2001, sequence: 1 },
+  { tmdbId: 1930, title: 'The Amazing Spider-Man', year: 2012, sequence: 1 },
+  { tmdbId: 101299, title: 'The Hunger Games: Catching Fire', year: 2013, sequence: 2 },
+  { tmdbId: 1891, title: 'The Empire Strikes Back', year: 1980, sequence: 2 },
+  { tmdbId: 76338, title: 'Thor: The Dark World', year: 2013, sequence: 2 },
+  { tmdbId: 198663, title: 'The Maze Runner', year: 2014, sequence: 1 },
+  { tmdbId: 18785, title: 'The Hangover', year: 2009, sequence: 1 },
+  { tmdbId: 269149, title: 'Zootopia', year: 2016, sequence: 1 },
+  { tmdbId: 274, title: 'The Silence of the Lambs', year: 1991, sequence: 1 },
+  { tmdbId: 329, title: 'Jurassic Park', year: 1993, sequence: 1 },
+  { tmdbId: 207703, title: 'Kingsman: The Secret Service', year: 2015, sequence: 1 },
+  { tmdbId: 109445, title: 'Frozen', year: 2013, sequence: 1 },
+  { tmdbId: 335983, title: 'Venom', year: 2018, sequence: 1 },
+  { tmdbId: 324857, title: 'Spider-Man: Into the Spider-Verse', year: 2018, sequence: 1 },
+  { tmdbId: 429617, title: 'Spider-Man: Far From Home', year: 2019, sequence: 2 },
+  { tmdbId: 1892, title: 'Return of the Jedi', year: 1983, sequence: 3 },
+  { tmdbId: 75656, title: 'Now You See Me', year: 2013, sequence: 1 },
+  { tmdbId: 299537, title: 'Captain Marvel', year: 2019, sequence: 1 },
+  { tmdbId: 131631, title: 'The Hunger Games: Mockingjay - Part 1', year: 2014, sequence: 3 },
+  { tmdbId: 558, title: 'Spider-Man 2', year: 2004, sequence: 2 },
+  { tmdbId: 348, title: 'Alien', year: 1979, sequence: 1 },
+  { tmdbId: 127585, title: 'X-Men: Days of Future Past', year: 2014, sequence: 5 },
+  { tmdbId: 49521, title: 'Man of Steel', year: 2013, sequence: 1 },
+  { tmdbId: 20352, title: 'Despicable Me', year: 2010, sequence: 1 },
+  { tmdbId: 1893, title: 'Star Wars: Episode I - The Phantom Menace', year: 1999, sequence: 4 },
+  { tmdbId: 10193, title: 'Toy Story 3', year: 2010, sequence: 3 },
+  { tmdbId: 122917, title: 'The Hobbit: The Battle of the Five Armies', year: 2014, sequence: 3 },
+  { tmdbId: 447332, title: 'A Quiet Place', year: 2018, sequence: 1 },
+  { tmdbId: 559, title: 'Spider-Man 3', year: 2007, sequence: 3 },
+  { tmdbId: 920, title: 'Cars', year: 2006, sequence: 1 },
+  { tmdbId: 335984, title: 'Blade Runner 2049', year: 2017, sequence: 2 },
+  { tmdbId: 393, title: 'Kill Bill: Vol. 2', year: 2004, sequence: 2 },
+  { tmdbId: 78, title: 'Blade Runner', year: 1982, sequence: 1 },
+  { tmdbId: 1865, title: 'Pirates of the Caribbean: On Stranger Tides', year: 2011, sequence: 4 },
+  { tmdbId: 297802, title: 'Aquaman', year: 2018, sequence: 1 },
+  { tmdbId: 863, title: 'Toy Story 2', year: 1999, sequence: 2 },
+  { tmdbId: 438631, title: 'Dune', year: 2021, sequence: 1 },
+  { tmdbId: 607, title: 'Men in Black', year: 1997, sequence: 1 },
+  { tmdbId: 12155, title: 'Alice in Wonderland', year: 2010, sequence: 1 },
+  { tmdbId: 10528, title: 'Sherlock Holmes', year: 2009, sequence: 1 },
+  { tmdbId: 1271, title: '300', year: 2007, sequence: 1 },
+  { tmdbId: 218, title: 'The Terminator', year: 1984, sequence: 1 },
+  { tmdbId: 353486, title: 'Jumanji: Welcome to the Jungle', year: 2017, sequence: 2 },
+  { tmdbId: 8966, title: 'Twilight', year: 2008, sequence: 1 },
+  { tmdbId: 10191, title: 'How to Train Your Dragon', year: 2010, sequence: 1 },
+  { tmdbId: 1894, title: 'Star Wars: Episode II - Attack of the Clones', year: 2002, sequence: 5 },
+  { tmdbId: 425, title: 'Ice Age', year: 2002, sequence: 1 },
+  { tmdbId: 324552, title: 'John Wick: Chapter 2', year: 2017, sequence: 2 },
+  { tmdbId: 280, title: 'Terminator 2: Judgment Day', year: 1991, sequence: 2 },
+  { tmdbId: 102382, title: 'The Amazing Spider-Man 2', year: 2014, sequence: 2 },
+  { tmdbId: 363088, title: 'Ant-Man and the Wasp', year: 2018, sequence: 2 },
+  { tmdbId: 57158, title: 'The Hobbit: The Desolation of Smaug', year: 2013, sequence: 2 },
+  { tmdbId: 76600, title: 'Avatar: The Way of Water', year: 2022, sequence: 2 },
+  { tmdbId: 546554, title: 'Knives Out', year: 2019, sequence: 1 },
+  { tmdbId: 165, title: 'Back to the Future Part II', year: 1989, sequence: 2 },
+  { tmdbId: 240, title: 'The Godfather Part II', year: 1974, sequence: 2 },
+  { tmdbId: 277834, title: 'Moana', year: 2016, sequence: 1 },
+  { tmdbId: 102651, title: 'Maleficent', year: 2014, sequence: 1 },
+  { tmdbId: 260513, title: 'Incredibles 2', year: 2018, sequence: 2 },
+  { tmdbId: 85, title: 'Raiders of the Lost Ark', year: 1981, sequence: 1 },
+  { tmdbId: 49538, title: 'X-Men: First Class', year: 2011, sequence: 4 },
+  { tmdbId: 157350, title: 'Divergent', year: 2014, sequence: 1 },
+  { tmdbId: 809, title: 'Shrek 2', year: 2004, sequence: 2 },
+  { tmdbId: 131634, title: 'The Hunger Games: Mockingjay - Part 2', year: 2015, sequence: 4 },
+  { tmdbId: 68726, title: 'Pacific Rim', year: 2013, sequence: 1 },
+  { tmdbId: 70981, title: 'Prometheus', year: 2012, sequence: 1 },
+  { tmdbId: 19908, title: 'Zombieland', year: 2009, sequence: 1 },
+  { tmdbId: 72105, title: 'Ted', year: 2012, sequence: 1 },
+  { tmdbId: 82690, title: 'Wreck-It Ralph', year: 2012, sequence: 1 },
+  { tmdbId: 166426, title: 'Pirates of the Caribbean: Dead Men Tell No Tales', year: 2017, sequence: 5 },
+  { tmdbId: 351286, title: 'Jurassic World: Fallen Kingdom', year: 2018, sequence: 5 },
+  { tmdbId: 61791, title: 'Rise of the Planet of the Apes', year: 2011, sequence: 1 },
+  { tmdbId: 138843, title: 'The Conjuring', year: 2013, sequence: 1 },
+  { tmdbId: 127380, title: 'Finding Dory', year: 2016, sequence: 2 },
+  { tmdbId: 9502, title: 'Kung Fu Panda', year: 2008, sequence: 1 },
+  { tmdbId: 771, title: 'Home Alone', year: 1990, sequence: 1 },
+  { tmdbId: 216015, title: 'Fifty Shades of Grey', year: 2015, sequence: 1 },
+  { tmdbId: 23483, title: 'Kick-Ass', year: 2010, sequence: 1 },
+  { tmdbId: 562, title: 'Die Hard', year: 1988, sequence: 1 },
+  { tmdbId: 1359, title: 'American Psycho', year: 2000, sequence: 1 },
+  { tmdbId: 119450, title: 'Dawn of the Planet of the Apes', year: 2014, sequence: 2 },
+  { tmdbId: 1858, title: 'Transformers', year: 2007, sequence: 1 },
+  { tmdbId: 36657, title: 'X-Men', year: 2000, sequence: 1 },
+  { tmdbId: 8681, title: 'Taken', year: 2008, sequence: 1 },
+  { tmdbId: 812, title: 'Aladdin', year: 1992, sequence: 1 },
+  { tmdbId: 93456, title: 'Despicable Me 2', year: 2013, sequence: 2 },
+  { tmdbId: 604, title: 'The Matrix Reloaded', year: 2003, sequence: 2 },
+  { tmdbId: 414906, title: 'The Batman', year: 2022, sequence: 1 },
+  { tmdbId: 953, title: 'Madagascar', year: 2005, sequence: 1 },
+  { tmdbId: 458156, title: 'John Wick: Chapter 3 - Parabellum', year: 2019, sequence: 3 },
+  { tmdbId: 291805, title: 'Now You See Me 2', year: 2016, sequence: 2 },
+  { tmdbId: 578, title: 'Jaws', year: 1975, sequence: 1 },
+  { tmdbId: 196, title: 'Back to the Future Part III', year: 1990, sequence: 3 },
+  { tmdbId: 411, title: 'The Chronicles of Narnia: The Lion, the Witch and the Wardrobe', year: 2005, sequence: 1 },
+  { tmdbId: 310, title: 'Bruce Almighty', year: 2003, sequence: 1 },
+  { tmdbId: 338952, title: 'Fantastic Beasts: The Crimes of Grindelwald', year: 2018, sequence: 2 },
+  { tmdbId: 62211, title: 'Monsters University', year: 2013, sequence: 2 },
+  { tmdbId: 8844, title: 'Jumanji', year: 1995, sequence: 1 },
+  { tmdbId: 45243, title: 'The Hangover Part II', year: 2011, sequence: 2 },
+  { tmdbId: 2080, title: 'X-Men Origins: Wolverine', year: 2009, sequence: 1 },
+  { tmdbId: 854, title: 'The Mask', year: 1994, sequence: 1 },
+  { tmdbId: 580489, title: 'Venom: Let There Be Carnage', year: 2021, sequence: 2 },
+  { tmdbId: 343668, title: 'Kingsman: The Golden Circle', year: 2017, sequence: 2 },
+  { tmdbId: 293167, title: 'Kong: Skull Island', year: 2017, sequence: 1 },
+  { tmdbId: 211672, title: 'Minions', year: 2015, sequence: 1 },
+  { tmdbId: 89, title: 'Indiana Jones and the Last Crusade', year: 1989, sequence: 3 },
+  { tmdbId: 294254, title: 'Maze Runner: The Scorch Trials', year: 2015, sequence: 2 },
+  { tmdbId: 64688, title: '21 Jump Street', year: 2012, sequence: 1 },
+  { tmdbId: 41154, title: 'Men in Black 3', year: 2012, sequence: 3 },
+  { tmdbId: 1593, title: 'Night at the Museum', year: 2006, sequence: 1 },
+  { tmdbId: 58574, title: 'Sherlock Holmes: A Game of Shadows', year: 2011, sequence: 2 },
+  { tmdbId: 36658, title: 'X2', year: 2003, sequence: 2 },
+  { tmdbId: 361743, title: 'Top Gun: Maverick', year: 2022, sequence: 2 },
+  { tmdbId: 679, title: 'Aliens', year: 1986, sequence: 2 },
+  { tmdbId: 9799, title: 'The Fast and the Furious', year: 2001, sequence: 1 },
+  { tmdbId: 605, title: 'The Matrix Revolutions', year: 2003, sequence: 3 },
+  { tmdbId: 420818, title: 'The Lion King', year: 2019, sequence: 1 },
+  { tmdbId: 56292, title: 'Mission: Impossible - Ghost Protocol', year: 2011, sequence: 4 },
+  { tmdbId: 10020, title: 'Beauty and the Beast', year: 1991, sequence: 1 },
+  { tmdbId: 608, title: 'Men in Black II', year: 2002, sequence: 2 },
+  { tmdbId: 399566, title: 'Godzilla vs. Kong', year: 2021, sequence: 3 },
+  { tmdbId: 772, title: 'Home Alone 2: Lost in New York', year: 1992, sequence: 2 },
+  { tmdbId: 502356, title: 'The Super Mario Bros. Movie', year: 2023, sequence: 1 },
+  { tmdbId: 405774, title: 'Bird Box', year: 2018, sequence: 1 },
+  { tmdbId: 392044, title: 'Murder on the Orient Express', year: 2017, sequence: 1 },
+  { tmdbId: 301528, title: 'Toy Story 4', year: 2019, sequence: 4 },
+  { tmdbId: 13475, title: 'Star Trek', year: 2009, sequence: 1 },
+  { tmdbId: 262500, title: 'Insurgent', year: 2015, sequence: 2 },
+  { tmdbId: 82702, title: 'How to Train Your Dragon 2', year: 2014, sequence: 2 },
+  { tmdbId: 10674, title: 'Mulan', year: 1998, sequence: 1 },
+  { tmdbId: 602, title: 'Independence Day', year: 1996, sequence: 1 },
+  { tmdbId: 454626, title: 'Sonic the Hedgehog', year: 2020, sequence: 1 },
+  { tmdbId: 627, title: 'Trainspotting', year: 1996, sequence: 1 },
+  { tmdbId: 36668, title: 'X-Men: The Last Stand', year: 2006, sequence: 3 },
+  { tmdbId: 950, title: 'Ice Age: The Meltdown', year: 2006, sequence: 2 },
+  { tmdbId: 330457, title: 'Frozen II', year: 2019, sequence: 2 },
+  { tmdbId: 76170, title: 'The Wolverine', year: 2013, sequence: 2 },
+  { tmdbId: 453395, title: 'Doctor Strange in the Multiverse of Madness', year: 2022, sequence: 2 },
+  { tmdbId: 287947, title: 'Shazam!', year: 2019, sequence: 1 },
+  { tmdbId: 87, title: 'Indiana Jones and the Temple of Doom', year: 1984, sequence: 2 },
+  { tmdbId: 2501, title: 'The Bourne Identity', year: 2002, sequence: 1 },
+  { tmdbId: 591, title: 'The Da Vinci Code', year: 2006, sequence: 1 },
+  { tmdbId: 176, title: 'Saw', year: 2004, sequence: 1 },
+  { tmdbId: 954, title: 'Mission: Impossible', year: 1996, sequence: 1 },
+  { tmdbId: 564, title: 'The Mummy', year: 1999, sequence: 1 },
+  { tmdbId: 156022, title: 'The Equalizer', year: 2014, sequence: 1 },
+  { tmdbId: 810, title: 'Shrek the Third', year: 2007, sequence: 3 },
+  { tmdbId: 124905, title: 'Godzilla', year: 2014, sequence: 1 },
+  { tmdbId: 18239, title: 'The Twilight Saga: New Moon', year: 2009, sequence: 2 },
+  { tmdbId: 620, title: 'Ghostbusters', year: 1984, sequence: 1 },
+  { tmdbId: 281338, title: 'War for the Planet of the Apes', year: 2017, sequence: 3 },
+  { tmdbId: 177677, title: 'Mission: Impossible - Rogue Nation', year: 2015, sequence: 5 },
+  { tmdbId: 54138, title: 'Star Trek Into Darkness', year: 2013, sequence: 2 },
+  { tmdbId: 429, title: 'The Good, the Bad and the Ugly', year: 1966, sequence: 3 },
+  { tmdbId: 474350, title: 'It Chapter Two', year: 2019, sequence: 2 },
+  { tmdbId: 436969, title: 'The Suicide Squad', year: 2021, sequence: 2 },
+  { tmdbId: 744, title: 'Top Gun', year: 1986, sequence: 1 },
+  { tmdbId: 126889, title: 'Alien: Covenant', year: 2017, sequence: 2 },
+  { tmdbId: 50620, title: 'The Twilight Saga: Breaking Dawn - Part 2', year: 2012, sequence: 5 },
+  { tmdbId: 512200, title: 'Jumanji: The Next Level', year: 2019, sequence: 3 },
+  { tmdbId: 50619, title: 'The Twilight Saga: Breaking Dawn - Part 1', year: 2011, sequence: 4 },
+  { tmdbId: 24021, title: 'The Twilight Saga: Eclipse', year: 2010, sequence: 3 },
+  { tmdbId: 109439, title: 'The Hangover Part III', year: 2013, sequence: 3 },
+  { tmdbId: 330, title: 'The Lost World: Jurassic Park', year: 1997, sequence: 2 },
+  { tmdbId: 259693, title: 'The Conjuring 2', year: 2016, sequence: 2 },
+  { tmdbId: 8373, title: 'Transformers: Revenge of the Fallen', year: 2009, sequence: 2 },
+  { tmdbId: 464052, title: 'Wonder Woman 1984', year: 2020, sequence: 2 },
+  { tmdbId: 217, title: 'Indiana Jones and the Kingdom of the Crystal Skull', year: 2008, sequence: 4 },
+  { tmdbId: 87101, title: 'Terminator Genisys', year: 2015, sequence: 5 },
+  { tmdbId: 38356, title: 'Transformers: Dark of the Moon', year: 2011, sequence: 3 },
+  { tmdbId: 8355, title: 'Ice Age: Dawn of the Dinosaurs', year: 2009, sequence: 3 },
+  { tmdbId: 51497, title: 'Fast Five', year: 2011, sequence: 5 },
+  { tmdbId: 91314, title: 'Transformers: Age of Extinction', year: 2014, sequence: 4 },
+  { tmdbId: 533535, title: 'Deadpool & Wolverine', year: 2024, sequence: 3 },
+  { tmdbId: 616037, title: 'Thor: Love and Thunder', year: 2022, sequence: 4 },
+  { tmdbId: 569094, title: 'Spider-Man: Across the Spider-Verse', year: 2023, sequence: 2 },
+  { tmdbId: 187017, title: '22 Jump Street', year: 2014, sequence: 2 },
+  { tmdbId: 49013, title: 'Cars 2', year: 2011, sequence: 2 },
+  { tmdbId: 1979, title: 'Fantastic Four: Rise of the Silver Surfer', year: 2007, sequence: 2 },
+  { tmdbId: 336843, title: 'Maze Runner: The Death Cure', year: 2018, sequence: 3 },
+  { tmdbId: 337167, title: 'Fifty Shades Freed', year: 2018, sequence: 3 },
+  { tmdbId: 2503, title: 'The Bourne Ultimatum', year: 2007, sequence: 3 },
+  { tmdbId: 447365, title: 'Guardians of the Galaxy Vol. 3', year: 2023, sequence: 3 },
+  { tmdbId: 2502, title: 'The Bourne Supremacy', year: 2004, sequence: 2 },
+  { tmdbId: 584, title: '2 Fast 2 Furious', year: 2003, sequence: 2 },
+  { tmdbId: 57800, title: 'Ice Age: Continental Drift', year: 2012, sequence: 4 },
+  { tmdbId: 404368, title: 'Ralph Breaks the Internet', year: 2018, sequence: 2 },
+  { tmdbId: 214756, title: 'Ted 2', year: 2015, sequence: 2 },
+  { tmdbId: 341174, title: 'Fifty Shades Darker', year: 2017, sequence: 2 },
+  { tmdbId: 10192, title: 'Shrek Forever After', year: 2010, sequence: 4 },
+  { tmdbId: 603692, title: 'John Wick: Chapter 4', year: 2023, sequence: 4 },
+  { tmdbId: 49444, title: 'Kung Fu Panda 2', year: 2011, sequence: 2 },
+  { tmdbId: 693134, title: 'Dune: Part Two', year: 2024, sequence: 2 },
+  { tmdbId: 331, title: 'Jurassic Park III', year: 2001, sequence: 3 },
+  { tmdbId: 13804, title: 'Fast & Furious', year: 2009, sequence: 4 },
+  { tmdbId: 1734, title: 'The Mummy Returns', year: 2001, sequence: 2 },
+  { tmdbId: 324852, title: 'Despicable Me 3', year: 2017, sequence: 3 },
+  { tmdbId: 956, title: 'Mission: Impossible III', year: 2006, sequence: 3 },
+  { tmdbId: 9615, title: 'The Fast and the Furious: Tokyo Drift', year: 2006, sequence: 3 },
+  { tmdbId: 955, title: 'Mission: Impossible II', year: 2000, sequence: 2 },
+  { tmdbId: 505642, title: 'Black Panther: Wakanda Forever', year: 2022, sequence: 2 },
+  { tmdbId: 10527, title: 'Madagascar: Escape 2 Africa', year: 2008, sequence: 2 },
+  { tmdbId: 520763, title: 'A Quiet Place Part II', year: 2021, sequence: 2 },
+  { tmdbId: 13448, title: 'Angels & Demons', year: 2009, sequence: 2 },
+  { tmdbId: 18360, title: 'Night at the Museum: Battle of the Smithsonian', year: 2009, sequence: 2 },
+  { tmdbId: 296, title: 'Terminator 3: Rise of the Machines', year: 2003, sequence: 3 },
+  { tmdbId: 82675, title: 'Taken 2', year: 2012, sequence: 2 },
+  { tmdbId: 166428, title: 'How to Train Your Dragon: The Hidden World', year: 2019, sequence: 3 },
+  { tmdbId: 188927, title: 'Star Trek Beyond', year: 2016, sequence: 3 },
+  { tmdbId: 534, title: 'Terminator Salvation', year: 2009, sequence: 4 },
+  { tmdbId: 262504, title: 'Allegiant', year: 2016, sequence: 3 },
+  { tmdbId: 53182, title: '300: Rise of an Empire', year: 2014, sequence: 2 },
+  { tmdbId: 242, title: 'The Godfather Part III', year: 1990, sequence: 3 },
+  { tmdbId: 241259, title: 'Alice Through the Looking Glass', year: 2016, sequence: 2 },
+  { tmdbId: 661374, title: 'Glass Onion: A Knives Out Mystery', year: 2022, sequence: 2 },
+  { tmdbId: 2454, title: 'The Chronicles of Narnia: Prince Caspian', year: 2008, sequence: 2 },
+  { tmdbId: 47964, title: 'A Good Day to Die Hard', year: 2013, sequence: 5 },
+  { tmdbId: 373571, title: 'Godzilla: King of the Monsters', year: 2019, sequence: 2 },
+  { tmdbId: 335988, title: 'Transformers: The Last Knight', year: 2017, sequence: 5 },
+  { tmdbId: 1572, title: 'Die Hard: With a Vengeance', year: 1995, sequence: 3 },
+  { tmdbId: 1022789, title: 'Inside Out 2', year: 2024, sequence: 2 },
+  { tmdbId: 207932, title: 'Inferno', year: 2016, sequence: 3 },
+  { tmdbId: 59859, title: 'Kick-Ass 2', year: 2013, sequence: 2 },
+  { tmdbId: 140300, title: 'Kung Fu Panda 3', year: 2016, sequence: 3 },
+  { tmdbId: 423108, title: 'The Conjuring: The Devil Made Me Do It', year: 2021, sequence: 3 },
+  { tmdbId: 420809, title: 'Maleficent: Mistress of Evil', year: 2019, sequence: 2 },
+  { tmdbId: 47933, title: 'Independence Day: Resurgence', year: 2016, sequence: 2 },
+  { tmdbId: 624860, title: 'The Matrix Resurrections', year: 2021, sequence: 4 },
+  { tmdbId: 1573, title: 'Die Hard 2', year: 1990, sequence: 2 },
+  { tmdbId: 260514, title: 'Cars 3', year: 2017, sequence: 3 },
+  { tmdbId: 8077, title: 'Alien┬│', year: 1992, sequence: 3 },
+  { tmdbId: 1571, title: 'Live Free or Die Hard', year: 2007, sequence: 4 },
+  { tmdbId: 338967, title: 'Zombieland: Double Tap', year: 2019, sequence: 2 },
+  { tmdbId: 181533, title: 'Night at the Museum: Secret of the Tomb', year: 2014, sequence: 3 },
+  { tmdbId: 324668, title: 'Jason Bourne', year: 2016, sequence: 5 },
+  { tmdbId: 260346, title: 'Taken 3', year: 2014, sequence: 3 },
+  { tmdbId: 49040, title: 'The Bourne Legacy', year: 2012, sequence: 4 },
+  { tmdbId: 345887, title: 'The Equalizer 2', year: 2018, sequence: 2 },
+  { tmdbId: 10140, title: 'The Chronicles of Narnia: The Voyage of the Dawn Treader', year: 2010, sequence: 3 },
+  { tmdbId: 675353, title: 'Sonic the Hedgehog 2', year: 2022, sequence: 2 },
+  { tmdbId: 215, title: 'Saw II', year: 2005, sequence: 2 },
+  { tmdbId: 640146, title: 'Ant-Man and the Wasp: Quantumania', year: 2023, sequence: 3 },
+  { tmdbId: 8078, title: 'Alien Resurrection', year: 1997, sequence: 4 },
+  { tmdbId: 268896, title: 'Pacific Rim: Uprising', year: 2018, sequence: 2 },
+  { tmdbId: 9740, title: 'Hannibal', year: 2001, sequence: 2 },
+  { tmdbId: 425909, title: 'Ghostbusters: Afterlife', year: 2021, sequence: 3 },
+  { tmdbId: 338953, title: 'Fantastic Beasts: The Secrets of Dumbledore', year: 2022, sequence: 3 },
+  { tmdbId: 9659, title: 'Mad Max', year: 1979, sequence: 1 },
+  { tmdbId: 214, title: 'Saw III', year: 2006, sequence: 3 },
+  { tmdbId: 278154, title: 'Ice Age: Collision Course', year: 2016, sequence: 5 },
+  { tmdbId: 501170, title: 'Doctor Sleep', year: 2019, sequence: 2 },
+  { tmdbId: 2978, title: 'Ghostbusters II', year: 1989, sequence: 2 },
+  { tmdbId: 786892, title: 'Furiosa: A Mad Max Saga', year: 2024, sequence: 5 },
+  { tmdbId: 1735, title: 'The Mummy: Tomb of the Dragon Emperor', year: 2008, sequence: 3 },
+  { tmdbId: 9533, title: 'Red Dragon', year: 2002, sequence: 3 },
+  { tmdbId: 391, title: 'A Fistful of Dollars', year: 1964, sequence: 1 },
+  { tmdbId: 823464, title: 'Godzilla x Kong: The New Empire', year: 2024, sequence: 2 },
+  { tmdbId: 2698, title: 'Evan Almighty', year: 2007, sequence: 2 },
+  { tmdbId: 938, title: 'For a Few Dollars More', year: 1965, sequence: 2 },
+  { tmdbId: 558449, title: 'Gladiator II', year: 2024, sequence: 2 },
+  { tmdbId: 653346, title: 'Kingdom of the Planet of the Apes', year: 2024, sequence: 4 },
+  { tmdbId: 505026, title: 'Death on the Nile', year: 2022, sequence: 2 },
+  { tmdbId: 8810, title: 'Mad Max 2', year: 1981, sequence: 2 },
+  { tmdbId: 912649, title: 'Venom: The Last Dance', year: 2024, sequence: 3 },
+  { tmdbId: 335977, title: 'Indiana Jones and the Dial of Destiny', year: 2023, sequence: 5 },
+  { tmdbId: 663, title: 'Saw IV', year: 2007, sequence: 4 },
+  { tmdbId: 646, title: 'Dr. No', year: 1962, sequence: 1 },
+  { tmdbId: 438148, title: 'Minions: The Rise of Gru', year: 2022, sequence: 2 },
+  { tmdbId: 658, title: 'Goldfinger', year: 1964, sequence: 3 },
+  { tmdbId: 11917, title: 'Saw V', year: 2008, sequence: 5 },
+  { tmdbId: 926393, title: 'The Equalizer 3', year: 2023, sequence: 3 },
+  { tmdbId: 594767, title: 'Shazam! Fury of the Gods', year: 2023, sequence: 2 },
+  { tmdbId: 1011985, title: 'Kung Fu Panda 4', year: 2024, sequence: 4 },
+  { tmdbId: 572802, title: 'Aquaman and the Lost Kingdom', year: 2023, sequence: 2 },
+  { tmdbId: 15969, title: 'The Return of Jafar', year: 1994, sequence: 2 },
+  { tmdbId: 180863, title: 'T2 Trainspotting', year: 2017, sequence: 2 },
+  { tmdbId: 657, title: 'From Russia with Love', year: 1963, sequence: 2 },
+  { tmdbId: 609681, title: 'The Marvels', year: 2023, sequence: 2 },
+  { tmdbId: 9714, title: 'Home Alone 3', year: 1997, sequence: 3 },
+  { tmdbId: 9355, title: 'Mad Max Beyond Thunderdome', year: 1985, sequence: 3 },
+  { tmdbId: 939243, title: 'Sonic the Hedgehog 3', year: 2024, sequence: 3 },
+  { tmdbId: 519182, title: 'Despicable Me 4', year: 2024, sequence: 4 },
+  { tmdbId: 11430, title: 'The Lion King 1┬╜', year: 2004, sequence: 3 },
+  { tmdbId: 822119, title: 'Captain America: Brave New World', year: 2025, sequence: 4 },
+  { tmdbId: 1241982, title: 'Moana 2', year: 2024, sequence: 2 },
+  { tmdbId: 889737, title: 'Joker: Folie ├á Deux', year: 2024, sequence: 2 },
+  { tmdbId: 945729, title: 'A Haunting in Venice', year: 2023, sequence: 3 },
+  { tmdbId: 83533, title: 'Avatar: Fire and Ash', year: 2025, sequence: 3 },
+  { tmdbId: 762509, title: 'Mufasa: The Lion King', year: 2024, sequence: 2 },
+  { tmdbId: 1084242, title: 'Zootopia 2', year: 2025, sequence: 2 },
+  { tmdbId: 660, title: 'Thunderball', year: 1965, sequence: 4 },
+  { tmdbId: 12242, title: 'Mulan II', year: 2004, sequence: 2 },
+  { tmdbId: 667, title: 'You Only Live Twice', year: 1967, sequence: 5 },
+  { tmdbId: 812583, title: 'Wake Up Dead Man: A Knives Out Mystery', year: 2025, sequence: 3 },
+  { tmdbId: 967847, title: 'Ghostbusters: Frozen Empire', year: 2024, sequence: 4 },
+  { tmdbId: 579, title: 'Jaws 2', year: 1978, sequence: 2 },
+  { tmdbId: 11238, title: 'Aladdin and the King of Thieves', year: 1996, sequence: 3 },
+  { tmdbId: 10214, title: 'Son of the Mask', year: 2005, sequence: 2 },
+  { tmdbId: 1038392, title: 'The Conjuring: Last Rites', year: 2025, sequence: 4 },
+  { tmdbId: 17692, title: 'Jaws 3-D', year: 1983, sequence: 3 },
+  { tmdbId: 12536, title: 'Home Alone 4', year: 2002, sequence: 4 },
+  { tmdbId: 580, title: 'Jaws: The Revenge', year: 1987, sequence: 4 },
+  { tmdbId: 13313, title: 'Beauty and the Beast: The Enchanted Christmas', year: 1997, sequence: 2 },
+  { tmdbId: 4437, title: '2010', year: 1984, sequence: 2 },
+  { tmdbId: 805320, title: 'Bird Box Barcelona', year: 2023, sequence: 2 },
+  { tmdbId: 10576, title: 'Psycho II', year: 1983, sequence: 2 },
+  { tmdbId: 1226863, title: 'The Super Mario Galaxy Movie', year: 2026, sequence: 2 },
+  { tmdbId: 187, title: 'Sin City', year: 2005, sequence: 1 },
+  { tmdbId: 268, title: 'Batman', year: 1989, sequence: 1 },
+  { tmdbId: 137106, title: 'The Lego Movie', year: 2014, sequence: 1 },
+  { tmdbId: 561, title: 'Constantine', year: 2005, sequence: 1 },
+  { tmdbId: 1487, title: 'Hellboy', year: 2004, sequence: 1 },
+  { tmdbId: 364, title: 'Batman Returns', year: 1992, sequence: 2 },
+  { tmdbId: 36647, title: 'Blade', year: 1998, sequence: 1 },
+  { tmdbId: 545609, title: 'Extraction', year: 2020, sequence: 1 },
+  { tmdbId: 11253, title: 'Hellboy II: The Golden Army', year: 2008, sequence: 2 },
+  { tmdbId: 414, title: 'Batman Forever', year: 1995, sequence: 3 },
+  { tmdbId: 415, title: 'Batman & Robin', year: 1997, sequence: 4 },
+  { tmdbId: 36586, title: 'Blade II', year: 2002, sequence: 2 },
+  { tmdbId: 547016, title: 'The Old Guard', year: 2020, sequence: 1 },
+  { tmdbId: 9495, title: 'The Crow', year: 1994, sequence: 1 },
+  { tmdbId: 146216, title: 'RED 2', year: 2013, sequence: 2 },
+  { tmdbId: 36648, title: 'Blade: Trinity', year: 2004, sequence: 3 },
+  { tmdbId: 1924, title: 'Superman', year: 1978, sequence: 1 },
+  { tmdbId: 8536, title: 'Superman II', year: 1980, sequence: 2 },
+  { tmdbId: 9531, title: 'Superman III', year: 1983, sequence: 3 },
+  { tmdbId: 39514, title: 'RED', year: 2010, sequence: 1 },
+  { tmdbId: 1498, title: 'Teenage Mutant Ninja Turtles', year: 1990, sequence: 1 },
+  { tmdbId: 1497, title: 'Teenage Mutant Ninja Turtles II: The Secret of the Ooze', year: 1991, sequence: 2 },
+  { tmdbId: 1499, title: 'Teenage Mutant Ninja Turtles III', year: 1993, sequence: 3 },
+  { tmdbId: 98566, title: 'Teenage Mutant Ninja Turtles', year: 2014, sequence: 1 },
+  { tmdbId: 308531, title: 'Teenage Mutant Ninja Turtles: Out of the Shadows', year: 2016, sequence: 2 },
+  { tmdbId: 614930, title: 'Teenage Mutant Ninja Turtles: Mutant Mayhem', year: 2023, sequence: 1 },
+  { tmdbId: 4513, title: '30 Days of Night', year: 2007, sequence: 1 },
+  { tmdbId: 16281, title: 'Creepshow', year: 1982, sequence: 1 },
+  { tmdbId: 1061474, title: 'Superman', year: 2025, sequence: 1 },
+  { tmdbId: 846422, title: 'The Old Guard 2', year: 2025, sequence: 2 },
+  { tmdbId: 871, title: 'Planet of the Apes', year: 1968, sequence: 1 },
+  { tmdbId: 1685, title: 'Beneath the Planet of the Apes', year: 1970, sequence: 2 },
+  { tmdbId: 1687, title: 'Escape from the Planet of the Apes', year: 1971, sequence: 3 },
+  { tmdbId: 1688, title: 'Conquest of the Planet of the Apes', year: 1972, sequence: 4 },
+  { tmdbId: 1705, title: 'Battle for the Planet of the Apes', year: 1973, sequence: 5 },
+  { tmdbId: 152, title: 'Star Trek: The Motion Picture', year: 1979, sequence: 1 },
+  { tmdbId: 154, title: 'Star Trek II: The Wrath of Khan', year: 1982, sequence: 2 },
+  { tmdbId: 157, title: 'Star Trek III: The Search for Spock', year: 1984, sequence: 3 },
+  { tmdbId: 168, title: 'Star Trek IV: The Voyage Home', year: 1986, sequence: 4 },
+  { tmdbId: 172, title: 'Star Trek V: The Final Frontier', year: 1989, sequence: 5 },
+  { tmdbId: 193, title: 'Star Trek: Generations', year: 1994, sequence: 1 },
+  { tmdbId: 199, title: 'Star Trek: First Contact', year: 1996, sequence: 2 },
+  { tmdbId: 200, title: 'Star Trek: Insurrection', year: 1998, sequence: 3 },
+  { tmdbId: 201, title: 'Star Trek: Nemesis', year: 2002, sequence: 4 },
+  { tmdbId: 479455, title: 'Men in Black: International', year: 2019, sequence: 4 },
+  { tmdbId: 507086, title: 'Jurassic World Dominion', year: 2022, sequence: 3 },
+  { tmdbId: 695721, title: 'The Hunger Games: The Ballad of Songbirds & Snakes', year: 2023, sequence: 1 },
+  { tmdbId: 968051, title: 'The Nun II', year: 2023, sequence: 2 },
+  { tmdbId: 762441, title: 'A Quiet Place: Day One', year: 2024, sequence: 3 },
+  { tmdbId: 28739, title: "Cabin Fever 2: Spring Fever", year: 2009, sequence: 2 }, // TMDB collection pos 2 in "Cabin Fever Collection"
+  { tmdbId: 16763, title: "Joy Ride 2: Dead Ahead", year: 2009, sequence: 2 }, // TMDB collection pos 2 in "Joy Ride Collection"
+  { tmdbId: 1977, title: "The Grudge 3", year: 2009, sequence: 3 }, // TMDB collection pos 3 in "The Grudge Collection"
+  { tmdbId: 14863, title: "Anaconda 3: Offspring", year: 2008, sequence: 3 }, // TMDB collection pos 3 in "Anaconda Collection"
+  { tmdbId: 15262, title: "Boogeyman 3", year: 2008, sequence: 3 }, // TMDB collection pos 3 in "Boogeyman Collection"
+  { tmdbId: 15440, title: "Cold Prey II", year: 2008, sequence: 2 }, // TMDB collection pos 2 in "Cold Prey Collection"
+  { tmdbId: 13489, title: "Lost Boys: The Tribe", year: 2008, sequence: 2 }, // TMDB collection pos 2 in "Lost Boys Collection"
+  { tmdbId: 35626, title: "Return to Sleepaway Camp", year: 2008, sequence: 4 }, // TMDB collection pos 4 in "Sleepaway Camp Collection"
+  { tmdbId: 15641, title: "Vacancy 2: The First Cut", year: 2008, sequence: 2 }, // TMDB collection pos 2 in "Vacancy Collection"
+  { tmdbId: 17456, title: "BloodRayne II: Deliverance", year: 2007, sequence: 2 }, // TMDB collection pos 2 in "BloodRayne Collection"
+  { tmdbId: 14913, title: "Boogeyman 2", year: 2007, sequence: 2 }, // TMDB collection pos 2 in "Boogeyman Collection"
+  { tmdbId: 17038, title: "Lake Placid 2", year: 2007, sequence: 2 }, // TMDB collection pos 2 in "Lake Placid Collection"
+  { tmdbId: 13564, title: "Return to House on Haunted Hill", year: 2007, sequence: 2 }, // TMDB collection pos 2 in "House on Haunted Hill Collection"
+  { tmdbId: 15212, title: "Species: The Awakening", year: 2007, sequence: 4 }, // TMDB collection pos 4 in "Species Collection"
+  { tmdbId: 7006, title: "White Noise 2: The Light", year: 2007, sequence: 2 }, // TMDB collection pos 2 in "White Noise Collection"
+  { tmdbId: 16304, title: "Creepshow 3", year: 2006, sequence: 3 }, // TMDB collection pos 3 in "Creepshow Collection"
+  { tmdbId: 2269, title: "Day Watch", year: 2006, sequence: 2 }, // TMDB collection pos 2 in "World of Watches Collection"
+  { tmdbId: 8997, title: "Hollow Man II", year: 2006, sequence: 2 }, // TMDB collection pos 2 in "Hollow Man Collection"
+  { tmdbId: 3602, title: "I'll Always Know What You Did Last Summer", year: 2006, sequence: 3 }, // TMDB collection pos 3 in "I Know What You Did Last Summer Collection"
+  { tmdbId: 9592, title: "Open Water 2: Adrift", year: 2006, sequence: 2 }, // TMDB collection pos 2 in "Open Water Collection"
+  { tmdbId: 12700, title: "Dominion: Prequel to The Exorcist", year: 2005, sequence: 5 }, // TMDB collection pos 5 in "The Exorcist Collection"
+  { tmdbId: 24935, title: "Return of the Living Dead: Necropolis", year: 2005, sequence: 4 }, // TMDB collection pos 4 in "Return of the Living Dead Collection"
+  { tmdbId: 24939, title: "Return of the Living Dead: Rave to the Grave", year: 2005, sequence: 5 }, // TMDB collection pos 5 in "Return of the Living Dead Collection"
+  { tmdbId: 9711, title: "Species III", year: 2005, sequence: 3 }, // TMDB collection pos 3 in "Species Collection"
+  { tmdbId: 16456, title: "The Crow: Wicked Prayer", year: 2005, sequence: 4 }, // TMDB collection pos 4 in "The Crow Collection"
+  { tmdbId: 10292, title: "Urban Legends: Bloody Mary", year: 2005, sequence: 3 }, // TMDB collection pos 3 in "Urban Legend Collection"
+  { tmdbId: 10361, title: "Ginger Snaps 2: Unleashed", year: 2004, sequence: 2 }, // TMDB collection pos 2 in "Ginger Snaps Collection"
+  { tmdbId: 12583, title: "Ginger Snaps Back: The Beginning", year: 2004, sequence: 3 }, // TMDB collection pos 3 in "Ginger Snaps Collection"
+  { tmdbId: 10891, title: "Tremors 4: The Legend Begins", year: 2004, sequence: 4 }, // TMDB collection pos 4 in "Tremors Collection"
+  { tmdbId: 11429, title: "Beyond Re-Animator", year: 2003, sequence: 3 }, // TMDB collection pos 3 in "Re-Animator Collection"
+  { tmdbId: 9666, title: "Ju-on: The Grudge 2", year: 2003, sequence: 4 }, // TMDB collection pos 4 in "Ju-on Collection"
+  { tmdbId: 10726, title: "American Psycho II: All American Girl", year: 2002, sequence: 2 }, // TMDB collection pos 2 in "American Psycho Collection"
+  { tmdbId: 10605, title: "Vampires: Los Muertos", year: 2002, sequence: 2 }, // TMDB collection pos 2 in "Vampires Collection"
+  { tmdbId: 10706, title: "Mimic 2", year: 2001, sequence: 2 }, // TMDB collection pos 2 in "Mimic Collection"
+  { tmdbId: 10829, title: "Tremors 3: Back to Perfection", year: 2001, sequence: 3 }, // TMDB collection pos 3 in "Tremors Collection"
+  { tmdbId: 15999, title: "Vampire Hunter D: Bloodlust", year: 2001, sequence: 2 }, // TMDB collection pos 2 in "Vampire Hunter D Collection"
+  { tmdbId: 28635, title: "Wishmaster 3: Beyond the Gates of Hell", year: 2001, sequence: 3 }, // TMDB collection pos 3 in "Wishmaster Collection"
+  { tmdbId: 10213, title: "From Dusk Till Dawn 3: The Hangman's Daughter", year: 2000, sequence: 3 }, // TMDB collection pos 3 in "From Dusk Till Dawn Collection"
+  { tmdbId: 12597, title: "Hellraiser: Inferno", year: 2000, sequence: 5 }, // TMDB collection pos 5 in "Hellraiser Collection"
+  { tmdbId: 18011, title: "Leprechaun in the Hood", year: 2000, sequence: 5 }, // TMDB collection pos 5 in "Leprechaun Collection"
+  { tmdbId: 9456, title: "The Crow: Salvation", year: 2000, sequence: 3 }, // TMDB collection pos 3 in "The Crow Collection"
+  { tmdbId: 12212, title: "Urban Legends: Final Cut", year: 2000, sequence: 2 }, // TMDB collection pos 2 in "Urban Legend Collection"
+  { tmdbId: 823, title: "Jin-Roh: The Wolf Brigade", year: 1999, sequence: 3 }, // TMDB collection pos 3 in "Kerberos Saga Collection"
+  { tmdbId: 20235, title: "Belle's Magical World", year: 1998, sequence: 3 }, // TMDB collection pos 3 in "Beauty and the Beast Collection"
+  { tmdbId: 13313, title: "Beauty and the Beast: The Enchanted Christmas", year: 1997, sequence: 2 }, // TMDB collection pos 2 in "Beauty and the Beast Collection"
+  { tmdbId: 18220, title: "Poison Ivy 2: Lily", year: 1996, sequence: 2 }, // TMDB collection pos 2 in "Poison Ivy Collection"
+  { tmdbId: 21835, title: "A Chinese Odyssey Part Two: Cinderella", year: 1995, sequence: 2 }, // TMDB collection pos 2 in "A Chinese Odyssey Collection"
+  { tmdbId: 15602, title: "Grumpier Old Men", year: 1995, sequence: 2 }, // TMDB collection pos 2 in "Grumpy Old Men Collection"
+  { tmdbId: 19286, title: "Leprechaun 3", year: 1995, sequence: 3 }, // TMDB collection pos 3 in "Leprechaun Collection"
+  { tmdbId: 10434, title: "Faraway, So Close!", year: 1993, sequence: 2 }, // TMDB collection pos 2 in "Damiel and Cassiel Collection"
+  { tmdbId: 11982, title: "Look Who's Talking Now!", year: 1993, sequence: 3 }, // TMDB collection pos 3 in "Look Who's Talking Collection"// TMDB collection pos 2 in "The Hood Collection"
+  { tmdbId: 34376, title: "Mannequin Two: On the Move", year: 1991, sequence: 2 }, // TMDB collection pos 2 in "Mannequin Collection"
+  { tmdbId: 12717, title: "My Mother's Castle", year: 1990, sequence: 2 }, // TMDB collection pos 2 in "Pagnol, Childhood's Memories Collection"
+  { tmdbId: 32669, title: "The Two Jakes", year: 1990, sequence: 2 }, // TMDB collection pos 2 in "The Jake Gittes Collection"
+  { tmdbId: 53150, title: "C.H.U.D. II: Bud the Chud", year: 1989, sequence: 2 }, // TMDB collection pos 2 in "C.H.U.D. Collection"
+  { tmdbId: 172, title: "Star Trek V: The Final Frontier", year: 1989, sequence: 5 }, // TMDB collection pos 5 in "Star Trek: The Original Series Collection"
+  { tmdbId: 10344, title: "The Fly II", year: 1989, sequence: 2 }, // TMDB collection pos 2 in "The Fly (1986) Collection"
+  { tmdbId: 19142, title: "The Return of Swamp Thing", year: 1989, sequence: 2 }, // TMDB collection pos 2 in "Swamp Thing Collection"
+  { tmdbId: 28165, title: "The Toxic Avenger Part II", year: 1989, sequence: 2 }, // TMDB collection pos 2 in "The Toxic Avenger Collection"
+  { tmdbId: 11285, title: "Cocoon: The Return", year: 1988, sequence: 2 }, // TMDB collection pos 2 in "Cocoon Collection"
+  { tmdbId: 10127, title: "Critters 2", year: 1988, sequence: 2 }, // TMDB collection pos 2 in "Critters Collection"
+  { tmdbId: 15158, title: "Phantasm II", year: 1988, sequence: 2 }, // TMDB collection pos 2 in "Phantasm Collection"
+  { tmdbId: 15482, title: "Return of the Killer Tomatoes!", year: 1988, sequence: 2 }, // TMDB collection pos 2 in "Killer Tomatoes! Collection"
+  { tmdbId: 11966, title: "Short Circuit 2", year: 1988, sequence: 2 }, // TMDB collection pos 2 in "Short Circuit Collection"
+  { tmdbId: 11411, title: "Superman IV: The Quest for Peace", year: 1987, sequence: 4 }, // TMDB collection pos 4 in "Superman Collection"
+  { tmdbId: 91691, title: "Ga-ga: Glory to the Heroes", year: 1986, sequence: 4 }, // TMDB collection pos 4 in "Apocalypse Collection"
+  { tmdbId: 168, title: "Star Trek IV: The Voyage Home", year: 1986, sequence: 4 }, // TMDB collection pos 4 in "Star Trek: The Original Series Collection"
+  { tmdbId: 4437, title: "2010", year: 1984, sequence: 2 }, // TMDB collection pos 2 in "The Space Odyssey Series"
+  { tmdbId: 43967, title: "Urusei Yatsura: Beautiful Dreamer", year: 1984, sequence: 2 }, // TMDB collection pos 2 in "Urusei Yatsura Collection"
+  { tmdbId: 69152, title: "Escape from the Bronx", year: 1983, sequence: 2 }, // TMDB collection pos 2 in "The Bronx Warriors Collection"
+  { tmdbId: 9531, title: "Superman III", year: 1983, sequence: 3 }, // TMDB collection pos 3 in "Superman Collection"
+  { tmdbId: 10676, title: "Halloween III: Season of the Witch", year: 1982, sequence: 3 }, // TMDB collection pos 3 in "Halloween Collection"
+  { tmdbId: 39230, title: "Mobile Suit Gundam III: Encounters in Space", year: 1982, sequence: 3 }, // TMDB collection pos 3 in "Mobile Suit Gundam Collection"
+  { tmdbId: 39229, title: "Mobile Suit Gundam II: Soldiers of Sorrow", year: 1981, sequence: 2 }, // TMDB collection pos 2 in "Mobile Suit Gundam Collection"
+  { tmdbId: 185354, title: "The War of the Worlds: Next Century", year: 1981, sequence: 2 }, // TMDB collection pos 2 in "Apocalypse Collection"
+  { tmdbId: 1078605, title: "Weapons", year: 2025, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Weapons Collection" (series represented)
+  { tmdbId: 756999, title: "The Black Phone", year: 2022, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Black Phone Collection" (series represented)
+  { tmdbId: 381719, title: "Peter Rabbit", year: 2018, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Peter Rabbit Collection" (series represented)
+  { tmdbId: 454983, title: "The Kissing Booth", year: 2018, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Kissing Booth Collection" (series represented)
+  { tmdbId: 312221, title: "Creed", year: 2015, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Creed Collection" (series represented)
+  { tmdbId: 273481, title: "Sicario", year: 2015, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Sicario Collection" (series represented)
+  { tmdbId: 195589, title: "Neighbors", year: 2014, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Neighbors Collection" (series represented)
+  { tmdbId: 249397, title: "Nymphomaniac: Vol. II", year: 2013, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Nymphomaniac Collection" (series represented)
+  { tmdbId: 49519, title: "The Croods", year: 2013, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Croods Collection" (series represented)
+  { tmdbId: 67660, title: "Think Like a Man", year: 2012, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Think Like a Man Collection" (series represented)
+  { tmdbId: 49018, title: "Insidious", year: 2011, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Insidious Collection" (series represented)
+  { tmdbId: 37799, title: "The Social Network", year: 2010, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Social Network Collection" (series represented)
+  { tmdbId: 8881, title: "Che: Part One", year: 2008, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Che Collection" (series represented)
+  { tmdbId: 11631, title: "Mamma Mia!", year: 2008, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Mamma Mia! Collection" (series represented)
+  { tmdbId: 8329, title: "[REC]", year: 2007, sequence: 1 }, // TMDB collection pos 1 ΓÇö "[REC] Collection" (series represented)
+  { tmdbId: 13491, title: "Arn: The Knight Templar", year: 2007, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Arn Collection" (series represented)
+  { tmdbId: 7347, title: "Elite Squad", year: 2007, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Elite Squad Collection" (series represented)
+  { tmdbId: 2082, title: "Halloween", year: 2007, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Halloween (Rob Zombie Series) Collection" (series represented)
+  { tmdbId: 10294, title: "Vacancy", year: 2007, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Vacancy Collection" (series represented)
+  { tmdbId: 21786, title: "Cold Prey", year: 2006, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Cold Prey Collection" (series represented)
+  { tmdbId: 1690, title: "Hostel", year: 2006, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Hostel Collection" (series represented)
+  { tmdbId: 9792, title: "The Hills Have Eyes", year: 2006, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Hills Have Eyes (Reboot) Collection" (series represented)
+  { tmdbId: 168705, title: "BloodRayne", year: 2005, sequence: 1 }, // TMDB collection pos 1 ΓÇö "BloodRayne Collection" (series represented)
+  { tmdbId: 8968, title: "Boogeyman", year: 2005, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Boogeyman Collection" (series represented)
+  { tmdbId: 9392, title: "The Descent", year: 2005, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Descent Collection" (series represented)
+  { tmdbId: 11804, title: "White Noise", year: 2005, sequence: 1 }, // TMDB collection pos 1 ΓÇö "White Noise Collection" (series represented)
+  { tmdbId: 395, title: "AVP: Alien vs. Predator", year: 2004, sequence: 1 }, // TMDB collection pos 1 ΓÇö "AVP Collection" (series represented)
+  { tmdbId: 83, title: "Open Water", year: 2004, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Open Water Collection" (series represented)
+  { tmdbId: 1970, title: "The Grudge", year: 2004, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Grudge Collection" (series represented)
+  { tmdbId: 11547, title: "Cabin Fever", year: 2003, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Cabin Fever Collection" (series represented)
+  { tmdbId: 2662, title: "House of 1000 Corpses", year: 2003, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Firefly Collection" (series represented)
+  { tmdbId: 9373, title: "The Texas Chainsaw Massacre", year: 2003, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Texas Chainsaw (Reboot) Collection" (series represented)
+  { tmdbId: 9902, title: "Wrong Turn", year: 2003, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Wrong Turn Collection" (series represented)
+  { tmdbId: 170, title: "28 Days Later", year: 2002, sequence: 1 }, // TMDB collection pos 1 ΓÇö "28 Days/Weeks/Years Later Collection" (series represented)
+  { tmdbId: 1576, title: "Resident Evil", year: 2002, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Resident Evil Collection" (series represented)
+  { tmdbId: 565, title: "The Ring", year: 2002, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Ring Collection" (series represented)
+  { tmdbId: 8922, title: "Jeepers Creepers", year: 2001, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Jeepers Creepers Collection" (series represented)
+  { tmdbId: 9532, title: "Final Destination", year: 2000, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Final Destination Collection" (series represented)
+  { tmdbId: 9871, title: "Ginger Snaps", year: 2000, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Ginger Snaps Collection" (series represented)
+  { tmdbId: 32250, title: "Ju-on: The Curse", year: 2000, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Ju-on Collection" (series represented)
+  { tmdbId: 4247, title: "Scary Movie", year: 2000, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Scary Movie Collection" (series represented)
+  { tmdbId: 16162, title: "The Best Man", year: 1999, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Best Man Collection" (series represented)
+  { tmdbId: 13345, title: "A Chinese Odyssey Part One: Pandora's Box", year: 1995, sequence: 1 }, // TMDB collection pos 1 ΓÇö "A Chinese Odyssey Collection" (series represented)
+  { tmdbId: 76, title: "Before Sunrise", year: 1995, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Before... Collection" (series represented)
+  { tmdbId: 10530, title: "Pocahontas", year: 1995, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Pocahontas Collection" (series represented)
+  { tmdbId: 11520, title: "Grumpy Old Men", year: 1993, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Grumpy Old Men Collection" (series represented)
+  { tmdbId: 9264, title: "Poison Ivy", year: 1992, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Poison Ivy Collection" (series represented)
+  { tmdbId: 12227, title: "White Fang", year: 1991, sequence: 1 }, // TMDB collection pos 1 ΓÇö "White Fang Collection" (series represented)
+  { tmdbId: 3980, title: "Critters", year: 1986, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Critters Collection" (series represented)
+  { tmdbId: 2605, title: "Short Circuit", year: 1986, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Short Circuit Collection" (series represented)
+  { tmdbId: 9426, title: "The Fly", year: 1986, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Fly (1986) Collection" (series represented)
+  { tmdbId: 10328, title: "Cocoon", year: 1985, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Cocoon Collection" (series represented)
+  { tmdbId: 1694, title: "Re-Animator", year: 1985, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Re-Animator Collection" (series represented)
+  { tmdbId: 10925, title: "The Return of the Living Dead", year: 1985, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Return of the Living Dead Collection" (series represented)
+  { tmdbId: 23730, title: "C.H.U.D.", year: 1984, sequence: 1 }, // TMDB collection pos 1 ΓÇö "C.H.U.D. Collection" (series represented)
+  { tmdbId: 15239, title: "The Toxic Avenger", year: 1984, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Toxic Avenger Collection" (series represented)
+  { tmdbId: 17918, title: "Swamp Thing", year: 1982, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Swamp Thing Collection" (series represented)
+  { tmdbId: 39228, title: "Mobile Suit Gundam I", year: 1981, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Mobile Suit Gundam Collection" (series represented)
+  { tmdbId: 829, title: "Chinatown", year: 1974, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Jake Gittes Collection" (series represented)
+  { tmdbId: 9552, title: "The Exorcist", year: 1973, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Exorcist Collection" (series represented)
+  { tmdbId: 62, title: "2001: A Space Odyssey", year: 1968, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Space Odyssey Series" (series represented)
+  { tmdbId: 990, title: "The Hustler", year: 1961, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Hustler Collection" (series represented)
+  { tmdbId: 1197137, title: "Black Phone 2", year: 2025, sequence: 2 }, // TMDB collection pos 2 ΓÇö "The Black Phone Collection"
+  { tmdbId: 315162, title: "Puss in Boots: The Last Wish", year: 2022, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Puss in Boots Collection"
+  { tmdbId: 484718, title: "Coming 2 America", year: 2021, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Coming to America Collection"
+  { tmdbId: 522478, title: "Peter Rabbit 2: The Runaway", year: 2021, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Peter Rabbit Collection"
+  { tmdbId: 379686, title: "Space Jam: A New Legacy", year: 2021, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Space Jam Collection"
+  { tmdbId: 529203, title: "The Croods: A New Age", year: 2020, sequence: 2 }, // TMDB collection pos 2 ΓÇö "The Croods Collection"
+  { tmdbId: 583083, title: "The Kissing Booth 2", year: 2020, sequence: 2 }, // TMDB collection pos 2 ΓÇö "The Kissing Booth Collection"
+  { tmdbId: 486131, title: "Shaft", year: 2019, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Shaft (Reboot) Collection"
+  { tmdbId: 480530, title: "Creed II", year: 2018, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Creed Collection"
+  { tmdbId: 458423, title: "Mamma Mia! Here We Go Again", year: 2018, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Mamma Mia! Collection"
+  { tmdbId: 400535, title: "Sicario: Day of the Soldado", year: 2018, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Sicario Collection"
+  { tmdbId: 325133, title: "Neighbors 2: Sorority Rising", year: 2016, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Neighbors Collection"
+  { tmdbId: 336884, title: "Dark Woods II", year: 2015, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Dark Woods Collection"
+  { tmdbId: 254470, title: "Pitch Perfect 2", year: 2015, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Pitch Perfect Collection"
+  { tmdbId: 184098, title: "Think Like a Man Too", year: 2014, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Think Like a Man Collection"
+  { tmdbId: 91586, title: "Insidious: Chapter 2", year: 2013, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Insidious Collection"
+  { tmdbId: 258216, title: "Nymphomaniac: Vol. I", year: 2013, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Nymphomaniac Collection"
+  { tmdbId: 146304, title: "The Best Man Holiday", year: 2013, sequence: 2 }, // TMDB collection pos 2 ΓÇö "The Best Man Collection"
+  { tmdbId: 89828, title: "Gang of Roses 2: Next Generation", year: 2012, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Gang of Roses Collection"
+  { tmdbId: 47931, title: "Elite Squad: The Enemy Within", year: 2010, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Elite Squad Collection"
+  { tmdbId: 33473, title: "Stomp the Yard 2: Homecoming", year: 2010, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Stomp the Yard Collection"
+  { tmdbId: 10664, title: "[REC]┬▓", year: 2009, sequence: 2 }, // TMDB collection pos 2 ΓÇö "[REC] Collection"
+  { tmdbId: 24150, title: "Halloween II", year: 2009, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Halloween (Rob Zombie Series) Collection"
+  { tmdbId: 34480, title: "The Descent: Part 2", year: 2009, sequence: 2 }, // TMDB collection pos 2 ΓÇö "The Descent Collection"
+  { tmdbId: 13522, title: "Arn: The Kingdom at Road's End", year: 2008, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Arn Collection"
+  { tmdbId: 8880, title: "Che: Part Two", year: 2008, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Che Collection"
+  { tmdbId: 1562, title: "28 Weeks Later", year: 2007, sequence: 2 }, // TMDB collection pos 2 ΓÇö "28 Days/Weeks/Years Later Collection"
+  { tmdbId: 440, title: "Aliens vs Predator: Requiem", year: 2007, sequence: 2 }, // TMDB collection pos 2 ΓÇö "AVP Collection"
+  { tmdbId: 1691, title: "Hostel: Part II", year: 2007, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Hostel Collection"
+  { tmdbId: 9793, title: "The Hills Have Eyes 2", year: 2007, sequence: 2 }, // TMDB collection pos 2 ΓÇö "The Hills Have Eyes (Reboot) Collection"
+  { tmdbId: 13186, title: "Wrong Turn 2: Dead End", year: 2007, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Wrong Turn Collection"
+  { tmdbId: 1251, title: "Letters from Iwo Jima", year: 2006, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Clint Eastwood's Iwo Jima Collection"
+  { tmdbId: 58, title: "Pirates of the Caribbean: Dead Man's Chest", year: 2006, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Pirates of the Caribbean Collection"
+  { tmdbId: 1975, title: "The Grudge 2", year: 2006, sequence: 2 }, // TMDB collection pos 2 ΓÇö "The Grudge Collection"
+  { tmdbId: 10781, title: "The Texas Chainsaw Massacre: The Beginning", year: 2006, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Texas Chainsaw (Reboot) Collection"
+  { tmdbId: 1696, title: "The Devil's Rejects", year: 2005, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Firefly Collection"
+  { tmdbId: 10320, title: "The Ring Two", year: 2005, sequence: 2 }, // TMDB collection pos 2 ΓÇö "The Ring Collection"
+  { tmdbId: 80, title: "Before Sunset", year: 2004, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Before... Collection"
+  { tmdbId: 1577, title: "Resident Evil: Apocalypse", year: 2004, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Resident Evil Collection"
+  { tmdbId: 9358, title: "Final Destination 2", year: 2003, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Final Destination Collection"
+  { tmdbId: 11351, title: "Jeepers Creepers 2", year: 2003, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Jeepers Creepers Collection"
+  { tmdbId: 11979, title: "Queen of the Damned", year: 2002, sequence: 2 }, // TMDB collection pos 2 ΓÇö "The Vampire Chronicles Collection"
+  { tmdbId: 4248, title: "Scary Movie 2", year: 2001, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Scary Movie Collection"
+  { tmdbId: 11531, title: "Book of Shadows: Blair Witch 2", year: 2000, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Blair Witch Collection"
+  { tmdbId: 13761, title: "Pocahontas II: Journey to a New World", year: 1998, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Pocahontas Collection"
+  { tmdbId: 22140, title: "The Kingdom II", year: 1998, sequence: 2 }, // TMDB collection pos 2 ΓÇö "The Kingdom"
+  { tmdbId: 9732, title: "The Lion King II: Simba's Pride", year: 1998, sequence: 2 }, // TMDB collection pos 2 ΓÇö "The Lion King Collection"
+  { tmdbId: 43643, title: "White Fang 2: Myth of the White Wolf", year: 1994, sequence: 2 }, // TMDB collection pos 2 ΓÇö "White Fang Collection"
+  { tmdbId: 9356, title: "Look Who's Talking Too", year: 1990, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Look Who's Talking Collection"
+  { tmdbId: 30502, title: "Big Top Pee-wee", year: 1988, sequence: 2 }, // TMDB collection pos 2 ΓÇö "Pee-wee's Collection"
+  { tmdbId: 11873, title: "The Color of Money", year: 1986, sequence: 2 }, // TMDB collection pos 2 ΓÇö "The Hustler Collection"
+  { tmdbId: 358213, title: "The Beaver Kid 2", year: 1981, sequence: 2 }, // TMDB collection pos 2 ΓÇö "The Beaver Trilogy Collection"
+  { tmdbId: 42872, title: "Alien 2: On Earth", year: 1980, sequence: 2 }, // title pattern ΓÇö "Alien 2: On Earth"
+  { tmdbId: 33258, title: "More American Graffiti", year: 1979, sequence: 2 }, // TMDB collection pos 2 ΓÇö "American Graffiti Collection"
+  { tmdbId: 911916, title: "Spider-Man: Beyond the Spider-Verse", year: 2027, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Spider-Man: Spider-Verse Collection"
+  { tmdbId: 1170608, title: "Dune: Part Three", year: 2026, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Dune Collection"
+  { tmdbId: 677179, title: "Creed III", year: 2023, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Creed Collection"
+  { tmdbId: 727745, title: "The Kissing Booth 3", year: 2021, sequence: 3 }, // TMDB collection pos 3 ΓÇö "The Kissing Booth Collection"
+  { tmdbId: 353616, title: "Pitch Perfect 3", year: 2017, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Pitch Perfect Collection"
+  { tmdbId: 326423, title: "Barbershop: The Next Cut", year: 2016, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Barbershop Collection"
+  { tmdbId: 132344, title: "Before Midnight", year: 2013, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Before... Collection"
+  { tmdbId: 23823, title: "Wrong Turn 3: Left for Dead", year: 2009, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Wrong Turn Collection"
+  { tmdbId: 285, title: "Pirates of the Caribbean: At World's End", year: 2007, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Pirates of the Caribbean Collection"
+  { tmdbId: 7737, title: "Resident Evil: Extinction", year: 2007, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Resident Evil Collection"
+  { tmdbId: 9286, title: "Final Destination 3", year: 2006, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Final Destination Collection"
+  { tmdbId: 4256, title: "Scary Movie 3", year: 2003, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Scary Movie Collection"
+  { tmdbId: 11838, title: "Ju-on: The Grudge", year: 2002, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Ju-on Collection"
+  { tmdbId: 4234, title: "Scream 3", year: 2000, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Scream Collection"
+  { tmdbId: 110, title: "Three Colors: Red", year: 1994, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Three Colors Collection"
+  { tmdbId: 28260, title: "Return of the Living Dead III", year: 1993, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Return of the Living Dead Collection"
+  { tmdbId: 12702, title: "Critters 3", year: 1991, sequence: 3 }, // TMDB collection pos 3 ΓÇö "Critters Collection"
+  { tmdbId: 991494, title: "The SpongeBob Movie: Search for SquarePants", year: 2025, sequence: 4 }, // TMDB collection pos 4 ΓÇö "SpongeBob Collection"
+  { tmdbId: 515114, title: "Honey: Rise Up and Dance", year: 2018, sequence: 4 }, // TMDB collection pos 4 ΓÇö "Honey Collection"
+  { tmdbId: 406563, title: "Insidious: The Last Key", year: 2018, sequence: 4 }, // TMDB collection pos 4 ΓÇö "Insidious Collection"
+  { tmdbId: 19912, title: "The Final Destination", year: 2009, sequence: 4 }, // TMDB collection pos 4 ΓÇö "Final Destination Collection"
+  { tmdbId: 4257, title: "Scary Movie 4", year: 2006, sequence: 4 }, // TMDB collection pos 4 ΓÇö "Scary Movie Collection"
+  { tmdbId: 11683, title: "Land of the Dead", year: 2005, sequence: 4 }, // TMDB collection pos 4 ΓÇö "Living Dead Collection"
+  { tmdbId: 11026, title: "Exorcist: The Beginning", year: 2004, sequence: 4 }, // TMDB collection pos 4 ΓÇö "The Exorcist Collection"
+  { tmdbId: 614479, title: "Insidious: The Red Door", year: 2023, sequence: 5 }, // TMDB collection pos 5 ΓÇö "Insidious Collection"
+  { tmdbId: 11249, title: "Seed of Chucky", year: 2004, sequence: 5 }, // TMDB collection pos 5 ΓÇö "Child's Play Collection"
+
+
 ];
 
 export const SERVICE_THE_FANS_IDS: number[] = SERVICE_THE_FANS.map(f => f.tmdbId);
