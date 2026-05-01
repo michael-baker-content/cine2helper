@@ -137,8 +137,6 @@ export const PERSON_FILMOGRAPHIES: PersonFilmography[] = [
       { tmdbId: 10186, title: 'The Rocker', year: 2008, role: 'Actor' },
       { tmdbId: 39414, title: 'Paper Man', year: 2009, role: 'Actor' },
       { tmdbId: 612392, title: 'My Favorite Shapes by Julio Torres', year: 2019, role: 'Actor' },
-      { tmdbId: 801876, title: "Dear Diary: World's First Pranks", year: 2021, role: 'Actor' },
-      { tmdbId: 1433330, title: 'SNL50: The Homecoming Concert', year: 2025, role: 'Actor' },
       { tmdbId: 567104, title: "Let's Dance", year: 2018, role: 'Actor' },
       { tmdbId: 747225, title: 'Bleat', year: 2022, role: 'Actor' },
       { tmdbId: 659809, title: 'iPhone Murder Apps', year: 2010, role: 'Actor' },

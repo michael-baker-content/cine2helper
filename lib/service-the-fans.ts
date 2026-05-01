@@ -503,7 +503,6 @@ export const SERVICE_THE_FANS: CuratedFilm[] = [
   { tmdbId: 39230, title: "Mobile Suit Gundam III: Encounters in Space", year: 1982, sequence: 3 }, // TMDB collection pos 3 in "Mobile Suit Gundam Collection"
   { tmdbId: 39229, title: "Mobile Suit Gundam II: Soldiers of Sorrow", year: 1981, sequence: 2 }, // TMDB collection pos 2 in "Mobile Suit Gundam Collection"
   { tmdbId: 185354, title: "The War of the Worlds: Next Century", year: 1981, sequence: 2 }, // TMDB collection pos 2 in "Apocalypse Collection"
-  { tmdbId: 1078605, title: "Weapons", year: 2025, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Weapons Collection" (series represented)
   { tmdbId: 756999, title: "The Black Phone", year: 2022, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Black Phone Collection" (series represented)
   { tmdbId: 381719, title: "Peter Rabbit", year: 2018, sequence: 1 }, // TMDB collection pos 1 ΓÇö "Peter Rabbit Collection" (series represented)
   { tmdbId: 454983, title: "The Kissing Booth", year: 2018, sequence: 1 }, // TMDB collection pos 1 ΓÇö "The Kissing Booth Collection" (series represented)
