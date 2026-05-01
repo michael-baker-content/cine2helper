@@ -7,6 +7,7 @@ import { WIN_CONDITIONS, CATEGORY_LABELS } from '@/lib/win-conditions';
 import { WinCondition, WinConditionCategory } from '@/types/tmdb';
 import Image from 'next/image';
 import { getPosterUrl } from '@/lib/tmdb';
+import FeedbackModal from '@/components/FeedbackModal';
 
 type View = 'home' | 'condition' | 'overlap';
 
@@ -287,6 +288,7 @@ export default function RootPage() {
   const [view, setView] = useState<View>('home');
   const [activeCondition, setActiveCondition] = useState<string | null>(null);
   const conditionsRef = useRef<HTMLDivElement>(null);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   const selectCondition = (id: string) => {
     setActiveCondition(id);
@@ -498,6 +500,7 @@ export default function RootPage() {
               {([
                 { label: 'Win Conditions', action: goHomeScrolled },
                 { label: 'Overlap Analyzer', action: () => setView('overlap') },
+                { label: 'Feedback', action: () => setShowFeedback(true) },
               ]).map(({ label, action }) => (
                 <button
                   key={label}
@@ -532,6 +535,7 @@ export default function RootPage() {
             {([
               { label: 'Win Conditions', action: goHomeScrolled },
               { label: 'Overlap', action: () => setView('overlap') },
+              { label: 'Feedback', action: () => setShowFeedback(true) },
             ]).map(({ label, action }) => (
               <button
                 key={label}
@@ -602,6 +606,11 @@ export default function RootPage() {
           </span>
         </footer>
       </div>
+
+      {/* Feedback modal — rendered outside the main layout so it overlays everything */}
+      {showFeedback && (
+        <FeedbackModal onClose={() => setShowFeedback(false)} />
+      )}
     </>
   );
 }
