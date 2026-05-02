@@ -440,7 +440,6 @@ export const ROMANCE_90S: CuratedFilm[] = [
   { tmdbId: 9087, title: 'The American President', year: 1995 },
   { tmdbId: 18311, title: 'Days of Being Wild', year: 1990 },
   { tmdbId: 2788, title: 'Reality Bites', year: 1994 },
-  // NOT FOUND: The Double Life of Véronique
   { tmdbId: 10660, title: 'It Could Happen to You', year: 1994 },
   { tmdbId: 11355, title: 'Never Been Kissed', year: 1999 },
   { tmdbId: 11622, title: 'Blast from the Past', year: 1999 },
@@ -768,6 +767,14 @@ export const ROMANCE_90S: CuratedFilm[] = [
   { tmdbId: 25147, title: 'Jude', year: 1996 },
   { tmdbId: 14667, title: 'Dogfight', year: 1991 },
   { tmdbId: 34444, title: 'Even Cowgirls Get the Blues', year: 1994 },
+  { tmdbId: 12254, title: "Emma", year: 1996 },
+  { tmdbId: 38295, title: "She's So Lovely", year: 1997 },
+  { tmdbId: 32332, title: "Hugo Pool", year: 1997 },
+  { tmdbId: 53027, title: "Mystery Date", year: 1991 },
+  { tmdbId: 41578, title: "Floundering", year: 1994 },
+  { tmdbId: 133575, title: "The Velocity of Gary", year: 1999 },
+  { tmdbId: 91580, title: "Cool Blue", year: 1990 },
+  { tmdbId: 134806, title: "Riders of the Purple Sage", year: 1996 },
 ];
 
 // ── 2000s Horror ─────────────────────────────────────────────────────────────
@@ -1173,6 +1180,8 @@ export const HORROR_2000S: CuratedFilm[] = [
   { tmdbId: 10085, title: 'Unrest', year: 2006 },
   { tmdbId: 60086, title: 'Babysitter Wanted', year: 2007 },
   { tmdbId: 16764, title: 'Toolbox Murders', year: 2004 },
+  { tmdbId: 22105, title: "Danika", year: 2006 },
+  { tmdbId: 15182, title: "Just Buried", year: 2007 },
 ];
 
 
