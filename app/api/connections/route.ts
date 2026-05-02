@@ -120,6 +120,7 @@ export async function GET(request: NextRequest) {
       rating: number;
       posterPath: string | null;
       winConditions: string[];
+      connectors: string[]; // names of people from searched film that link here
     }>();
 
     for (const [personId, person] of personMap) {
@@ -139,7 +140,6 @@ export async function GET(request: NextRequest) {
       for (const film of allFilms) {
         const filmId = parseInt(String(film.id), 10); // ensure numeric key
         if (filmId === movieId) continue;         // exclude searched film
-        if (filmMap.has(filmId)) continue;        // already added
         if (!MOVIE_CACHE[filmId]) continue;       // not in our cache
 
         const cached: TMDBMovie = MOVIE_CACHE[filmId];
@@ -149,14 +149,23 @@ export async function GET(request: NextRequest) {
         if (isDocumentary(cached.genre_ids ?? [])) continue;
         if (!cached.release_date) continue;
 
-        filmMap.set(filmId, {
-          tmdbId:       filmId,
-          title:        cached.title,
-          year:         parseInt(cached.release_date.slice(0, 4)),
-          rating:       cached.vote_average ?? 0,
-          posterPath:   cached.poster_path,
-          winConditions: getWinConditions(filmId),
-        });
+        if (filmMap.has(filmId)) {
+          // Film already added — just append this connector if not already listed
+          const existing = filmMap.get(filmId)!;
+          if (!existing.connectors.includes(person.name)) {
+            existing.connectors.push(person.name);
+          }
+        } else {
+          filmMap.set(filmId, {
+            tmdbId:        filmId,
+            title:         cached.title,
+            year:          parseInt(cached.release_date.slice(0, 4)),
+            rating:        cached.vote_average ?? 0,
+            posterPath:    cached.poster_path,
+            winConditions: getWinConditions(filmId),
+            connectors:    [person.name],
+          });
+        }
       }
     }
 

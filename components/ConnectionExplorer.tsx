@@ -25,6 +25,7 @@ interface FlatResult {
   rating: number;
   posterPath: string | null;
   winConditions: string[]; // condition IDs this film qualifies for
+  connectors: string[];    // names of people from searched film that link here
 }
 
 // ── Constants ────────────────────────────────────────────────────────────────
@@ -169,8 +170,8 @@ function FilmInfoModal({ tmdbId, title, onClose }: {
       }}>
         <div style={{ display: 'flex', gap: '12px', padding: '16px 16px 0', alignItems: 'flex-start' }}>
           {MOVIE_CACHE[tmdbId]?.poster_path && (
-            <Image unoptimized src={getPosterUrl(MOVIE_CACHE[tmdbId].poster_path, 'w185')} alt={title}
-              width={56} height={84} 
+            <Image src={getPosterUrl(MOVIE_CACHE[tmdbId].poster_path, 'w185')} alt={title}
+              width={56} height={84} unoptimized
               style={{ borderRadius: '5px', objectFit: 'cover', flexShrink: 0 }} />
           )}
           <div style={{ flex: 1 }}>
@@ -255,8 +256,8 @@ function FlatFilmRow({ film, onSelect }: {
           }}
         >
           {film.posterPath ? (
-            <Image unoptimized src={getPosterUrl(film.posterPath, 'w185')} alt={film.title}
-              width={28} height={42} 
+            <Image src={getPosterUrl(film.posterPath, 'w185')} alt={film.title}
+              width={28} height={42} unoptimized
               style={{ borderRadius: '3px', objectFit: 'cover', flexShrink: 0 }} />
           ) : (
             <div style={{ width: 28, height: 42, background: 'var(--surface-2)', borderRadius: '3px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>🎬</div>
@@ -266,10 +267,15 @@ function FlatFilmRow({ film, onSelect }: {
               onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--text)')}
             >{film.title}</div>
-            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: film.winConditions.length > 0 ? '4px' : '0' }}>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '3px' }}>
               {film.year}
               {film.rating > 0 && <span style={{ color: 'var(--accent)', marginLeft: '8px' }}>★ {film.rating.toFixed(1)}</span>}
             </div>
+            {film.connectors?.length > 0 && (
+              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: film.winConditions.length > 0 ? '4px' : '0', fontStyle: 'italic' }}>
+                via {film.connectors.join(' · ')}
+              </div>
+            )}
             {film.winConditions.length > 0 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
                 {film.winConditions.map(id => <ConditionChip key={id} conditionId={id} />)}
@@ -344,8 +350,8 @@ function SuggestedFilms({ onSelect }: { onSelect: (film: SearchResult) => void }
           >
             <div style={{ position: 'relative', aspectRatio: '2/3', background: 'var(--surface-2)' }}>
               {film.posterPath ? (
-                <Image unoptimized src={getPosterUrl(film.posterPath, 'w185')} alt={film.title}
-                  fill style={{ objectFit: 'cover' }} sizes="90px" />
+                <Image src={getPosterUrl(film.posterPath, 'w185')} alt={film.title}
+                  fill unoptimized style={{ objectFit: 'cover' }} sizes="90px" />
               ) : (
                 <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>🎬</div>
               )}
@@ -396,11 +402,12 @@ function SelectedFilmHeader({ film }: { film: SearchResult }) {
         marginBottom: '20px',
       }}>
         {film.poster_path && (
-          <Image unoptimized
+          <Image
             src={getPosterUrl(film.poster_path, 'w185')}
             alt={film.title}
             width={40}
             height={60}
+            unoptimized
             style={{ borderRadius: '4px', objectFit: 'cover', flexShrink: 0 }}
           />
         )}
@@ -656,11 +663,12 @@ export default function ConnectionExplorer() {
                 onMouseLeave={e => e.currentTarget.style.background = 'none'}
               >
                 {film.poster_path ? (
-                  <Image unoptimized
+                  <Image
                     src={getPosterUrl(film.poster_path, 'w185')}
                     alt={film.title}
                     width={28}
                     height={42}
+                    unoptimized
                     style={{ borderRadius: '3px', objectFit: 'cover', flexShrink: 0 }}
                   />
                 ) : (
