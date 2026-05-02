@@ -453,5 +453,4 @@ export const OVERLAP_INDEX: Record<number, string[]> = {
   1170608: ["person-timothee-chalamet", "service-the-fans"],
   1197137: ["person-ethan-hawke", "service-the-fans"],
   1233413: ["sing-the-blues", "thank-the-academy"],
-  1491034: ["person-jacob-elordi", "join-the-revolution"]
 };
