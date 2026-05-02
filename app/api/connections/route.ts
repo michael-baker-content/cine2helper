@@ -137,24 +137,25 @@ export async function GET(request: NextRequest) {
       ];
 
       for (const film of allFilms) {
-        if (film.id === movieId) continue;        // exclude searched film
-        if (filmMap.has(film.id)) continue;       // already added
-        if (!MOVIE_CACHE[film.id]) continue;      // not in our cache
+        const filmId = parseInt(String(film.id), 10); // ensure numeric key
+        if (filmId === movieId) continue;         // exclude searched film
+        if (filmMap.has(filmId)) continue;        // already added
+        if (!MOVIE_CACHE[filmId]) continue;       // not in our cache
 
-        const cached: TMDBMovie = MOVIE_CACHE[film.id];
+        const cached: TMDBMovie = MOVIE_CACHE[filmId];
 
         // Feature film checks using cached data
         if (!isFeature(cached)) continue;
         if (isDocumentary(cached.genre_ids ?? [])) continue;
         if (!cached.release_date) continue;
 
-        filmMap.set(film.id, {
-          tmdbId:       film.id,
+        filmMap.set(filmId, {
+          tmdbId:       filmId,
           title:        cached.title,
           year:         parseInt(cached.release_date.slice(0, 4)),
           rating:       cached.vote_average ?? 0,
           posterPath:   cached.poster_path,
-          winConditions: getWinConditions(film.id),
+          winConditions: getWinConditions(filmId),
         });
       }
     }
