@@ -211,10 +211,10 @@ function FilmInfoModal({ tmdbId, title, onClose }: {
             <div style={{ color: 'var(--text-dim)', fontSize: '13px' }}>Loading credits…</div>
           ) : (
             <>
-              <Row label="Director" names={[...new Set(directors)]} />
-              <Row label={writers.length > 1 ? 'Writers' : 'Writer'} names={[...new Set(writers)]} />
-              <Row label="Cinematography" names={[...new Set(dops)]} />
-              <Row label="Composer" names={[...new Set(composers)]} />
+              <Row label="Director" names={[...new Set<string>(directors)]} />
+              <Row label={writers.length > 1 ? 'Writers' : 'Writer'} names={[...new Set<string>(writers)]} />
+              <Row label="Cinematography" names={[...new Set<string>(dops)]} />
+              <Row label="Composer" names={[...new Set<string>(composers)]} />
               {topCast.length > 0 && (
                 <div>
                   <div style={{ fontSize: '10px', color: 'var(--accent)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px' }}>Cast</div>
