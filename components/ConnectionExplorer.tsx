@@ -169,8 +169,8 @@ function FilmInfoModal({ tmdbId, title, onClose }: {
       }}>
         <div style={{ display: 'flex', gap: '12px', padding: '16px 16px 0', alignItems: 'flex-start' }}>
           {MOVIE_CACHE[tmdbId]?.poster_path && (
-            <Image src={getPosterUrl(MOVIE_CACHE[tmdbId].poster_path, 'w185')} alt={title}
-              width={56} height={84} unoptimized
+            <Image unoptimized src={getPosterUrl(MOVIE_CACHE[tmdbId].poster_path, 'w185')} alt={title}
+              width={56} height={84} 
               style={{ borderRadius: '5px', objectFit: 'cover', flexShrink: 0 }} />
           )}
           <div style={{ flex: 1 }}>
@@ -255,8 +255,8 @@ function FlatFilmRow({ film, onSelect }: {
           }}
         >
           {film.posterPath ? (
-            <Image src={getPosterUrl(film.posterPath, 'w185')} alt={film.title}
-              width={28} height={42} unoptimized
+            <Image unoptimized src={getPosterUrl(film.posterPath, 'w185')} alt={film.title}
+              width={28} height={42} 
               style={{ borderRadius: '3px', objectFit: 'cover', flexShrink: 0 }} />
           ) : (
             <div style={{ width: 28, height: 42, background: 'var(--surface-2)', borderRadius: '3px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>🎬</div>
@@ -344,8 +344,8 @@ function SuggestedFilms({ onSelect }: { onSelect: (film: SearchResult) => void }
           >
             <div style={{ position: 'relative', aspectRatio: '2/3', background: 'var(--surface-2)' }}>
               {film.posterPath ? (
-                <Image src={getPosterUrl(film.posterPath, 'w185')} alt={film.title}
-                  fill unoptimized style={{ objectFit: 'cover' }} sizes="90px" />
+                <Image unoptimized src={getPosterUrl(film.posterPath, 'w185')} alt={film.title}
+                  fill style={{ objectFit: 'cover' }} sizes="90px" />
               ) : (
                 <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>🎬</div>
               )}
@@ -396,12 +396,11 @@ function SelectedFilmHeader({ film }: { film: SearchResult }) {
         marginBottom: '20px',
       }}>
         {film.poster_path && (
-          <Image
+          <Image unoptimized
             src={getPosterUrl(film.poster_path, 'w185')}
             alt={film.title}
             width={40}
             height={60}
-            unoptimized
             style={{ borderRadius: '4px', objectFit: 'cover', flexShrink: 0 }}
           />
         )}
@@ -657,12 +656,11 @@ export default function ConnectionExplorer() {
                 onMouseLeave={e => e.currentTarget.style.background = 'none'}
               >
                 {film.poster_path ? (
-                  <Image
+                  <Image unoptimized
                     src={getPosterUrl(film.poster_path, 'w185')}
                     alt={film.title}
                     width={28}
                     height={42}
-                    unoptimized
                     style={{ borderRadius: '3px', objectFit: 'cover', flexShrink: 0 }}
                   />
                 ) : (

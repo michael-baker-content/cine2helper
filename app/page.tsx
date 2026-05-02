@@ -70,7 +70,7 @@ function ConditionCard({ condition, onClick }: {
             borderRight: i < posters.length - 1 ? '1px solid var(--border)' : 'none',
           }}>
             {p.poster_path && (
-              <Image
+              <Image unoptimized
                 src={getPosterUrl(p.poster_path, 'w185')}
                 alt={p.title}
                 fill
