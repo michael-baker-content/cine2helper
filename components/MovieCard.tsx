@@ -224,6 +224,7 @@ function InfoModal({ movie, onClose, triggerRef }: {
                 alt={movie.title}
                 width={60}
                 height={90}
+                unoptimized
                 style={{ borderRadius: '6px', objectFit: 'cover', flexShrink: 0 }}
               />
             )}
@@ -372,6 +373,7 @@ export default function MovieCard({
               alt={movie.title}
               width={32} height={48}
               loading={index < 8 ? 'eager' : 'lazy'}
+              unoptimized
               style={{ borderRadius: '3px', objectFit: 'cover', flexShrink: 0 }}
             />
           ) : (
@@ -468,6 +470,7 @@ export default function MovieCard({
               alt={movie.title}
               fill
               loading={index < 8 ? 'eager' : 'lazy'}
+              unoptimized
               style={{ objectFit: 'cover' }}
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 200px"
             />

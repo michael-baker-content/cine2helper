@@ -527,32 +527,35 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
         )}
 
         {/* Stats bar */}
-        <div style={{
-          marginTop: '12px', display: 'flex', gap: '16px',
-          fontSize: '12px', color: 'var(--text-muted)',
-        }}>
-          <span>{filtered.length} films</span>
-          {personFilter && (
-            <span>· {
-              (() => {
-                const idx = condition?.groupDisplayNames?.indexOf(personFilter) ?? -1;
-                return idx >= 0 ? (condition?.groupPersonNames?.[idx] ?? personFilter) : personFilter;
-              })()
-            } only</span>
-          )}
-          {eraFilter !== 'all' && (
-            <span>· {ERA_FILTERS.find(e => e.value === eraFilter)?.label}</span>
-          )}
-          {overlapFilter.size > 0 && (
-            <span>· filtered by {overlapFilter.size} condition{overlapFilter.size > 1 ? 's' : ''}</span>
-          )}
-          {search && <span>· filtered from {movies.length}</span>}
-          {!search && !overlapFilter.size && total > 0 && (
-            <span>· showing {movies.length} of {total}</span>
-          )}
-          <span style={{ marginLeft: 'auto', color: 'var(--text-dim)', fontSize: '11px' }}>
+        <div style={{ marginTop: '12px', fontSize: '12px', color: 'var(--text-muted)' }}>
+          {/* Primary stats row */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 12px', alignItems: 'center' }}>
+            <span>{filtered.length} films</span>
+            {personFilter && (
+              <span>· {
+                (() => {
+                  const idx = condition?.groupDisplayNames?.indexOf(personFilter) ?? -1;
+                  return idx >= 0 ? (condition?.groupPersonNames?.[idx] ?? personFilter) : personFilter;
+                })()
+              } only</span>
+            )}
+            {eraFilter !== 'all' && (
+              <span style={{ whiteSpace: 'nowrap' }}>
+                · {ERA_FILTERS.find(e => e.value === eraFilter)?.label}
+              </span>
+            )}
+            {overlapFilter.size > 0 && (
+              <span>· {overlapFilter.size} overlap filter{overlapFilter.size > 1 ? 's' : ''}</span>
+            )}
+            {search && <span>· filtered from {movies.length}</span>}
+            {!search && !overlapFilter.size && total > 0 && (
+              <span style={{ whiteSpace: 'nowrap' }}>· showing {movies.length} of {total}</span>
+            )}
+          </div>
+          {/* Attribution — always on its own line, subdued */}
+          <div style={{ marginTop: '3px', fontSize: '11px', color: 'var(--text-dim)' }}>
             via TMDB · refreshes hourly
-          </span>
+          </div>
         </div>
       </div>{/* /inner max-width */}
       </div>{/* /header full-width */}
