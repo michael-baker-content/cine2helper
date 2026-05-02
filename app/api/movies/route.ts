@@ -109,6 +109,15 @@ export async function GET(request: NextRequest) {
   const overlapParam = searchParams.get('overlap')
     ? searchParams.get('overlap')!.split(',').map(s => s.trim()).filter(Boolean)
     : [];
+  const eraParam = searchParams.get('era') ?? null;
+
+  // Era year ranges — only applied to thank-the-academy
+  const ERA_RANGES: Record<string, { from: number; to: number }> = {
+    'classic':       { from: 1927, to: 1959 },
+    'new-hollywood': { from: 1960, to: 1979 },
+    'blockbuster':   { from: 1980, to: 1999 },
+    'modern':        { from: 2000, to: 9999 },
+  };
 
   if (!conditionId) {
     return NextResponse.json({ error: 'Missing condition parameter' }, { status: 400 });
@@ -271,6 +280,15 @@ export async function GET(request: NextRequest) {
     if (overlapParam.length > 0) {
       const overlapSets = overlapParam.map(id => getFilmIdsForCondition(id));
       movies = movies.filter(m => overlapSets.every(s => s.has(m.id)));
+    }
+
+    // ── Era filter (thank-the-academy only) ──────────────────────────────────
+    if (conditionId === 'thank-the-academy' && eraParam && ERA_RANGES[eraParam]) {
+      const { from, to } = ERA_RANGES[eraParam];
+      movies = movies.filter(m => {
+        const yr = parseInt(m.release_date?.slice(0, 4) ?? '0');
+        return yr >= from && yr <= to;
+      });
     }
 
     // ── Derive available overlaps from full (pre-pagination) dataset ──────────

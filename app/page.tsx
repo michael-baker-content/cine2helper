@@ -138,7 +138,7 @@ function HomePage({
           marginBottom: '24px',
           lineHeight: 1.1,
         }}>
-          CINE2NERDLE BATTLE
+          CINE2NERDLE BATTLE 2.0
         </h1>
         <p style={{
           fontSize: '16px',
@@ -149,10 +149,10 @@ function HomePage({
           margin: '0 auto 32px',
         }}
         className="hero-body">
-          Cine2Nerdle Battle challenges you to connect films through shared cast and crew.
-          Cine2Helper shows you which films qualify for each win condition — and which films
-          satisfy multiple conditions at once. Overlap can work for you or against you:
-          a film that satisfies your condition and your opponent's hands them a win too.
+          Cine2Nerdle challenges players to find connections between films through their shared cast and crew. 
+          In Battle 2.0 mode, players can win faster by completing a win condition.
+          That may mean playing films from a particular film, actor, or genre, for example.
+          Explore Season 6's conditions below to learn which films qualify for each option.
         </p>
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button

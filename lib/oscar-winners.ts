@@ -300,7 +300,6 @@ export const OSCAR_WINNERS: OscarWinner[] = [
   { tmdbId: 3033, title: 'Gods and Monsters', year: 1998 },
   { tmdbId: 857, title: 'Saving Private Ryan', year: 1998 },
   { tmdbId: 1934, title: 'Shakespeare in Love', year: 1998 },
-  { tmdbId: 77825, title: 'The Personals', year: 1998 },
   { tmdbId: 9837, title: 'The Prince of Egypt', year: 1998 },
   { tmdbId: 14283, title: 'The Red Violin', year: 1998 },
   { tmdbId: 12159, title: 'What Dreams May Come', year: 1998 },

@@ -644,6 +644,8 @@ export const SERVICE_THE_FANS: CuratedFilm[] = [
   { tmdbId: 11026, title: "Exorcist: The Beginning", year: 2004, sequence: 4 }, // TMDB collection pos 4 ΓÇö "The Exorcist Collection"
   { tmdbId: 614479, title: "Insidious: The Red Door", year: 2023, sequence: 5 }, // TMDB collection pos 5 ΓÇö "Insidious Collection"
   { tmdbId: 11249, title: "Seed of Chucky", year: 2004, sequence: 5 }, // TMDB collection pos 5 ΓÇö "Child's Play Collection"
+  { tmdbId: 350, title: 'The Devil Wears Prada', year: 2006, sequence: 1 },
+  { tmdbId: 1314481, title: 'The Devil Wears Prada 2', year: 2026, sequence: 2 },
 
 
 ];

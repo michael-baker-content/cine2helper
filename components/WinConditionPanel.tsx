@@ -10,7 +10,16 @@ interface WinConditionPanelProps {
 }
 
 type ViewMode = 'grid' | 'list';
-type SortMode = 'popularity' | 'rating' | 'year_asc' | 'year_desc' | 'title_asc' | 'title_desc' | 'decade';
+type SortMode = 'popularity' | 'rating' | 'year_asc' | 'year_desc' | 'title_asc' | 'title_desc';
+
+type EraFilter = 'all' | 'classic' | 'new-hollywood' | 'blockbuster' | 'modern';
+
+const ERA_FILTERS: { value: EraFilter; label: string; from: number; to: number }[] = [
+  { value: 'classic',       label: 'Classic Era (1927–1959)',    from: 1927, to: 1959 },
+  { value: 'new-hollywood', label: 'New Hollywood (1960–1979)',  from: 1960, to: 1979 },
+  { value: 'blockbuster',   label: 'Blockbuster Era (1980–1999)', from: 1980, to: 1999 },
+  { value: 'modern',        label: 'Modern Era (2000–present)',  from: 2000, to: 9999 },
+];
 
 interface ApiResponse {
   conditionId: string;
@@ -32,12 +41,6 @@ function sortMovies(movies: TMDBMovie[], sort: SortMode): TMDBMovie[] {
       case 'year_desc': return (b.release_date ?? '').localeCompare(a.release_date ?? '');
       case 'title_asc': return a.title.localeCompare(b.title);
       case 'title_desc': return b.title.localeCompare(a.title);
-      case 'decade': {
-        const decadeA = Math.floor(parseInt(a.release_date?.slice(0, 4) ?? '0') / 10) * 10;
-        const decadeB = Math.floor(parseInt(b.release_date?.slice(0, 4) ?? '0') / 10) * 10;
-        if (decadeB !== decadeA) return decadeB - decadeA;
-        return (b.release_date ?? '').localeCompare(a.release_date ?? '');
-      }
       default: return 0;
     }
   });
@@ -60,6 +63,10 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
   const [sequenceFilter, setSequenceFilter] = useState<number | null>(null);
   const sequenceFilterRef = React.useRef<number | null>(null);
 
+  // Era filter — only shown for thank-the-academy
+  const [eraFilter, setEraFilter] = useState<EraFilter>(conditionId === 'thank-the-academy' ? 'modern' : 'all');
+  const eraFilterRef = React.useRef<EraFilter>(conditionId === 'thank-the-academy' ? 'modern' : 'all');
+
   // Overlap filter — set of condition IDs the user has toggled on
   const [overlapFilter, setOverlapFilter] = useState<Set<string>>(new Set());
   const overlapFilterRef = React.useRef<Set<string>>(new Set());
@@ -72,7 +79,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
     setError(null);
     try {
       const res = await fetch(
-        `/api/movies?condition=${encodeURIComponent(conditionId)}&page=${pageNum}&sort=${sortMode}${personFilterRef.current ? `&person=${encodeURIComponent(personFilterRef.current)}` : ''}${sequenceFilterRef.current !== null ? `&sequence=${sequenceFilterRef.current}` : ''}${overlapFilterRef.current.size > 0 ? `&overlap=${[...overlapFilterRef.current].join(',')}` : ''}`
+        `/api/movies?condition=${encodeURIComponent(conditionId)}&page=${pageNum}&sort=${sortMode}${personFilterRef.current ? `&person=${encodeURIComponent(personFilterRef.current)}` : ''}${sequenceFilterRef.current !== null ? `&sequence=${sequenceFilterRef.current}` : ''}${overlapFilterRef.current.size > 0 ? `&overlap=${[...overlapFilterRef.current].join(',')}` : ''}${eraFilterRef.current !== 'all' ? `&era=${eraFilterRef.current}` : ''}`
       );
       if (!res.ok) {
         const err = await res.json();
@@ -101,6 +108,9 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
     personFilterRef.current = null;
     setSequenceFilter(null);
     sequenceFilterRef.current = null;
+    const defaultEra: EraFilter = conditionId === 'thank-the-academy' ? 'modern' : 'all';
+    setEraFilter(defaultEra);
+    eraFilterRef.current = defaultEra;
     setOverlapFilter(new Set());
     overlapFilterRef.current = new Set();
     setMovies([]);
@@ -141,6 +151,16 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
     fetchPage(1, false, newSort);
   };
 
+  // Change era filter — triggers a server fetch
+  const handleEraFilterChange = useCallback((newEra: EraFilter) => {
+    eraFilterRef.current = newEra;
+    setEraFilter(newEra);
+    setMovies([]);
+    setPage(1);
+    setHasMore(false);
+    fetchPage(1, false, sort);
+  }, [fetchPage, sort]);
+
   // Toggle a single overlap condition on/off — triggers a server fetch
   const handleOverlapChipClick = useCallback((overlapConditionId: string) => {
     const next = new Set(overlapFilterRef.current);
@@ -159,7 +179,7 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
 
 
 
-  // Apply client-side title search filter (overlap filtering is server-side)
+  // Apply client-side title search filter (era and overlap filtering are server-side)
   const filtered = useMemo(() => {
     let result = movies;
     if (search.trim()) {
@@ -351,14 +371,38 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
               >
                 <option value="year_desc">Newest First</option>
                 <option value="year_asc">Oldest First</option>
-                {conditionId === 'thank-the-academy' && (
-                  <option value="decade">By Decade</option>
-                )}
+
                 <option value="popularity">Most Popular</option>
                 <option value="rating">Highest Rated</option>
                 <option value="title_asc">A–Z</option>
                 <option value="title_desc">Z–A</option>
               </select>
+
+              {conditionId === 'thank-the-academy' && (
+                <select
+                  aria-label="Filter by era"
+                  value={eraFilter}
+                  onChange={e => handleEraFilterChange(e.target.value as EraFilter)}
+                  style={{
+                    background: 'var(--surface-2)',
+                    backgroundImage: 'url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%228%22%20viewBox%3D%220%200%2012%208%22%3E%3Cpath%20d%3D%22M1%201l5%205%205-5%22%20stroke%3D%22%23a0a0b0%22%20stroke-width%3D%221.5%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E")',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 10px center',
+                    border: `1px solid ${eraFilter !== 'all' ? 'var(--accent)' : 'var(--border)'}`,
+                    borderRadius: 'var(--radius)',
+                    padding: '6px 28px 6px 10px',
+                    color: eraFilter !== 'all' ? 'var(--accent)' : 'var(--text)',
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    outline: 'none',
+                    appearance: 'none' as const,
+                  }}
+                >
+                  {ERA_FILTERS.map(era => (
+                    <option key={era.value} value={era.value}>{era.label}</option>
+                  ))}
+                </select>
+              )}
 
               <div style={{
                 display: 'flex',
@@ -496,6 +540,9 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
               })()
             } only</span>
           )}
+          {eraFilter !== 'all' && (
+            <span>· {ERA_FILTERS.find(e => e.value === eraFilter)?.label}</span>
+          )}
           {overlapFilter.size > 0 && (
             <span>· filtered by {overlapFilter.size} condition{overlapFilter.size > 1 ? 's' : ''}</span>
           )}
@@ -524,56 +571,11 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
         </div>
         {filtered.length === 0 ? (
           <div style={{ ...centerStyle, color: 'var(--text-muted)', fontSize: '14px' }}>
-            No movies found{search ? ` matching "${search}"` : overlapFilter.size > 0 ? ' matching the selected filters' : ''}.
+            No movies found{search ? ` matching "${search}"` : overlapFilter.size > 0 ? ' matching the selected filters' : ' in this era'}.
           </div>
         ) : view === 'grid' ? (
           <div>
-            {sort === 'decade' ? (
-              (() => {
-                const groups: { decade: number; movies: typeof filtered }[] = [];
-                for (const movie of filtered) {
-                  const yr = parseInt(movie.release_date?.slice(0, 4) ?? '0');
-                  const dec = Math.floor(yr / 10) * 10;
-                  const last = groups[groups.length - 1];
-                  if (last && last.decade === dec) last.movies.push(movie);
-                  else groups.push({ decade: dec, movies: [movie] });
-                }
-                let globalIdx = 0;
-                return groups.map(({ decade, movies: gMovies }) => (
-                  <div key={decade} style={{ marginBottom: '24px' }}>
-                    <h3 style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '16px',
-                      letterSpacing: '0.08em',
-                      color: 'var(--accent)',
-                      marginBottom: '12px',
-                      paddingBottom: '6px',
-                      borderBottom: '1px solid var(--border)',
-                    }}>
-                      {decade}s
-                    </h3>
-                    <div style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
-                      gap: '14px',
-                    }}>
-                      {gMovies.map((movie) => {
-                        const idx = globalIdx++;
-                        return (
-                          <MovieCard
-                            key={movie.id}
-                            movie={movie}
-                            index={idx}
-                            onOverlapClick={handleOverlapChipClick}
-                          />
-                        );
-                      })}
-                    </div>
-                  </div>
-                ));
-              })()
-            ) : (
-              <div style={{
+            <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
                 gap: '14px',
@@ -587,62 +589,18 @@ export default function WinConditionPanel({ conditionId }: WinConditionPanelProp
                   />
                 ))}
               </div>
-            )}
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            {sort === 'decade' ? (
-              (() => {
-                const groups: { decade: number; movies: typeof filtered }[] = [];
-                for (const movie of filtered) {
-                  const yr = parseInt(movie.release_date?.slice(0, 4) ?? '0');
-                  const dec = Math.floor(yr / 10) * 10;
-                  const last = groups[groups.length - 1];
-                  if (last && last.decade === dec) last.movies.push(movie);
-                  else groups.push({ decade: dec, movies: [movie] });
-                }
-                let globalIdx = 0;
-                return groups.map(({ decade, movies: gMovies }) => (
-                  <div key={decade} style={{ marginBottom: '16px' }}>
-                    <h3 style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '14px',
-                      letterSpacing: '0.08em',
-                      color: 'var(--accent)',
-                      marginBottom: '8px',
-                      paddingBottom: '4px',
-                      borderBottom: '1px solid var(--border)',
-                    }}>
-                      {decade}s
-                    </h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      {gMovies.map((movie) => {
-                        const idx = globalIdx++;
-                        return (
-                          <MovieCard
-                            key={movie.id}
-                            movie={movie}
-                            compact
-                            index={idx}
-                            onOverlapClick={handleOverlapChipClick}
-                          />
-                        );
-                      })}
-                    </div>
-                  </div>
-                ));
-              })()
-            ) : (
-              filtered.map((movie, idx) => (
-                <MovieCard
-                  key={movie.id}
-                  movie={movie}
-                  compact
-                  index={idx}
-                  onOverlapClick={handleOverlapChipClick}
-                />
-              ))
-            )}
+            {filtered.map((movie, idx) => (
+              <MovieCard
+                key={movie.id}
+                movie={movie}
+                compact
+                index={idx}
+                onOverlapClick={handleOverlapChipClick}
+              />
+            ))}
           </div>
         )}
 
