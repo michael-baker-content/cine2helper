@@ -775,6 +775,7 @@ export const ROMANCE_90S: CuratedFilm[] = [
   { tmdbId: 133575, title: "The Velocity of Gary", year: 1999 },
   { tmdbId: 91580, title: "Cool Blue", year: 1990 },
   { tmdbId: 134806, title: "Riders of the Purple Sage", year: 1996 },
+  { tmdbId: 35196, title: 'Restoration', year: 1995 },
 ];
 
 // ── 2000s Horror ─────────────────────────────────────────────────────────────
