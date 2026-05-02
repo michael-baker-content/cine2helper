@@ -1032,7 +1032,7 @@ export const PERSON_FILMOGRAPHIES: PersonFilmography[] = [
   },
   {
     personId: 1640,
-    name: 'Stellan Skarsg├Ñrd',
+    name: 'Stellan Skarsgård',
     conditionId: 'get-sentimental-skarsgard',
     films: [
       { tmdbId: 24428, title: 'The Avengers', year: 2012, role: 'Actor' },

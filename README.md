@@ -1,6 +1,6 @@
 # Cine2Helper
 
-A companion tool for [Cine2Nerdle Battle](https://www.cinenerdle2.app/battle). Browse films by win condition, see which other conditions each film qualifies for, and filter results by overlap to find your strongest plays.
+A companion tool for [Cine2Nerdle Battle](https://www.cinenerdle2.app/battle). Browse films by win condition, see which other conditions each film qualifies for, filter results by overlap, and explore film connections to find your strongest plays or discover non-obvious paths between films.
 
 ## Setup
 
@@ -78,6 +78,8 @@ app/
   api/movies/                # Film list endpoint — filtering, sorting, pagination, overlap annotation
   api/movie-detail/          # Full credits for the film info modal
   api/condition-preview/     # 3 sample posters per condition card (CDN-cached 1hr)
+  api/connections/           # Connection Explorer endpoint — fetches person credits from TMDB
+  api/search-films/          # Film title search for the Connection Explorer
   api/verify-film/           # Internal verification endpoint
   verify/                    # Internal data verification UI (/verify, not linked from main UI)
 
@@ -85,6 +87,7 @@ components/
   MovieCard.tsx              # Film card with overlap chips and ⓘ info modal
   WinConditionPanel.tsx      # Paginated, sortable, filterable film list for a condition
   OverlapAnalyzer.tsx        # Multi-condition overlap finder
+  ConnectionExplorer.tsx     # Film connection explorer — search any film, find cached connections
   FeedbackModal.tsx          # User feedback form (Formspree)
 
 lib/
@@ -128,6 +131,8 @@ scripts/
 **Service the Fans** — only add a film series once a sequel has been released. Both the original (sequence: 1) and the sequel should be added at the same time. The `check-new-releases.mjs` script flags originals that need to be added when a new sequel is detected.
 
 **Verification** — the `/verify` route is an internal tool for checking film data. Not linked from the main UI.
+
+**Connection Explorer** — search for any film to see which cached films share a director, writer, cinematographer, composer, or top-billed cast member with it. Results show win condition chips where applicable. The explorer makes live TMDB calls at query time (one per tracked-role person in the searched film's credits) — no pre-built index. Results are limited to feature films (runtime ≥ 60 min, non-documentary) that appear in the movie cache.
 
 **Feedback** — user feedback is collected via a Formspree form (`components/FeedbackModal.tsx`). Submissions arrive by email and can be reviewed at formspree.io.
 

@@ -7,9 +7,9 @@ import { WIN_CONDITIONS, CATEGORY_LABELS } from '@/lib/win-conditions';
 import { WinCondition, WinConditionCategory } from '@/types/tmdb';
 import Image from 'next/image';
 import { getPosterUrl } from '@/lib/tmdb';
-import FeedbackModal from '@/components/FeedbackModal';
+import ConnectionExplorer from '@/components/ConnectionExplorer';
 
-type View = 'home' | 'condition' | 'overlap';
+type View = 'home' | 'condition' | 'overlap' | 'connections';
 
 const OVERVIEW_CATEGORY_ORDER: WinConditionCategory[] = ['themed', 'decade', 'person'];
 
@@ -138,7 +138,7 @@ function HomePage({
           marginBottom: '24px',
           lineHeight: 1.1,
         }}>
-          CINE2NERDLE BATTLE 2.0
+          CINE2NERDLE BATTLE
         </h1>
         <p style={{
           fontSize: '16px',
@@ -149,10 +149,10 @@ function HomePage({
           margin: '0 auto 32px',
         }}
         className="hero-body">
-          Cine2Nerdle challenges players to find connections between films through their shared cast and crew. 
-          In Battle 2.0 mode, players can win faster by completing a win condition.
-          That may mean playing films from a particular film, actor, or genre, for example.
-          Explore Season 6's conditions below to learn which films qualify for each option.
+          Cine2Nerdle Battle challenges you to connect films through shared cast and crew.
+          Cine2Helper shows you which films qualify for each win condition — and which films
+          satisfy multiple conditions at once. Overlap can work for you or against you:
+          a film that satisfies your condition and your opponent's hands them a win too.
         </p>
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button
@@ -289,6 +289,7 @@ export default function RootPage() {
   const [activeCondition, setActiveCondition] = useState<string | null>(null);
   const conditionsRef = useRef<HTMLDivElement>(null);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [explorerKey, setExplorerKey] = useState(0);
 
   const selectCondition = (id: string) => {
     setActiveCondition(id);
@@ -500,6 +501,7 @@ export default function RootPage() {
               {([
                 { label: 'Win Conditions', action: goHomeScrolled },
                 { label: 'Overlap Analyzer', action: () => setView('overlap') },
+                { label: 'Connections', action: () => { setView('connections'); setExplorerKey(k => k + 1); } },
                 { label: 'Feedback', action: () => setShowFeedback(true) },
               ]).map(({ label, action }) => (
                 <button
@@ -534,7 +536,7 @@ export default function RootPage() {
           <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex' }}>
             {([
               { label: 'Win Conditions', action: goHomeScrolled },
-              { label: 'Overlap', action: () => setView('overlap') },
+              { label: 'Connections', action: () => { setView('connections'); setExplorerKey(k => k + 1); } },
               { label: 'Feedback', action: () => setShowFeedback(true) },
             ]).map(({ label, action }) => (
               <button
@@ -592,6 +594,12 @@ export default function RootPage() {
               </div>
             </div>
           )}
+
+          {view === 'connections' && (
+            <div className="slide-in-right" style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
+              <ConnectionExplorer key={explorerKey} />
+            </div>
+          )}
         </main>
 
         {/* ── Footer ──────────────────────────────────────────────── */}
@@ -606,11 +614,6 @@ export default function RootPage() {
           </span>
         </footer>
       </div>
-
-      {/* Feedback modal — rendered outside the main layout so it overlays everything */}
-      {showFeedback && (
-        <FeedbackModal onClose={() => setShowFeedback(false)} />
-      )}
     </>
   );
 }
