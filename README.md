@@ -70,6 +70,32 @@ node scripts/find-missing-from-cache.mjs > missing-from-cache.txt
 ```
 Cross-references every film across all static sources against every decade condition using only the movie cache — no pagination limits. Run this after adding new filmographies or Oscar winners to catch overlapping films that qualify for decade conditions.
 
+### Cache and list sync
+
+Before rebuilding the movie cache, always preview what would change:
+```bash
+npx tsx scripts/preview-cache-rebuild.mjs
+```
+This shows which films would be added or removed without making any changes. Only proceed with a full rebuild once you're satisfied with the preview output.
+
+**When removing films from condition lists:**
+```bash
+node scripts/remove-short-films.mjs    # removes entries from data files
+node scripts/remove-from-cache.mjs     # removes same entries from cache
+npx tsx scripts/build-overlap-index.mjs
+```
+Place the TSV of films to remove at `scripts/remove-short-films.tsv` before running. Do **not** run `build-movie-cache.mjs` after removals — use `remove-from-cache.mjs` instead to surgically remove only the targeted entries.
+
+To audit for short films or non-features that have slipped into the lists:
+```bash
+npx tsx scripts/find-shortest-films.mjs > short-films.tsv
+```
+
+To find films in the cache not referenced by any condition list:
+```bash
+npx tsx scripts/find-unreferenced-cache-films.mjs > unreferenced.tsv
+```
+
 ## Project structure
 
 ```
@@ -115,6 +141,13 @@ scripts/
   find-missing-low-threshold.mjs # Discovers films below normal vote threshold for review
   check-genres.mjs               # Verifies TMDB genre tags on curated lists
   check-documentaries.mjs        # Flags documentaries in person filmographies
+
+  # ── Cache sync and cleanup ────────────────────────────────────────────────
+  preview-cache-rebuild.mjs      # Preview what build-movie-cache would add/remove
+  find-shortest-films.mjs        # Find films under 60 min across all condition lists
+  find-unreferenced-cache-films.mjs # Find cache films not referenced by any condition list
+  remove-short-films.mjs         # Remove films from condition lists using a TSV
+  remove-from-cache.mjs          # Remove specific film IDs from the movie cache
 ```
 
 ## Key notes
