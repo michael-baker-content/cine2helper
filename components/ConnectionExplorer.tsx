@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { PERSON_FILMOGRAPHIES } from '@/lib/person-filmographies';
 import { OVERLAP_INDEX } from '@/lib/overlap-index';
 import { WIN_CONDITIONS_MAP } from '@/lib/win-conditions';
 import { MOVIE_CACHE } from '@/lib/movie-cache';
@@ -36,32 +35,27 @@ const PAGE_SIZE = 50;
 
 
 // ── Suggested films ──────────────────────────────────────────────────────────
-// Pick films with the most win condition overlaps as starter suggestions.
-// These are the most strategically interesting films for players to explore.
+// Pick 7 random films from the top 200 most popular films in the cache.
+// Randomised on each page load so suggestions feel fresh.
 
 const SUGGESTED_FILMS = (() => {
-  // Build set of all film IDs from tracked person filmographies
-  const trackedFilmIds = new Set<number>();
-  for (const filmography of PERSON_FILMOGRAPHIES) {
-    for (const film of filmography.films) trackedFilmIds.add(film.tmdbId);
+  const popular = Object.values(MOVIE_CACHE)
+    .filter(f => f.poster_path && f.release_date)
+    .sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0))
+    .slice(0, 200);
+
+  // Fisher-Yates shuffle then take 7
+  const shuffled = [...popular];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
 
-  // Only suggest films that:
-  // 1. Are in the movie cache
-  // 2. Appear in at least one tracked person's filmography
-  // 3. Qualify for multiple win conditions (most strategically interesting)
-  const entries = Object.entries(OVERLAP_INDEX)
-    .map(([id, conditions]) => ({ id: parseInt(id), conditions }))
-    .filter(e => MOVIE_CACHE[e.id] && trackedFilmIds.has(e.id))
-    .sort((a, b) => b.conditions.length - a.conditions.length)
-    .slice(0, 14);
-
-  return entries.map(e => ({
-    tmdbId:     e.id,
-    title:      MOVIE_CACHE[e.id].title,
-    year:       parseInt(MOVIE_CACHE[e.id].release_date?.slice(0, 4) ?? '0'),
-    posterPath: MOVIE_CACHE[e.id].poster_path,
-    conditions: e.conditions,
+  return shuffled.slice(0, 7).map(f => ({
+    tmdbId:     f.id,
+    title:      f.title,
+    year:       parseInt(f.release_date?.slice(0, 4) ?? '0'),
+    posterPath: f.poster_path,
   }));
 })();
 
@@ -315,10 +309,17 @@ function SuggestedFilms({ onSelect }: { onSelect: (film: SearchResult) => void }
         Suggested starting points
       </div>
       <div style={{
-        display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '8px',
-        scrollbarWidth: 'thin', scrollbarColor: 'var(--border) transparent',
-        WebkitOverflowScrolling: 'touch',
-      }}>
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '10px',
+      }}
+        className="suggestions-grid"
+      >
+        <style>{`
+          @media (min-width: 560px) {
+            .suggestions-grid { grid-template-columns: repeat(7, 1fr) !important; }
+          }
+        `}</style>
         {SUGGESTED_FILMS.map(film => (
           <button
             key={film.tmdbId}
@@ -329,11 +330,11 @@ function SuggestedFilms({ onSelect }: { onSelect: (film: SearchResult) => void }
               poster_path:  film.posterPath ?? null,
               vote_average: MOVIE_CACHE[film.tmdbId]?.vote_average ?? 0,
             })}
-            title={`${film.title} (${film.year}) — qualifies for ${film.conditions.length} conditions`}
+            title={`${film.title} (${film.year})`}
             style={{
               background: 'var(--surface)', border: '1px solid var(--border)',
               borderRadius: 'var(--radius)', cursor: 'pointer', padding: 0,
-              overflow: 'hidden', flexShrink: 0, width: '90px',
+              overflow: 'hidden',
               transition: 'transform 0.12s, border-color 0.12s, box-shadow 0.12s',
               display: 'flex', flexDirection: 'column',
             }}
@@ -351,33 +352,19 @@ function SuggestedFilms({ onSelect }: { onSelect: (film: SearchResult) => void }
             <div style={{ position: 'relative', aspectRatio: '2/3', background: 'var(--surface-2)' }}>
               {film.posterPath ? (
                 <Image src={getPosterUrl(film.posterPath, 'w185')} alt={film.title}
-                  fill unoptimized style={{ objectFit: 'cover' }} sizes="90px" />
+                  fill unoptimized style={{ objectFit: 'cover' }} sizes="(max-width: 720px) 14vw, 100px" />
               ) : (
                 <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>🎬</div>
               )}
-              <div style={{
-                position: 'absolute', bottom: '4px', right: '4px',
-                background: 'rgba(0,0,0,0.75)', borderRadius: '8px',
-                padding: '1px 5px', fontSize: '10px', fontWeight: 700,
-                color: 'var(--accent)', backdropFilter: 'blur(4px)',
-              }}>
-                {film.conditions.length}
-              </div>
             </div>
             <div style={{ padding: '6px 7px 7px' }}>
               <div style={{
                 fontSize: '11px', fontWeight: 500, color: 'var(--text)',
-                lineHeight: 1.3, display: '-webkit-box',
-                WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
-                overflow: 'hidden', textAlign: 'left',
+                lineHeight: 1.3, textAlign: 'left',
               }}>{film.title}</div>
-              <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>{film.year}</div>
             </div>
           </button>
         ))}
-      </div>
-      <div style={{ fontSize: '11px', color: 'var(--text-dim)', marginTop: '8px' }}>
-        Badge shows number of win conditions each film qualifies for.
       </div>
     </div>
   );
