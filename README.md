@@ -1,6 +1,6 @@
 # Cine2Helper
 
-A companion tool for [Cine2Nerdle Battle](https://www.cinenerdle2.app/battle). Browse films by win condition, see which other conditions each film qualifies for, filter results by overlap, and explore film connections to find your strongest plays or discover non-obvious paths between films.
+A companion tool for [Cine2Nerdle Battle](https://www.cinenerdle2.app/battle). Browse films by win condition, see which other conditions each film qualifies for, and explore film connections to find your strongest plays or discover non-obvious paths between films.
 
 ## Setup
 
@@ -86,7 +86,6 @@ app/
 components/
   MovieCard.tsx              # Film card with overlap chips and ⓘ info modal
   WinConditionPanel.tsx      # Paginated, sortable, filterable film list for a condition
-  OverlapAnalyzer.tsx        # Multi-condition overlap finder
   ConnectionExplorer.tsx     # Film connection explorer — search any film, find cached connections
   FeedbackModal.tsx          # User feedback form (Formspree)
 

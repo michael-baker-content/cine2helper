@@ -2,14 +2,13 @@
 
 import { useState, useRef, useEffect } from 'react';
 import WinConditionPanel from '@/components/WinConditionPanel';
-import OverlapAnalyzer from '@/components/OverlapAnalyzer';
 import { WIN_CONDITIONS, CATEGORY_LABELS } from '@/lib/win-conditions';
 import { WinCondition, WinConditionCategory } from '@/types/tmdb';
 import Image from 'next/image';
 import { getPosterUrl } from '@/lib/tmdb';
 import ConnectionExplorer from '@/components/ConnectionExplorer';
 
-type View = 'home' | 'condition' | 'overlap' | 'connections';
+type View = 'home' | 'condition' | 'connections';
 
 const OVERVIEW_CATEGORY_ORDER: WinConditionCategory[] = ['themed', 'decade', 'person'];
 
@@ -101,11 +100,11 @@ function ConditionCard({ condition, onClick }: {
 // ── Home page (hero + conditions grid) ───────────────────────────────────────
 function HomePage({
   onSelectCondition,
-  onOverlap,
+  onConnections,
   conditionsRef,
 }: {
   onSelectCondition: (id: string) => void;
-  onOverlap: () => void;
+  onConnections: () => void;
   conditionsRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const grouped = OVERVIEW_CATEGORY_ORDER.reduce<Record<string, WinCondition[]>>((acc, cat) => {
@@ -150,9 +149,9 @@ function HomePage({
         }}
         className="hero-body">
           Cine2Nerdle Battle challenges you to connect films through shared cast and crew.
-          Cine2Helper shows you which films qualify for each win condition — and which films
-          satisfy multiple conditions at once. Overlap can work for you or against you:
-          a film that satisfies your condition and your opponent's hands them a win too.
+          Cine2Helper shows you which films qualify for each win condition, highlights overlaps
+          between conditions, and lets you explore film connections to discover non-obvious
+          paths — so you can find your strongest plays before your opponent does.
         </p>
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button
@@ -178,8 +177,8 @@ function HomePage({
             WIN CONDITIONS ↓
           </button>
           <button
-            onClick={onOverlap}
-            aria-label="Open overlap analyzer"
+            onClick={onConnections}
+            aria-label="Open connection explorer"
             className="hero-cta"
             style={{
               padding: '12px 28px',
@@ -201,7 +200,7 @@ function HomePage({
               e.currentTarget.style.background = 'transparent';
             }}
           >
-            OVERLAP ANALYZER →
+            CONNECTIONS →
           </button>
           <a
             href="https://www.cinenerdle2.app/battle"
@@ -409,7 +408,7 @@ export default function RootPage() {
 
 
             {/* Back button */}
-            {(view === 'condition' || view === 'overlap') && (
+            {(view === 'condition' || view === 'connections') && (
               <button
                 onClick={goHome}
                 style={{
@@ -486,13 +485,7 @@ export default function RootPage() {
                 / {conditionLabel}
               </span>
             )}
-            {view === 'overlap' && (
-              <span className="desktop-only" style={{
-                color: 'var(--text-dim)', fontSize: '13px', marginLeft: '4px',
-              }}>
-                / Overlap Analyzer
-              </span>
-            )}
+
 
             {/* Nav — desktop */}
             <nav className="desktop-only" aria-label="Main navigation" style={{
@@ -500,7 +493,6 @@ export default function RootPage() {
             }}>
               {([
                 { label: 'Win Conditions', action: goHomeScrolled },
-                { label: 'Overlap Analyzer', action: () => setView('overlap') },
                 { label: 'Connections', action: () => { setView('connections'); setExplorerKey(k => k + 1); } },
                 { label: 'Feedback', action: () => setShowFeedback(true) },
               ]).map(({ label, action }) => (
@@ -567,7 +559,6 @@ export default function RootPage() {
           }}>
             {view === 'condition' && activeCondition
               ? `Viewing ${WIN_CONDITIONS.find(w => w.id === activeCondition)?.label ?? ''} films`
-              : view === 'overlap' ? 'Overlap analyzer'
               : 'Win conditions overview'}
           </div>
 
@@ -575,7 +566,7 @@ export default function RootPage() {
             <div className="slide-in-left" style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
               <HomePage
                 onSelectCondition={selectCondition}
-                onOverlap={() => setView('overlap')}
+                onConnections={() => { setView('connections'); setExplorerKey(k => k + 1); }}
                 conditionsRef={conditionsRef}
               />
             </div>
@@ -584,14 +575,6 @@ export default function RootPage() {
           {view === 'condition' && activeCondition && (
             <div className="slide-in-right condition-view" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
               <WinConditionPanel key={activeCondition} conditionId={activeCondition} />
-            </div>
-          )}
-
-          {view === 'overlap' && (
-            <div className="slide-in-right" style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
-              <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '24px 20px' }}>
-                <OverlapAnalyzer />
-              </div>
             </div>
           )}
 
