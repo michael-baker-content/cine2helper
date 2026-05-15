@@ -203,7 +203,7 @@ function HomePage({
             CONNECTIONS →
           </button>
           <a
-            href="https://www.cinenerdle2.app/battle"
+            href="https://www.cinenerdle.app/battle"
             target="_blank"
             rel="noreferrer"
             style={{
