@@ -96,11 +96,23 @@ const DELAY = 150;
 async function tmdbGet(path, params = {}) {
   const url = new URL(`https://api.themoviedb.org/3${path}`);
   Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, String(v)));
-  const res = await fetch(url.toString(), {
-    headers: { Authorization: 'Bearer ' + TOKEN },
-  });
-  if (!res.ok) return null;
-  return res.json();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
+  try {
+    const res = await fetch(url.toString(), {
+      headers: { Authorization: 'Bearer ' + TOKEN },
+      signal: controller.signal,
+    });
+    if (!res.ok) return null;
+    return res.json();
+  } catch (e) {
+    if (e.name === 'AbortError') {
+      console.error(`  ⚠ Request timed out: ${path}`);
+    }
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 async function getAllPages(path, params = {}, maxPages = 5) {
@@ -131,11 +143,14 @@ function isReleased(film) {
 
 // ── Results store ─────────────────────────────────────────────────────────────
 
-const results = new Map(); // conditionId -> { label, entries[] }
+const results = new Map(); // conditionId -> { label, entries[], seenIds: Set }
 
 function addResult(conditionId, label, entry) {
-  if (!results.has(conditionId)) results.set(conditionId, { label, entries: [] });
-  results.get(conditionId).entries.push(entry);
+  if (!results.has(conditionId)) results.set(conditionId, { label, entries: [], seenIds: new Set() });
+  const bucket = results.get(conditionId);
+  if (bucket.seenIds.has(entry.tmdbId)) return; // deduplicate
+  bucket.seenIds.add(entry.tmdbId);
+  bucket.entries.push(entry);
 }
 
 // ── Phase 1: Curated decade/genre lists ──────────────────────────────────────

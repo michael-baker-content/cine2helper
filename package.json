@@ -17,9 +17,10 @@
     "react-dom": "^19.2.5"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^19",
-    "@types/react-dom": "^19"
+    "@types/react-dom": "^19",
+    "tsx": "^4.22.3",
+    "typescript": "^5"
   }
 }

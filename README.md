@@ -1,6 +1,6 @@
 # Cine2Helper
 
-A companion tool for [Cine2Nerdle Battle](https://www.cinenerdle2.app/battle). Browse films by win condition, see which other conditions each film qualifies for, and explore film connections to find your strongest plays or discover non-obvious paths between films.
+A companion tool for [Cine2Nerdle Battle](https://www.cinenerdle.app/battle). Browse films by win condition, see which other conditions each film qualifies for, and explore film connections to find your strongest plays or discover non-obvious paths between films.
 
 ## Setup
 
